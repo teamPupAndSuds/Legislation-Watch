@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/HR-Proudfoots/proudfoots#readme",
   "dependencies": {
+    "mongo": "^0.1.0",
+    "mongoose": "^4.7.8"
     "express": "^4.14.0"
   }
 }
