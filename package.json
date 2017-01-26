@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/HR-Proudfoots/proudfoots/issues"
   },
-  "homepage": "https://github.com/HR-Proudfoots/proudfoots#readme"
+  "homepage": "https://github.com/HR-Proudfoots/proudfoots#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
 }
