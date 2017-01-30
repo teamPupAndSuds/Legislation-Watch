@@ -4,6 +4,7 @@ class LegislatorInfo extends React.Component {
   constructor(props) {
     super(props);
 
+    // Dummy Data for Testing Purposes
     this.legislatorData = {
       "bioguide_id": "C001109",
       "birthday": "1966-07-28",
@@ -102,39 +103,53 @@ class LegislatorInfoPresentational extends React.Component {
 
         <table className="table">
           <tr>
+            <td>Office Address:</td>
+            <td>{info.office} , Washington, DC 20515</td>
+          </tr>
+          <tr>
             <td>Phone:</td>
             <td><a href={'tel:' + info.phone}>{info.phone}</a></td>
           </tr>
-          <tr>
-            <td>Fax:</td>
-            <td>{info.fax}</td>
-          </tr>
+          {info.fax &&
+            <tr>
+              <td>Fax:</td>
+              <td>{info.fax}</td>
+            </tr>
+          }
           <tr>
             <td>Email:</td>
             <td><a href={'mailto:' + info.oc_email}>{info.oc_email}</a></td>
           </tr>
+          {info.website &&
           <tr>
             <td>Website:</td>
             <td><a href={info.website}>{info.website}</a></td>
           </tr>
-          <tr>
-            <td>Contact Form:</td>
-            <td><a href={info.contact_form}>Link</a></td>
-          </tr>
+          }
+          {info.contact_form &&
+            <tr>
+              <td>Contact Form:</td>
+              <td><a href={info.contact_form}>Link</a></td>
+            </tr>
+          }
           {info.facebook_id &&
             <tr>
               <td>Facebook ID:</td>
               <td><a href={'http://facebook.com/' + info.facebook_id}>{info.facebook_id}</a></td>
             </tr>
           }
-          <tr>
-            <td>Twitter:</td>
-            <td><a href={'http://twitter.com/' + info.twitter_id}>{info.twitter_id}</a></td>
-          </tr>  
-          <tr>
-            <td>Youtube:</td>
-            <td><a href={'http://youtube.com/' + info.youtube_id}>{info.youtube_id}</a></td>
-          </tr>  
+          {info.twitter_id && 
+            <tr>
+              <td>Twitter:</td>
+              <td><a href={'http://twitter.com/' + info.twitter_id}>{info.twitter_id}</a></td>
+            </tr>  
+          }
+          {info.youtube_id &&
+            <tr>
+              <td>Youtube:</td>
+              <td><a href={'http://youtube.com/' + info.youtube_id}>{info.youtube_id}</a></td>
+            </tr>
+          }
         </table>
       </div>
     );
