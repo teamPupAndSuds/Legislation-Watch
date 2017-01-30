@@ -18,7 +18,8 @@ var config = {
         test: /\.jsx?$/,
         include: APP_DIR,
         exclude: /node_modules/,
-        presets: ['es2015', 'react']
+        presets: ['es2015', 'react'],
+        plugins: ['transform-es2015-arrow-functions']
       }
     ]
   },
