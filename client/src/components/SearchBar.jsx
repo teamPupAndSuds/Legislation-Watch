@@ -16,14 +16,13 @@ class SearchBar extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log(this.userSearchTerms);
+    this.props.onSubmit(this.userSearchTerms);
   }
-
 
   render() {
     return (
       <SearchBarPresentational onSearchInputChange={this.handleSearchInputChange} onSubmit={this.handleSubmit} />
-    )
+    );
   }
 }
 
