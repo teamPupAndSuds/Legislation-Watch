@@ -11,43 +11,6 @@ class LegislatorInfo extends React.Component {
   }
 }
 
-LegislatorInfo.defaultProps = {
-  info: {
-    "bioguide_id": "C001109",
-    "birthday": "1966-07-28",
-    "chamber": "house",
-    "contact_form": null,
-    "crp_id": "N00035504",
-    "district": 0,
-    "fax": null,
-    "fec_ids": [
-      "H6WY00159"
-    ],
-    "first_name": "Liz",
-    "gender": "F",
-    "govtrack_id": "412732",
-    "in_office": true,
-    "last_name": "Cheney",
-    "leadership_role": null,
-    "middle_name": null,
-    "name_suffix": null,
-    "nickname": null,
-    "oc_email": "Rep.Cheney@opencongress.org",
-    "ocd_id": "ocd-division/country:us/state:wy",
-    "office": "416 Cannon House Office Building",
-    "party": "R",
-    "phone": "202-225-2311",
-    "state": "WY",
-    "state_name": "Wyoming",
-    "term_end": "2019-01-03",
-    "term_start": "2017-01-03",
-    "thomas_id": "",
-    "title": "Rep",
-    "votesmart_id": 145932,
-    "website": "https://cheney.house.gov"
-  }
-}
-
 class LegislatorInfoPresentational extends React.Component {
   constructor(props) {
     super(props);
