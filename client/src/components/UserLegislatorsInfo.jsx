@@ -84,8 +84,6 @@ class UserLegislatorsInfo extends React.Component {
   getElectoralInfo() {
     let readableElectoralInfo = {};
 
-    console.log(this.state.electoralInfo.district);
-
     // Assign values from electoralInfo as default to the readableElectoralInfo
     readableElectoralInfo.state = this.state.electoralInfo.state;
     readableElectoralInfo.districtName = this.state.electoralInfo.districtName + '';
