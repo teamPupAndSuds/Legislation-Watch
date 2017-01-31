@@ -5,7 +5,7 @@ class UserLegislatorsInfo extends React.Component {
   constructor(props) {
     super(props);
 
-    this.electoralRepresentativeInfo = this.props.electoralRepresentativeInfo; 
+    this.electoralRepresentativesInfo = this.props.electoralRepresentativesInfo; 
     this.electoralInfo = this.props.electoralInfo;
 
     this.getHouseRepInfo = this.getHouseRepInfo.bind(this);
@@ -15,15 +15,38 @@ class UserLegislatorsInfo extends React.Component {
   render() {
     return (
       <UserLegislatorsInfoPresentational 
-        electoralInfo={this.electoralInfo} 
+        electoralInfo={this.getElectoralInfo()} 
         houseRepInfo={this.getHouseRepInfo()} 
         senatorsInfo={this.getSenatorsInfo()}
       />
     );
   }
 
+  // Converts district API data to a more readable format for display
+  getElectoralInfo() {
+    let readableElectoralInfo = {};
+
+    // Assign values from electoralInfo as default to the readableElectoralInfo
+    readableElectoralInfo.state = this.electoralInfo.state;
+    readableElectoralInfo.districtName = this.electoralInfo.district + '';
+
+    // Use the State name from the House Rep instead of 2 letter symbol 
+    if (this.getHouseRepInfo() !== undefined) {
+      readableElectoralInfo.state = this.getHouseRepInfo().state_name;
+    }
+
+    // Handle case where the state is a district At-large
+    if (this.electoralInfo.district === 0) {
+      readableElectoralInfo.districtName = 'At-Large Congressional District';
+    } else {
+      eadableElectoralInfo.districtName = this.electoralInfo.district + 'th Congressional District';
+    }
+
+    return readableElectoralInfo;
+  }
+
   getHouseRepInfo() {
-    return this.electoralRepresentativeInfo.filter(isHouseRep)[0];
+    return this.electoralRepresentativesInfo.filter(isHouseRep)[0];
 
     function isHouseRep(legislatorInfo) {
       return (legislatorInfo.chamber === 'house');
@@ -31,7 +54,7 @@ class UserLegislatorsInfo extends React.Component {
   }
 
   getSenatorsInfo() {
-    return this.electoralRepresentativeInfo.filter(isSenator);
+    return this.electoralRepresentativesInfo.filter(isSenator);
 
     function isSenator(legislatorInfo) {
       return (legislatorInfo.chamber === 'senate');
@@ -45,7 +68,7 @@ UserLegislatorsInfo.defaultProps = {
     'state': 'WY',
     'district': 0
   },
-  electoralRepresentativeInfo: [
+  electoralRepresentativesInfo: [
     {
       "bioguide_id": "C001109",
       "birthday": "1966-07-28",
@@ -171,7 +194,8 @@ class UserLegislatorsInfoPresentational extends React.Component {
     return (
       <div className="panel panel-default">
         <div className="panel-heading">
-          <h3 className="panel-title">Electoral Info</h3>
+          <h3 className="panel-title">Your Electoral Info:</h3>
+          <h4>{this.props.electoralInfo.state} - {this.props.electoralInfo.districtName}</h4>
         </div>
         <div className = "panel-body">
           <h3>House of Representative</h3>
