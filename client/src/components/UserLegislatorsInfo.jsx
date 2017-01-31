@@ -19,7 +19,7 @@ class UserLegislatorsInfo extends React.Component {
     this.fetchLegislatorDataFromExternalSources = this.fetchLegislatorDataFromExternalSources.bind(this);
   }
 
-
+  
   render() {
     let isFechingData = this.state.isFechingData;
     return (
