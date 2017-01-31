@@ -1,9 +1,5 @@
 var request = require('request');
-var mongoose = require('mongoose');
-var fs = require('fs');
-
 var config = require('./config');
-var helpers = require('./httpHelpers');
 var Bill = require('./../db/models/bill');
 var logger = require('./logHelpers.js');
 
@@ -39,55 +35,50 @@ var billsAPIRequest = function(qs, callback) {
 
 // This helper function initializes the bills database if it has not been initialized yet.
 // It checks if the database is empty, and if so it retrieves all bills from the current Congress.
-var initializeBillsDatabase = function() {
+var initializeBillsDatabase = function(callback) {
 
    // Check if the database is empty
   Bill.findOne({}, {}, function(err, bill) {
     if (err) {
-      logger.log('Error initializing Bills database: ' + err, function() {});
+      logger.log('Error initializing Bills database: ' + err);
     } else if (!bill) { 
-      console.log('Did not find bill any bills in database. Now going to make API request');
       // The database is empty, so grab all recent congressional bills...
 
-      // First,  do an initial request to figure out how many bills we need to download into the database
+      // First, do an initial request to figure out how many bills we need to download into the database
       billsAPIRequest(initializationQueryString, function(error, response, body) {
         if (error) {
-          logger.log('Error initializing Bills database: ' + err, function() {}); 
+          logger.log('Error initializing Bills database: ' + err); 
         } else {
           body = JSON.parse(body);
-          logger.log('Made initial API request. Response results: ' + body.results, function() {});
-          console.log('Made initial API request, bill count is: ', body.count);
+       
+          var totalBills = body.count;  // total number of bills to be fetched
+          var billsFetched = 0;         // running count of bills we have requested from the API so far
+          var billsWritten = 0;         // running count of bills written to the database so far
+          var billsPerPage = Number(initializationQueryString.per_page); // number of bills received in each call to the Sunlight Foundation API
+          var page = 1;                 // a counter we will increment in order to progressively retrieve all bills available through the API
 
-          // total number of bills to be downloaded:
-          var totalBills = body.count; 
-          // running count of bills downloaded so far:
-          var billsDownloaded = 0;
-          // number of bills received in each call to the Sunlight Foundation API:
-          var billsPerPage = Number(initializationQueryString.per_page);
-          // a counter we will increment in order to progressively retrieve all bills available through the API:
-          var page = 1;
-
-          // Now use pagination to download all bills incrementally
-          while (billsDownloaded < totalBills) {
-            console.log('About to make request for page: ', page);
+          // Now use pagination to download all bills page by page
+          while (billsFetched < totalBills) {
             var queryString = JSON.parse(JSON.stringify(initializationQueryString)); // making a deep clone of the initalizationQueryString
                                                                                      // through use of the JSON libraries 
             queryString.page = page.toString();
-            billsDownloaded += billsPerPage;
-            page++;
-            console.log('billsDownloaded: ', billsDownloaded, ' totalBills: ', totalBills);        
+            billsFetched += billsPerPage;
+            page++;      
             billsAPIRequest(queryString, function(error, response, body) {
               if (error) {
-                logger.log('Error initializing Bills database: ' + err, function() {});
+                logger.log('Error initializing Bills database: ' + err);
               } else {
                 // Write each bill to the database
                 body = JSON.parse(body);
-                console.log('Just got back results for page: ', body.page.page);
                 body.results.forEach(function(b) {
                   var bill = new Bill(b);
                   bill.save(function(err) {
                     if (err) {
-                      logger.log('Error writing bill to the database: ' + err, function() {});                    
+                      logger.log('Error writing bill to the database: ' + err);                    
+                    }
+                    billsWritten++;
+                    if (billsWritten === totalBills) {
+                      callback();
                     }
                   });
                 });
@@ -96,6 +87,8 @@ var initializeBillsDatabase = function() {
           }  
         }
       });
+    } else { // database is not empty, no initialization needed
+      callback();
     }
   });
 };

@@ -9,7 +9,11 @@ var logger = require('./logHelpers.js');
 
 mongoose.connect(config.databaseURL);
 
-helpers.initializeBillsDatabase();
+helpers.initializeBillsDatabase(function() {
+  console.log('Initalization complete.');
+});
+
+/// Code below this line is WIP
 
 /*
 // find the newest record in the database so we can only fetch records that are newer
