@@ -1,12 +1,6 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
+const LegislatorInfo = require(__dirname + '/src/components/LegislatorInfo.jsx');
+const UserLegislatorsInfo = require(__dirname + '/src/components/UserLegislatorsInfo.jsx');
 
-class Hello extends React.Component {
-  render() {
-    return (
-        <h1>Hello</h1>
-    );
-  }
-}
-
-ReactDOM.render(<Hello />, document.getElementById('hello'));
+ReactDOM.render(<UserLegislatorsInfo />, document.getElementById('hello'));
