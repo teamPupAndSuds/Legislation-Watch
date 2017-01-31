@@ -3,89 +3,48 @@ const React = require('react');
 class LegislatorInfo extends React.Component {
   constructor(props) {
     super(props);
-
-    // Dummy Data for Testing Purposes
-    this.legislatorData = {
-      "bioguide_id": "C001109",
-      "birthday": "1966-07-28",
-      "chamber": "house",
-      "contact_form": null,
-      "crp_id": "N00035504",
-      "district": 0,
-      "fax": null,
-      "fec_ids": [
-        "H6WY00159"
-      ],
-      "first_name": "Liz",
-      "gender": "F",
-      "govtrack_id": "412732",
-      "in_office": true,
-      "last_name": "Cheney",
-      "leadership_role": null,
-      "middle_name": null,
-      "name_suffix": null,
-      "nickname": null,
-      "oc_email": "Rep.Cheney@opencongress.org",
-      "ocd_id": "ocd-division/country:us/state:wy",
-      "office": "416 Cannon House Office Building",
-      "party": "R",
-      "phone": "202-225-2311",
-      "state": "WY",
-      "state_name": "Wyoming",
-      "term_end": "2019-01-03",
-      "term_start": "2017-01-03",
-      "thomas_id": "",
-      "title": "Rep",
-      "votesmart_id": 145932,
-      "website": "https://cheney.house.gov"
-    };
-
-    this.legislatorData1 = {
-      'bioguide_id': 'B001261',
-      'birthday': '1952-07-21',
-      'chamber': 'senate',
-      'contact_form': 'http://www.barrasso.senate.gov/public/index.cfm?FuseAction=ContactUs.ContactForm',
-      'crp_id': 'N00006236',
-      'district': null,
-      'facebook_id': '21146775942',
-      'fax': '202-224-1724',
-      'fec_ids': [
-        'S6WY00068'
-      ],
-      'first_name': 'John',
-      'gender': 'M',
-      'govtrack_id': '412251',
-      'icpsr_id': 40707,
-      'in_office': true,
-      'last_name': 'Barrasso',
-      'leadership_role': null,
-      'lis_id': 'S317',
-      'middle_name': 'A.',
-      'name_suffix': null,
-      'nickname': null,
-      'oc_email': 'Sen.Barrasso@opencongress.org',
-      'ocd_id': 'ocd-division/country:us/state:wy',
-      'office': '307 Dirksen Senate Office Building',
-      'party': 'R',
-      'phone': '202-224-6441',
-      'senate_class': 1,
-      'state': 'WY',
-      'state_name': 'Wyoming',
-      'state_rank': 'junior',
-      'term_end': '2019-01-03',
-      'term_start': '2013-01-03',
-      'thomas_id': '01881',
-      'title': 'Sen',
-      'twitter_id': 'SenJohnBarrasso',
-      'votesmart_id': 52662,
-      'website': 'http://www.barrasso.senate.gov',
-      'youtube_id': 'barrassowyo'
-    };
   }
   render() {
     return (
-      <LegislatorInfoPresentational info={this.legislatorData}/>
+      <LegislatorInfoPresentational info={this.props.info}/>
     );
+  }
+}
+
+LegislatorInfo.defaultProps = {
+  info: {
+    "bioguide_id": "C001109",
+    "birthday": "1966-07-28",
+    "chamber": "house",
+    "contact_form": null,
+    "crp_id": "N00035504",
+    "district": 0,
+    "fax": null,
+    "fec_ids": [
+      "H6WY00159"
+    ],
+    "first_name": "Liz",
+    "gender": "F",
+    "govtrack_id": "412732",
+    "in_office": true,
+    "last_name": "Cheney",
+    "leadership_role": null,
+    "middle_name": null,
+    "name_suffix": null,
+    "nickname": null,
+    "oc_email": "Rep.Cheney@opencongress.org",
+    "ocd_id": "ocd-division/country:us/state:wy",
+    "office": "416 Cannon House Office Building",
+    "party": "R",
+    "phone": "202-225-2311",
+    "state": "WY",
+    "state_name": "Wyoming",
+    "term_end": "2019-01-03",
+    "term_start": "2017-01-03",
+    "thomas_id": "",
+    "title": "Rep",
+    "votesmart_id": 145932,
+    "website": "https://cheney.house.gov"
   }
 }
 
@@ -117,10 +76,12 @@ class LegislatorInfoPresentational extends React.Component {
                 <td>{info.fax}</td>
               </tr>
             }
-            <tr>
-              <td>Email:</td>
-              <td><a href={'mailto:' + info.oc_email}>{info.oc_email}</a></td>
-            </tr>
+            {info.email &&
+              <tr>
+                <td>Email:</td>
+                <td><a href={'mailto:' + info.oc_email}>{info.oc_email}</a></td>
+              </tr>
+            }
             {info.website &&
             <tr>
               <td>Website:</td>
