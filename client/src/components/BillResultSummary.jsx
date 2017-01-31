@@ -4,14 +4,23 @@ class BillResultSummary extends React.Component {
   render() {
     return (
       <BillResultSummaryPresentational info={this.props.info}/>
-    )
+    );
   }
 }
 
 class BillResultSummaryPresentational extends React.Component {
-
   render() {
     let info = this.props.info;
+    let cosponsorElements = [];
+
+    if (info.cosponsor_ids && info.cosponsor_ids.length !== 0) {
+      cosponsorElements = info.cosponsor_ids.map(function(id) {
+        return (
+          <span key={id}>{id}, </span>
+        );
+      });
+    }
+
     return (
       <div className="panel panel-info">
         <div className="panel-heading">
@@ -33,10 +42,12 @@ class BillResultSummaryPresentational extends React.Component {
               <tr>
                 <td>
                   <strong>Sponsor:</strong> {info.sponsor.first_name} {info.sponsor.last_name} ({info.sponsor.party})
-                  {info.cosponsor_ids.length !== 0 && 
-                    <strong> Co-Sponsor(s): </strong>
+                  {info.cosponsor_ids && info.cosponsor_ids.length !== 0 && 
+                    <strong> Co-Sponsor(s): </strong> 
                   }
-                  {info.cosponsor_ids.map((id) => <span key={id}>{id}, </span>)}
+                  {info.cosponsor_ids && info.cosponsor_ids.length !== 0 && 
+                    cosponsorElements
+                  }
                 </td>
               </tr>
               <tr>
