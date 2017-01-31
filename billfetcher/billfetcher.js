@@ -4,11 +4,14 @@ var fs = require('fs');
 
 var config = require('./config');
 var helpers = require('./httpHelpers');
-var Bill = require('./..db/bill');
+var Bill = require('./../db/models/bill');
 var logger = require('./logHelpers.js');
 
 mongoose.connect(config.databaseURL);
 
+helpers.initializeBillsDatabase();
+
+/*
 // find the newest record in the database so we can only fetch records that are newer
 Bill.findOne({}, {}, {sort: {'created_at': -1 }}, function(err, bill) {
   if (err) {
@@ -40,7 +43,7 @@ Bill.findOne({}, {}, {sort: {'created_at': -1 }}, function(err, bill) {
 
 
 });
-
+*/
 
 
 
