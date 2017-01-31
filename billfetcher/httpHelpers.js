@@ -1,12 +1,22 @@
 var request = require('request');
-var config = require('./config');
 var mongoose = require('mongoose');
 var fs = require('fs');
+
+var config = require('./config');
+var helpers = require('./httpHelpers');
+var Bill = require('./..db/bill');
+var logger = require('./logHelpers.js');
 
 // Use this query string in an http request when pulling the data used to initially populate the database.
 // It pulls all bills from the current Congress.
 var initializationQueryString = {
   congress: config.congress,
+  fields: 'bill_id,chamber,introduced_on,last_action_at,last_vote_at,last_version_on,short_title,official_title,popular_title,sponsor.first_name,sponsor.last_name,sponsor.middle_name,sponsor.title,sponsor_id,cosponsor_ids,keywords,summary,summary_short,related_bill_ids'
+};
+
+// Use this query string in an http request when updating the bills in the database.
+var updateQueryString = {
+  fields: 'bill_id,chamber,introduced_on,last_action_at,last_vote_at,last_version_on,short_title,official_title,popular_title,sponsor.first_name,sponsor.last_name,sponsor.middle_name,sponsor.title,sponsor_id,cosponsor_ids,keywords,summary,summary_short,related_bill_ids'
 };
 
 // Generic helper function for querying the bills API.
@@ -30,7 +40,10 @@ var billsAPIRequest = function(qs, callback) {
 // It checks if the database is empty, and if so it retrieves all bills from the current Congress.
 var initializeBillsDatabase = function(callback) {
 
-  // TODO: check if the database is empty; if so, populate it with all the recent congressional bills up to today's date
+  // Check if the database is empty; if so, populate it with all the recent congressional bills up to today's date
+  Bill.findOne({}, {}, function(err, bill) {
+ 
+  });
 
   billsAPIRequest(initializationQueryString, function(error, response, body) {
     if (error) {
