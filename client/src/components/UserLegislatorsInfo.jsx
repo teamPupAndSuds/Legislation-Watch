@@ -5,30 +5,90 @@ class UserLegislatorsInfo extends React.Component {
   constructor(props) {
     super(props);
 
-    this.electoralRepresentativesInfo = this.props.electoralRepresentativesInfo; 
-    this.electoralInfo = this.props.electoralInfo;
+    // Default State
+    this.state = {
+      isFetchingRepData: true,
+      isFetchingElectoralData: true,
+      electoralRepresentativesInfo: undefined,
+      electoralInfo: undefined
+    };
 
+    this.render = this.render.bind(this);
     this.getHouseRepInfo = this.getHouseRepInfo.bind(this);
     this.getSenatorsInfo = this.getSenatorsInfo.bind(this);
+    this.fetchLegislatorDataFromExternalSources = this.fetchLegislatorDataFromExternalSources.bind(this);
   }
 
+
   render() {
+    let isFechingData = this.state.isFechingData;
     return (
-      <UserLegislatorsInfoPresentational 
-        electoralInfo={this.getElectoralInfo()} 
-        houseRepInfo={this.getHouseRepInfo()} 
-        senatorsInfo={this.getSenatorsInfo()}
-      />
+      <div>
+      {(this.state.isFetchingRepData || this.state.isFetchingElectoralData) && 
+        <p>Fetching Data</p>
+      }
+
+      {!this.state.isFetchingRepData && !this.state.isFetchingElectoralData && 
+        <UserLegislatorsInfoPresentational 
+          electoralInfo={this.getElectoralInfo()} 
+          houseRepInfo={this.getHouseRepInfo()} 
+          senatorsInfo={this.getSenatorsInfo()}
+        />
+      }
+      </div>
     );
+  }
+  componentDidMount() {
+
+    // Initiate AJAX calls to external API for legislator and district info
+    this.setState({
+      isFetchingRepData: true,
+      isFetchingElectoralData: true
+    });
+
+    this.fetchLegislatorDataFromExternalSources();
+    this.fetchElectoralDataFromExternalSources();
+  }
+
+  fetchLegislatorDataFromExternalSources() {
+    let queryParameters = {
+      latitude: this.props.userLat,
+      longitude: this.props.userLong
+    };
+
+    $.get('https://congress.api.sunlightfoundation.com/legislators/locate', queryParameters, onLegislatorInfoFetchComplete.bind(this), 'json');
+
+    function onLegislatorInfoFetchComplete(data, textStatus, jqXHR) {
+      this.setState({
+        electoralRepresentativesInfo: data.results,
+        isFetchingRepData: false});
+    }
+  }
+
+  fetchElectoralDataFromExternalSources() {
+    let queryParameters = {
+      latitude: this.props.userLat,
+      longitude: this.props.userLong
+    };
+
+    $.get('https://congress.api.sunlightfoundation.com/districts/locate', queryParameters, onElectoralInfoFetchComplete.bind(this), 'json');
+
+    function onElectoralInfoFetchComplete(data, textStatus, jqXHR) {
+      this.setState({
+        electoralInfo: data.results[0],
+        isFetchingElectoralData: false});
+    }
   }
 
   // Converts district API data to a more readable format for display
   getElectoralInfo() {
     let readableElectoralInfo = {};
 
+    console.log(this.state.electoralInfo.district);
+
     // Assign values from electoralInfo as default to the readableElectoralInfo
-    readableElectoralInfo.state = this.electoralInfo.state;
-    readableElectoralInfo.districtName = this.electoralInfo.district + '';
+    readableElectoralInfo.state = this.state.electoralInfo.state;
+    readableElectoralInfo.districtName = this.state.electoralInfo.districtName + '';
 
     // Use the State name from the House Rep instead of 2 letter symbol 
     if (this.getHouseRepInfo() !== undefined) {
@@ -36,17 +96,17 @@ class UserLegislatorsInfo extends React.Component {
     }
 
     // Handle case where the state is a district At-large
-    if (this.electoralInfo.district === 0) {
+    if (this.state.electoralInfo.district === 0) {
       readableElectoralInfo.districtName = 'At-Large Congressional District';
     } else {
-      eadableElectoralInfo.districtName = this.electoralInfo.district + 'th Congressional District';
+      readableElectoralInfo.districtName = this.state.electoralInfo.district + 'th Congressional District';
     }
 
     return readableElectoralInfo;
   }
 
   getHouseRepInfo() {
-    return this.electoralRepresentativesInfo.filter(isHouseRep)[0];
+    return this.state.electoralRepresentativesInfo.filter(isHouseRep)[0];
 
     function isHouseRep(legislatorInfo) {
       return (legislatorInfo.chamber === 'house');
@@ -54,7 +114,7 @@ class UserLegislatorsInfo extends React.Component {
   }
 
   getSenatorsInfo() {
-    return this.electoralRepresentativesInfo.filter(isSenator);
+    return this.state.electoralRepresentativesInfo.filter(isSenator);
 
     function isSenator(legislatorInfo) {
       return (legislatorInfo.chamber === 'senate');
@@ -64,128 +124,8 @@ class UserLegislatorsInfo extends React.Component {
 
 // Temporary Default Props for Testing
 UserLegislatorsInfo.defaultProps = { 
-  electoralInfo: {
-    'state': 'WY',
-    'district': 0
-  },
-  electoralRepresentativesInfo: [
-    {
-      "bioguide_id": "C001109",
-      "birthday": "1966-07-28",
-      "chamber": "house",
-      "contact_form": null,
-      "crp_id": "N00035504",
-      "district": 0,
-      "fax": null,
-      "fec_ids": [
-        "H6WY00159"
-      ],
-      "first_name": "Liz",
-      "gender": "F",
-      "govtrack_id": "412732",
-      "in_office": true,
-      "last_name": "Cheney",
-      "leadership_role": null,
-      "middle_name": null,
-      "name_suffix": null,
-      "nickname": null,
-      "oc_email": "Rep.Cheney@opencongress.org",
-      "ocd_id": "ocd-division/country:us/state:wy",
-      "office": "416 Cannon House Office Building",
-      "party": "R",
-      "phone": "202-225-2311",
-      "state": "WY",
-      "state_name": "Wyoming",
-      "term_end": "2019-01-03",
-      "term_start": "2017-01-03",
-      "thomas_id": "",
-      "title": "Rep",
-      "votesmart_id": 145932,
-      "website": "https://cheney.house.gov"
-    },
-    {
-      "bioguide_id": "E000285",
-      "birthday": "1944-02-01",
-      "chamber": "senate",
-      "contact_form": "http://www.enzi.senate.gov/public/index.cfm/contact?p=e-mail-senator-enzi",
-      "crp_id": "N00006249",
-      "district": null,
-      "facebook_id": "23068049436",
-      "fax": "202-228-0359",
-      "fec_ids": [
-        "S6WY00126"
-      ],
-      "first_name": "Michael",
-      "gender": "M",
-      "govtrack_id": "300041",
-      "icpsr_id": 49706,
-      "in_office": true,
-      "last_name": "Enzi",
-      "leadership_role": null,
-      "lis_id": "S254",
-      "middle_name": "B.",
-      "name_suffix": null,
-      "nickname": null,
-      "oc_email": "Sen.Enzi@opencongress.org",
-      "ocd_id": "ocd-division/country:us/state:wy",
-      "office": "379a Russell Senate Office Building",
-      "party": "R",
-      "phone": "202-224-3424",
-      "senate_class": 2,
-      "state": "WY",
-      "state_name": "Wyoming",
-      "state_rank": "senior",
-      "term_end": "2021-01-03",
-      "term_start": "2015-01-06",
-      "thomas_id": "01542",
-      "title": "Sen",
-      "twitter_id": "SenatorEnzi",
-      "votesmart_id": 558,
-      "website": "http://www.enzi.senate.gov",
-      "youtube_id": "senatorenzi"
-    },
-    {
-      "bioguide_id": "B001261",
-      "birthday": "1952-07-21",
-      "chamber": "senate",
-      "contact_form": "http://www.barrasso.senate.gov/public/index.cfm?FuseAction=ContactUs.ContactForm",
-      "crp_id": "N00006236",
-      "district": null,
-      "facebook_id": "21146775942",
-      "fax": "202-224-1724",
-      "fec_ids": [
-        "S6WY00068"
-      ],
-      "first_name": "John",
-      "gender": "M",
-      "govtrack_id": "412251",
-      "icpsr_id": 40707,
-      "in_office": true,
-      "last_name": "Barrasso",
-      "leadership_role": null,
-      "lis_id": "S317",
-      "middle_name": "A.",
-      "name_suffix": null,
-      "nickname": null,
-      "oc_email": "Sen.Barrasso@opencongress.org",
-      "ocd_id": "ocd-division/country:us/state:wy",
-      "office": "307 Dirksen Senate Office Building",
-      "party": "R",
-      "phone": "202-224-6441",
-      "senate_class": 1,
-      "state": "WY",
-      "state_name": "Wyoming",
-      "state_rank": "junior",
-      "term_end": "2019-01-03",
-      "term_start": "2013-01-03",
-      "thomas_id": "01881",
-      "title": "Sen",
-      "twitter_id": "SenJohnBarrasso",
-      "votesmart_id": 52662,
-      "website": "http://www.barrasso.senate.gov",
-      "youtube_id": "barrassowyo"
-    }
-  ]
+  userLat: 37.795,
+  userLong: -122.40
 };
 
 
