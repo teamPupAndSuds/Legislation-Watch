@@ -11,7 +11,7 @@ exports.termSearch = function(req, res) {
 
   //req.body.term comes in as an array of search terms input form user
   //convert search term array to string
-  var searchTerms = req.body['term']slice();
+  var searchTerms = req.body['term'].slice();
   searchTerms.toString();
   searchTerm.concat(searchTerms);
 
