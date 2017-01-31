@@ -35,6 +35,44 @@ var billsAPIRequest = function(qs, callback) {
   });  
 };
 
+var retrieveAndStore = function(billCount, qs, callback) {
+
+  var billsFetched = 0;         // running count of bills we have requested from the API so far
+  var billsWritten = 0;         // running count of bills written to the database so far
+  var billsPerPage = Number(qs.per_page); // number of bills received in each call to the Sunlight Foundation API
+  var page = 1;                 // a counter we will increment in order to progressively retrieve all bills available through the API
+
+  // Now use pagination to download all new bills page by page
+  while (billsFetched < billCount) {
+    var queryString = JSON.parse(JSON.stringify(qs));   // making a deep clone of the query string through use of the JSON libraries 
+    queryString.page = page.toString();
+    billsFetched += billsPerPage;
+    page++;      
+    billsAPIRequest(queryString, function(err, response, body) {
+      if (err) {
+        logger.log('Error making API request to update or initialize the Bills database: ' + err);
+      } else {
+        // Write each bill to the database
+        body = JSON.parse(body);
+        body.results.forEach(function(bill) {
+          Bill.findOrCreate(bill, function(err, bill, created) {
+            if (err) {
+              logger.log('Error writing bill to the database: ' + err);  
+            }
+            billsWritten++;
+            if (billsWritten === billCount) {
+              callback();
+            }
+          });
+        });
+      }
+    });
+  } 
+};
+
+
+// This function updates the bills database with any new bills.
+// It is meant to be run on an ongoing basis via cron job, but can be run ad hoc as well.
 var updateBillsDatabase = function(callback) {
   // find the most recently added bill in the database
   Bill.findOne({}, {}, {sort: {'created_at': -1 }}, function(err, bill) {
@@ -58,48 +96,14 @@ var updateBillsDatabase = function(callback) {
         if (error) {
           logger.log('Error updating Bills database: ' + err); 
         } else {
-          body = JSON.parse(body);
-       
-          var totalBills = body.count;  // total number of bills to be fetched
-          var billsFetched = 0;         // running count of bills we have requested from the API so far
-          var billsWritten = 0;         // running count of bills written to the database so far
-          var billsPerPage = Number(updateQueryString.per_page); // number of bills received in each call to the Sunlight Foundation API
-          var page = 1;                 // a counter we will increment in order to progressively retrieve all bills available through the API
-
-          // Now use pagination to download all new bills page by page
-          while (billsFetched < totalBills) {
-            var queryString = JSON.parse(JSON.stringify(updateQueryString));  // making a deep clone of the updateQueryString
-                                                                              // through use of the JSON libraries 
-            queryString.page = page.toString();
-            billsFetched += billsPerPage;
-            page++;      
-            billsAPIRequest(queryString, function(error, response, body) {
-              if (error) {
-                logger.log('Error updating Bills database: ' + err);
-              } else {
-                // Write each bill to the database
-                body = JSON.parse(body);
-                body.results.forEach(function(bill) {
-                  Bill.findOrCreate(bill, function(err, bill, created) {
-                    if (err) {
-                      logger.log('Error writing bill to the database: ' + err);  
-                    }
-                    billsWritten++;
-                    if (billsWritten === totalBills) {
-                      callback();
-                    }
-                  });
-                });
-              }
-            });
-          }  
+          retrieveAndStore(JSON.parse(body).count, updateQueryString, callback);
         }
       });
     }
   });
 };
 
-// This helper function initializes the bills database if it has not been initialized yet.
+// This function initializes the bills database if it has not been initialized yet.
 // It checks if the database is empty, and if so it retrieves all bills from the current Congress.
 var initializeBillsDatabase = function(callback) {
 
@@ -115,42 +119,7 @@ var initializeBillsDatabase = function(callback) {
         if (error) {
           logger.log('Error initializing Bills database: ' + err); 
         } else {
-          body = JSON.parse(body);
-       
-          var totalBills = body.count;  // total number of bills to be fetched
-          var billsFetched = 0;         // running count of bills we have requested from the API so far
-          var billsWritten = 0;         // running count of bills written to the database so far
-          var billsPerPage = Number(initializationQueryString.per_page); // number of bills received in each call to the Sunlight Foundation API
-          var page = 1;                 // a counter we will increment in order to progressively retrieve all bills available through the API
-
-          // Now use pagination to download all bills page by page
-          while (billsFetched < totalBills) {
-            var queryString = JSON.parse(JSON.stringify(initializationQueryString)); // making a deep clone of the initalizationQueryString
-                                                                                     // through use of the JSON libraries 
-            queryString.page = page.toString();
-            billsFetched += billsPerPage;
-            page++;      
-            billsAPIRequest(queryString, function(error, response, body) {
-              if (error) {
-                logger.log('Error initializing Bills database: ' + err);
-              } else {
-                // Write each bill to the database
-                body = JSON.parse(body);
-                body.results.forEach(function(b) {
-                  var bill = new Bill(b);
-                  bill.save(function(err) {
-                    if (err) {
-                      logger.log('Error writing bill to the database: ' + err);                    
-                    }
-                    billsWritten++;
-                    if (billsWritten === totalBills) {
-                      callback();
-                    }
-                  });
-                });
-              }
-            });
-          }  
+          retrieveAndStore(JSON.parse(body).count, initializationQueryString, callback); 
         }
       });
     } else { // database is not empty, no initialization needed
