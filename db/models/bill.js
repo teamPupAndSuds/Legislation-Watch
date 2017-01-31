@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var billSchema = mongoose.Schema({
+var billSchema = new mongoose.Schema({
   bill_id: {
     type: String,
     unique: true
@@ -40,11 +40,10 @@ var billSchema = mongoose.Schema({
   //if there are no keywords, we will generate an array of keywords using another word association API
   keywords_generated: Array,
 
-  //add createdAt and updatedAt fields to schema
-  timestamps: true
-
-});
+//timestamps in options, set to true for both createdAt and 
+}, {timestamps: true});
 
 var BillModel = mongoose.model('Bill', billSchema);
+
 
 module.exports = BillModel;
