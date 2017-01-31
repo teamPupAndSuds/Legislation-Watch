@@ -31,8 +31,11 @@ var billSchema = mongoose.Schema({
   summary: String,
   summary_short: String,
 
-  //we will have to make another api call to sunlight to retrieve the names of the cosponsors based on their id
+  //list of ids of cosponsors from initial api call
   cosponsor_ids: Array,
+
+  //list of names of cosponsors from secondary api call
+  cosponsors: Array,
 
   //if there are no keywords, we will generate an array of keywords using another word association API
   keywords_generated: Array,
