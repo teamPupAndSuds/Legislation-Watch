@@ -63,23 +63,26 @@ var initializeBillsDatabase = function() {
           // running count of bills downloaded so far:
           var billsDownloaded = 0;
           // number of bills received in each call to the Sunlight Foundation API:
-          var billsPerPage = initializationQueryString.per_page;
+          var billsPerPage = Number(initializationQueryString.per_page);
           // a counter we will increment in order to progressively retrieve all bills available through the API:
           var page = 1;
 
           // Now use pagination to download all bills incrementally
           while (billsDownloaded < totalBills) {
+            console.log('About to make request for page: ', page);
             var queryString = JSON.parse(JSON.stringify(initializationQueryString)); // making a deep clone of the initalizationQueryString
                                                                                      // through use of the JSON libraries 
             queryString.page = page.toString();
             billsDownloaded += billsPerPage;
-            page++;        
+            page++;
+            console.log('billsDownloaded: ', billsDownloaded, ' totalBills: ', totalBills);        
             billsAPIRequest(queryString, function(error, response, body) {
               if (error) {
                 logger.log('Error initializing Bills database: ' + err, function() {});
               } else {
                 // Write each bill to the database
                 body = JSON.parse(body);
+                console.log('Just got back results for page: ', body.page.page);
                 body.results.forEach(function(b) {
                   var bill = new Bill(b);
                   bill.save(function(err) {
