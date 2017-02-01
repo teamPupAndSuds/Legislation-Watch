@@ -31,6 +31,7 @@
     "mongoose": "^4.7.8",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-router": "^3.0.2",
     "request": "^2.79.0",
     "unirest": "^0.5.1",
     "webpack": "^1.14.0",
