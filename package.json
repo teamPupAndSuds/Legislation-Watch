@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clientDevServer": "node_modules/.bin/webpack-dev-server --progress --color --content-base client/"
+    "clientDevServer": "node_modules/.bin/webpack-dev-server --progress --color --content-base client/",
+    "start": "nodemon server/server.js"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "request": "^2.79.0",
+    "unirest": "^0.5.1",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2"
   },
