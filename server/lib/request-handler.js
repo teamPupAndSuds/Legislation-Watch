@@ -27,8 +27,3 @@ exports.termSearch = function(req, res) {
       res.writeHead(200).send(result.body['associations_array']);
   });
 }
-
-//Renders home page
-exports.renderIndex = function(req, res) {
-  res.sendFile(path.join(__dirname, '/../../client/index.html'));
-}
