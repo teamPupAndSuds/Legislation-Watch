@@ -36,7 +36,7 @@ class BillResultSummaryPresentational extends React.Component {
           <div className="container-fluid">
             <div className="row">
               <div className="col-sm-9" style={{padding: 0}}>
-                <strong>{info.short_title}{!info.short_title && info.official_title}</strong>
+                <strong><a href={info.urls.congress + '/text'} target="_blank">{info.short_title}{!info.short_title && info.official_title}</a></strong>
                 <small className="text-uppercase"> ({info.chamber})</small>
               </div>
               <div className="col-sm-3" style={{padding: 0}}>
@@ -74,7 +74,7 @@ class BillResultSummaryPresentational extends React.Component {
           </table>
         </div>
       </div>
-    )
+    );
   }
 }
 
