@@ -12,6 +12,8 @@ const NavigationBar = require(__dirname + '/src/components/NavigationBar.jsx');
 const UserDashBoard = require(__dirname + '/src/components/UserDashBoard.jsx');
 const UserLegislatorsInfo = require(__dirname + '/src/components/UserLegislatorsInfo.jsx');
 const LegislationSearch = require(__dirname + '/src/components/LegislationSearch.jsx');
+const UserLogin = require(__dirname + '/src/components/UserLogin.jsx');
+const UserSignup = require(__dirname + '/src/components/UserSignup.jsx');
 
 // This is pre-download trimmed down version of Legislator data
 var LegislatorData = require(__dirname + '/src/data/LegislatorData.js');
@@ -60,6 +62,8 @@ class Test extends React.Component {
   render() {
     return (
       <Router history = {hashHistory}>
+        <Route path="/login" component={UserLogin} />
+        <Route path="/login" component={UserSignup} />
         <Route path="/" component={App}>
           <Route path="/search" components = {{main: () => <LegislationSearch legislatorCache={LegislatorData} />}} />
           <Route path="/dashboard" components = {{main: () => <UserDashBoard />}} />
