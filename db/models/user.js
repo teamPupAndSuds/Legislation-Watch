@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-//add bcrypt and bluebird if not using Passport
 var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
 
@@ -10,7 +9,6 @@ var userSchema = new mongoose.Schema({
     required: true
   },
 
-  //or are we using Passport?
   password: {
     type: String,
     required: true
@@ -30,7 +28,6 @@ var userSchema = new mongoose.Schema({
 
 var UserModel = mongoose.model('User', userSchema);
 
-//Use this if not using Passport
 User.comparePassword = function(candidatePassword, savedPassword, cb) {
   bcrypt.compare(candidatePassword, savedPassword, function(err, isMatch) {
     if (err) {
@@ -41,7 +38,6 @@ User.comparePassword = function(candidatePassword, savedPassword, cb) {
   });
 };
 
-//Use this if not using Passport
 userSchema.pre('save', function(next) {
   var cipher = Promise.promisify(bcrypt.hash);
   return cipher(this.password, null, null).bind(this)
