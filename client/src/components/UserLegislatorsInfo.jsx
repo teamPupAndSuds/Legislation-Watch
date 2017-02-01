@@ -56,7 +56,7 @@ class UserLegislatorsInfo extends React.Component {
       longitude: this.props.userLong
     };
 
-    $.get('https://congress.api.sunlightfoundation.com/legislators/locate', queryParameters, onLegislatorInfoFetchComplete.bind(this), 'json');
+    $.get('https://congress.api.sunlightfoundation.com/legislators/locate', queryParameters, onLegislatorInfoFetchComplete.bind(this), 'jsonp');
 
     function onLegislatorInfoFetchComplete(data, textStatus, jqXHR) {
       this.setState({
@@ -71,7 +71,7 @@ class UserLegislatorsInfo extends React.Component {
       longitude: this.props.userLong
     };
 
-    $.get('https://congress.api.sunlightfoundation.com/districts/locate', queryParameters, onElectoralInfoFetchComplete.bind(this), 'json');
+    $.get('https://congress.api.sunlightfoundation.com/districts/locate', queryParameters, onElectoralInfoFetchComplete.bind(this), 'jsonp');
 
     function onElectoralInfoFetchComplete(data, textStatus, jqXHR) {
       this.setState({
