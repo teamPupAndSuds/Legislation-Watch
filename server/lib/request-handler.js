@@ -1,3 +1,4 @@
+import { wordAssocAPIk } from './api_config.js';
 var path = require('path');
 var unirest = require('unirest');
 var db = require('/../../db');
@@ -17,7 +18,7 @@ exports.termSearch = function(req, res) {
 
   //sends post request to Twinword API with user entered search term
   unirest.post("https://twinword-word-associations-v1.p.mashape.com/associations/")
-    .header("X-Mashape-Key", "")
+    .header("X-Mashape-Key", wordAssocAPIk['key'])
     .header("Content-Type", "application/x-www-form-urlencoded")
     .header("Accept", "application/json")
     .send(searchTerm)
