@@ -25,6 +25,7 @@ var userSchema = new mongoose.Schema({
   },
   latitude: Number,
   longitude: Number,
+  keywords: Array
 });
 
 var UserModel = mongoose.model('User', userSchema);

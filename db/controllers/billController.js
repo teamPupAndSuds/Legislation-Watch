@@ -1,5 +1,6 @@
 // var BillModel = require('../models/bill.js');
 
-// function findBillByKeyWord(keyword, callback) {
-//   BillModel.find({}, callback);
+// function findBillsByKeywords(keyword, callback) {
+//   BillModel.find({keywords: keyword, keywords_generated: keyword}, callback);
 // }
+
