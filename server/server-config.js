@@ -10,7 +10,6 @@ var app = express();
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname + '/../client')));
 
-app.get('/', handler.renderIndex);
 app.post('/searchterm', handler.termSearch);
 
 module.exports = app;
