@@ -53,7 +53,12 @@ class BillResultSummaryPresentational extends React.Component {
               <tr>
                 <td>
                   <br />
-                  <div>{info.summary_short}</div>
+                  {info.summary_short && 
+                    <div>{info.summary_short}</div>
+                  }
+                  {!info.summary_short &&
+                    <div>No Summary Available</div>
+                  }
                 </td>
               </tr>
             </tbody>
