@@ -48,31 +48,31 @@ class LegislatorInfoPresentational extends React.Component {
             {info.website &&
             <tr>
               <td>Website:</td>
-              <td><a href={info.website}>{info.website}</a></td>
+              <td><a href={info.website} target="_blank">{info.website}</a></td>
             </tr>
             }
             {info.contact_form &&
               <tr>
                 <td>Contact Form:</td>
-                <td><a href={info.contact_form}>Link</a></td>
+                <td><a href={info.contact_form} target="_blank">Link</a></td>
               </tr>
             }
             {info.facebook_id &&
               <tr>
                 <td>Facebook ID:</td>
-                <td><a href={'http://facebook.com/' + info.facebook_id}>{info.facebook_id}</a></td>
+                <td><a href={'http://facebook.com/' + info.facebook_id} target="_blank">{info.facebook_id}</a></td>
               </tr>
             }
             {info.twitter_id && 
               <tr>
                 <td>Twitter:</td>
-                <td><a href={'http://twitter.com/' + info.twitter_id}>{info.twitter_id}</a></td>
+                <td><a href={'http://twitter.com/' + info.twitter_id} target="_blank">{info.twitter_id}</a></td>
               </tr>  
             }
             {info.youtube_id &&
               <tr>
                 <td>Youtube:</td>
-                <td><a href={'http://youtube.com/' + info.youtube_id}>{info.youtube_id}</a></td>
+                <td><a href={'http://youtube.com/' + info.youtube_id} target="_blank">{info.youtube_id}</a></td>
               </tr>
             }
           </tbody>
