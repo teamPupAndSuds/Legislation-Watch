@@ -3,9 +3,12 @@ const BillResultSummary = require('./BillResultSummary.jsx');
 
 class SearchResults extends React.Component {
   render() {
-    console.log('SearchResults,jsx', this.props.billResults);
     return (
-      <SearchResultsPresentational isFetching={this.props.isFetching} searchResults={this.props.billResults} />
+      <SearchResultsPresentational 
+        isFetching={this.props.isFetching} 
+        searchResults={this.props.billResults} 
+        legislatorCache={this.props.legislatorCache}
+        />
     );
   }
 
@@ -19,11 +22,10 @@ class SearchResultsPresentational extends React.Component {
       return null;
     }
 
-
     let billResultComponents = this.props.searchResults.map(
       function(bill) {
-        return <BillResultSummary key={bill.bill_id} info={bill} />;
-      });
+        return <BillResultSummary key={bill.bill_id} info={bill} legislatorCache={this.props.legislatorCache}/>;
+      }.bind(this));
 
     return (
       <div>
