@@ -18,8 +18,16 @@ class SearchResults extends React.Component {
 class SearchResultsPresentational extends React.Component {
   render() {
 
-    if (!this.props.searchResults) {
-      return null;
+    // if (!this.props.searchResults) {
+    //   return null;
+    // }
+
+    if(this.props.searchResults.length === 0) {
+      return (
+        <div>
+          No Results Found
+        </div>
+      );
     }
 
     let billResultComponents = this.props.searchResults.map(
