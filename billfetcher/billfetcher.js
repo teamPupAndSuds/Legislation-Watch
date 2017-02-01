@@ -8,6 +8,7 @@ helpers.initializeBillsDatabase(function() {
   console.log('Initalization complete.');
   helpers.updateBillsDatabase(function() {
     console.log('Update complete.');
+    process.exit();
   });
 });
 
