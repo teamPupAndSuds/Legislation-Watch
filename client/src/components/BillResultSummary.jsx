@@ -3,7 +3,7 @@ const React = require('react');
 class BillResultSummary extends React.Component {
   render() {
     return (
-      <BillResultSummaryPresentational info={this.props.info}/>
+      <BillResultSummaryPresentational info={this.props.info} legislatorCache={this.props.legislatorCache} />
     );
   }
 }
@@ -11,13 +11,22 @@ class BillResultSummary extends React.Component {
 class BillResultSummaryPresentational extends React.Component {
   render() {
     let info = this.props.info;
+    let legislatorCache = this.props.legislatorCache;
     let cosponsorElements = [];
 
     if (info.cosponsor_ids && info.cosponsor_ids.length !== 0) {
       cosponsorElements = info.cosponsor_ids.map(function(id) {
-        return (
-          <span key={id}>{id}, </span>
-        );
+        let cosponsor = legislatorCache[id];
+        if (cosponsor === undefined) {
+          console.log('+' + id + '+');
+          return (
+            <span key={id}>{id},</span>
+          );
+        } else {
+          return (
+            <span key={id}>{cosponsor.firstname} {cosponsor.lastname} ({cosponsor.party}), </span>
+          );
+        }
       });
     }
 
