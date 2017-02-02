@@ -12,10 +12,17 @@ exports.checkUser = function(req, res) {
 	if (!exports.isLoggedIn(req)) {
 	    res.writeHead(401);
 	    res.end();
-	  } else {
-	    res.send(req.session.user);
-	  }
-	};
+	 } else {
+	  	var userInfo = {};
+	  	userInfo['name'] = res.session.user.name;
+	  	userInfo['username'] = res.session.user.username;
+	  	userInfo['location'] = res.session.user.location;
+	  	userInfo['geoLocation'] = {};
+	  	userInfo['geoLocation']['lat'] = res.session.user.latitude;
+	  	userInfo['geoLocation']['long'] = res.session.user.longitude;
+	    res.send(userInfo);
+	}
+};
 
 exports.createSession = function(req, res, newUser) {
   return req.session.regenerate(function() {
