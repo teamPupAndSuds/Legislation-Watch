@@ -1,9 +1,10 @@
 const React = require('react');
+const LegislatorData = require('../data/LegislatorData.js');
 
 class BillResultSummary extends React.Component {
   render() {
     return (
-      <BillResultSummaryPresentational info={this.props.info} legislatorCache={this.props.legislatorCache} />
+      <BillResultSummaryPresentational info={this.props.info} legislatorCache={LegislatorData} />
     );
   }
 }
@@ -12,20 +13,18 @@ class BillResultSummaryPresentational extends React.Component {
   render() {
     let info = this.props.info;
     let legislatorCache = this.props.legislatorCache;
+
+    // Retrieve the cosponsor's name and party from the supplied ids
     let cosponsorElements = [];
 
     if (info.cosponsor_ids && info.cosponsor_ids.length !== 0) {
-      cosponsorElements = info.cosponsor_ids.map(function(id) {
+      info.cosponsor_ids.forEach(function(id) {
         let cosponsor = legislatorCache[id];
         if (cosponsor === undefined) {
-          console.log('+' + id + '+');
-          return (
-            <span key={id}>{id},</span>
-          );
+          console.log('Uncached Legislator bioguide_id:', id);
+          cosponsorElements.push(id + ' ');
         } else {
-          return (
-            <span key={id}>{cosponsor.firstname} {cosponsor.lastname} ({cosponsor.party}), </span>
-          );
+          cosponsorElements.push(cosponsor.firstname + ' ' + cosponsor.lastname + ' (' + cosponsor.party + ') ');
         }
       });
     }
@@ -55,7 +54,7 @@ class BillResultSummaryPresentational extends React.Component {
                     <strong> Co-Sponsor(s): </strong> 
                   }
                   {info.cosponsor_ids && info.cosponsor_ids.length !== 0 && 
-                    cosponsorElements
+                    <span>{cosponsorElements.join(',')}</span>
                   }
                 </td>
               </tr>
