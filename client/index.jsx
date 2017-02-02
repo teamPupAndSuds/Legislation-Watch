@@ -63,7 +63,7 @@ class Test extends React.Component {
     return (
       <Router history = {hashHistory}>
         <Route path="/login" component={UserLogin} />
-        <Route path="/login" component={UserSignup} />
+        <Route path="/signup" component={UserSignup} />
         <Route path="/" component={App}>
           <Route path="/search" components = {{main: () => <LegislationSearch legislatorCache={LegislatorData} />}} />
           <Route path="/dashboard" components = {{main: () => <UserDashBoard />}} />
