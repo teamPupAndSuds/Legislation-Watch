@@ -23,39 +23,71 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    // This is an cache for storing legislator info retrieved from the Sunlight API.
-    // This is design to reduce the number of API call to sunlight for legislator information
+    this.state = {
+      isVerifyingUserSession: true,
+      isUserLoggedIn: false 
+    };
+  }
 
-    // Now handled by Router, to be removed
-    // this.legislatorInfoCache = LegislatorData;
+  // Need check with the server to see if user is autheticated
+  componentDidMount() {
+    $.get('login')
+      .done(function(data) {
+        this.setState({        
+          isVerifyingUserSession: false,
+          isUserLoggedIn: true
+        });
+      })
+      .fail(error => {
+        // If user is not logged in:
+        this.setState({
+          isVerifyingUserSession: false,
+          isUserLoggedIn: false
+        });
+
+        // Redirect them to login
+        hashHistory.push('/login');
+      });
   }
 
   render() {
-    return (
-      <div>
-        <NavigationBar />
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-md-4">
-              <UserLegislatorsInfo />
-            </div>
-            <div className="col-md-8">
-              {this.props.main}
+    // If we are in the progress of checking if the user is logged in or not...
+    if (this.state.isVerifyingUserSession === true) {
+      return (
+        <div>
+          <h1>Authenticating...</h1>
+        </div>
+      );
+    }
+
+    // If the user is logged in...
+    if (this.state.isUserLoggedIn === true) {
+      return (
+        <div>
+          <NavigationBar />
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-md-4">
+                <UserLegislatorsInfo />
+              </div>
+              <div className="col-md-8">
+                {this.props.main}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+    
+    return null;
   }
 }
-
-//<LegislationSearch legislatorCache={this.legislatorInfoCache}/> 
 
 App.defaultProps = {
   main: (<UserDashBoard />)
 };
 
-class Test extends React.Component {
+class AppRoutes extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -77,4 +109,4 @@ class Test extends React.Component {
 
 
 
-ReactDOM.render(<Test />, document.getElementById('app'));
+ReactDOM.render(<AppRoutes />, document.getElementById('app'));
