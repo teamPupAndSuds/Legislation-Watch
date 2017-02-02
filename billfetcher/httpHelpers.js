@@ -6,14 +6,14 @@ var logger = require('./logHelpers.js');
 // Use this query string in an http request when pulling the data used to initially populate the database.
 var initializationQueryString = {
   congress: config.congress,
-  fields: 'bill_id,chamber,introduced_on,last_action_at,last_vote_at,last_version_on,short_title,official_title,popular_title,sponsor.first_name,sponsor.last_name,sponsor.middle_name,sponsor.title,sponsor_id,cosponsor_ids,keywords,summary,summary_short,related_bill_ids',
+  fields: 'bill_id,chamber,introduced_on,last_action_at,last_vote_at,last_version_on,short_title,official_title,popular_title,sponsor.first_name,sponsor.last_name,sponsor.middle_name,sponsor.title,sponsor_id,last_version,cosponsor_ids,keywords,summary,summary_short,related_bill_ids',
   order: 'introduced_on',
   per_page: '50'
 };
 
 // Use this query string in an http request when updating the bills in the database.
 var updateQueryString = {
-  fields: 'bill_id,chamber,introduced_on,last_action_at,last_vote_at,last_version_on,short_title,official_title,popular_title,sponsor.first_name,sponsor.last_name,sponsor.middle_name,sponsor.title,sponsor_id,cosponsor_ids,keywords,summary,summary_short,related_bill_ids',
+  fields: 'bill_id,chamber,introduced_on,last_action_at,last_vote_at,last_version_on,short_title,official_title,popular_title,sponsor.first_name,sponsor.last_name,sponsor.middle_name,sponsor.title,sponsor_id,last_version,cosponsor_ids,keywords,summary,summary_short,related_bill_ids',
   order: 'introduced_on',
   per_page: '20'
 };
