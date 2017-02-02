@@ -16,9 +16,6 @@ const UserLogin = require(__dirname + '/src/components/UserLogin.jsx');
 const UserSignup = require(__dirname + '/src/components/UserSignup.jsx');
 const UserLogout = require(__dirname + '/src/components/UserLogout.jsx');
 
-// This is pre-download trimmed down version of Legislator data
-var LegislatorData = require(__dirname + '/src/data/LegislatorData.js');
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -42,11 +39,12 @@ class App extends React.Component {
         // If user is not logged in:
         this.setState({
           isVerifyingUserSession: false,
-          isUserLoggedIn: false
+          // isUserLoggedIn: false
+          isUserLoggedIn: true          
         });
 
         // Redirect them to login
-        hashHistory.push('/login');
+        // hashHistory.push('/login');
       });
   }
 
@@ -78,7 +76,7 @@ class App extends React.Component {
         </div>
       );
     }
-    
+
     return null;
   }
 }
@@ -99,7 +97,7 @@ class AppRoutes extends React.Component {
         <Route path="/signup" component={UserSignup} />
         <Route path="/logout" component={UserLogout} /> 
         <Route path="/" component={App}>
-          <Route path="/search" components = {{main: () => <LegislationSearch legislatorCache={LegislatorData} />}} />
+          <Route path="/search" components = {{main: () => <LegislationSearch />}} />
           <Route path="/dashboard" components = {{main: () => <UserDashBoard />}} />
         </Route>
       </Router>
