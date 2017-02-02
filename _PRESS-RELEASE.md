@@ -1,4 +1,4 @@
-# Project Name #
+# !nformed! #
 
 <!-- 
 > This material was originally posted [here](http://www.quora.com/What-is-Amazons-approach-to-product-development-and-product-management). It is reproduced here for posterities sake.
@@ -15,30 +15,29 @@ Oh, and I also like to write press-releases in what I call "Oprah-speak" for mai
 
 Once the project moves into development, the press release can be used as a touchstone; a guiding light. The product team can ask themselves, "Are we building what is in the press release?" If they find they're spending time building things that aren't in the press release (overbuilding), they need to ask themselves why. This keeps product development focused on achieving the customer benefits and not building extraneous stuff that takes longer to build, takes resources to maintain, and doesn't provide real customer benefit (at least not enough to warrant inclusion in the press release).
  -->
- 
-## Heading ##
-  > Name the product in a way the reader (i.e. your target customers) will understand.
 
-## Sub-Heading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
-
-## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+An app for people who want to know what happens in congress about issues they care about
 
 ## Problem ##
-  > Describe the problem your product solves.
+In today's political climate, it's important to know what's going on in congress. Each one of us has topics of interest that we care deeply about, and want to make sure we know about the latest bills that have to do with these issues. The problem is, the average person doesn't have time to search government sites every day to find and keep track of these bills.
 
 ## Solution ##
-  > Describe how your product elegantly solves the problem.
+This is where !nformed! comes in. Each user will have a customized dashboard that will contain the latest bills of their chosen topics: no need to aimlessly search on various government websites any longer! Each day, all users will also receive an email digest containing information about new bills relating to their personalized topics. It's that simple. 
 
-## Quote from You ##
-  > A quote from a spokesperson in your company.
+"We created !nformed! to help the average citizen stay...well...informed with the latest bills introduced in congress. Our app makes it easy for anybody to know exactly what's going on in the government." -Founder of !nformed!
 
 ## How to Get Started ##
-  > Describe how easy it is to get started.
+To get started, all you need to do is sign up at (insert app address here)! Once you sign up, you can simply add topics you want to keep track of to your dashboard. Our app will present you with the latest bills for each topic chosen. 
 
-## Customer Quote ##
-  > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+Don't know what topics to add? Start exploring with our search feature: simply type in a possible topic you may want to add, and you will receive the latest bills for that topic. This can help you decide and refine your topics of interest for results that will best fit your interests.
 
-## Closing and Call to Action ##
-  > Wrap it up and give pointers where the reader should go next.
+See a bill that interests/concerns you? Contact information for your local representatives will always be accessible through your sidebar. 
+
+## Customer Quotes ##
+"As a social activist, I must know what's happening in congress at all times. New bills are introduced every day, and it's hard to sort through them all. !nformed! makes it so easy for me to keep track of new bills that interest me. It's crazy: the minute a bill is given a title, I get to know about it! This allows us to hold conversations with our representatives early on in the bill making process." -Glinda Hopper, Social Activist
+
+"As a med student, I hardly have any time to search a million websites to find all the bills introduced to congress for a given day. I like the email digest feature so that I can see what's happening at a quick glance." -Abraham Aviles, Medical Student
+
+"In addition to the topics dashboard, I really like how information about my local representatives are always on my sidebar. If I see a bill that needs addressing, its very easy for me to find the contact info for my local rep." -Lisa Caldwell, Lawyer
+
+What are you waiting for? Sign up today! (insert web address here)
