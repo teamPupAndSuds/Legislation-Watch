@@ -22,7 +22,7 @@ An app for people who want to know what happens in congress about issues they ca
 In today's political climate, it's important to know what's going on in congress. Each one of us has topics of interest that we care deeply about, and want to make sure we know about the latest bills that have to do with these issues. The problem is, the average person doesn't have time to search government sites every day to find and keep track of these bills.
 
 ## Solution ##
-This is where !nformed! comes in. Each user will have a customized dashboard that will contain the latest bills of their chosen topics: no need to aimlessly search on on various government websites any longer! Each day, all users will also receive an email digest containing information about new bills relating to their personalized topics. It's that simple. 
+This is where !nformed! comes in. Each user will have a customized dashboard that will contain the latest bills of their chosen topics: no need to aimlessly search on various government websites any longer! Each day, all users will also receive an email digest containing information about new bills relating to their personalized topics. It's that simple. 
 
 "We created !nformed! to help the average citizen stay...well...informed with the latest bills introduced in congress. Our app makes it easy for anybody to know exactly what's going on in the government." -Founder of !nformed!
 
@@ -40,5 +40,4 @@ See a bill that interests/concerns you? Contact information for your local repre
 
 "In addition to the topics dashboard, I really like how information about my local representatives are always on my sidebar. If I see a bill that needs addressing, its very easy for me to find the contact info for my local rep." -Lisa Caldwell, Lawyer
 
-## Closing and Call to Action ##
-  > Wrap it up and give pointers where the reader should go next.
+What are you waiting for? Sign up today! (insert web address here)
