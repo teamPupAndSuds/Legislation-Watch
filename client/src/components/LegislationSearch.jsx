@@ -18,7 +18,6 @@ class LegislationSearch extends React.Component {
         isFetching={this.state.isFetchingSearchResults}
         billResults={this.state.searchResults} 
         onSearchSubmit={this.handleSearchSubmit}
-        legislatorCache={this.props.legislatorCache}
       />
     );
   }
@@ -26,7 +25,7 @@ class LegislationSearch extends React.Component {
   handleSearchSubmit(searchTerms) {
     this.setState({isFetchingSearchResults: true});
 
-    // Call Sunlight API to retrieve the bill inform
+    // Call Sunlight API to retrieve the bill information
     let ajaxSettings = {
       method: 'GET',
       context: this,
@@ -60,7 +59,6 @@ class LegislationSearchPresentational extends React.Component {
           <SearchResults 
             isFetching={this.props.isFetching} 
             billResults={this.props.billResults}
-            legislatorCache={this.props.legislatorCache}
             />
         }
       </div>
