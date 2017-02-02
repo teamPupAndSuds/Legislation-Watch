@@ -41,7 +41,7 @@ var billSchema = new mongoose.Schema({
   //if there are no keywords, we will generate an array of keywords using another word association API
   keywords_generated: Array,
 
-//timestamps in options, set to true for both createdAt and 
+//timestamps in options, set to true for both createdAt and updatedAt
 }, {timestamps: true});
 
 
