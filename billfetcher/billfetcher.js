@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var config = require('./config');
-var helpers = require('./httpHelpers');
+var helpers = require('./billsAPIHelpers');
 var keywordFetcher = require('./keywordfetcher.js');
 
 mongoose.connect(config.databaseURL);
