@@ -23,7 +23,8 @@ var userSchema = new mongoose.Schema({
   },
   latitude: Number,
   longitude: Number,
-  keywords: Array
+  keywords: Array,
+  email: String
 });
 
 var UserModel = mongoose.model('User', userSchema);
