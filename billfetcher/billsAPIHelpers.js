@@ -39,8 +39,8 @@ var updateBillsDatabase = function(callback) {
       // First, do an initial request to figure out how many new bills we need to download into the database
       updateQueryString.introduced_on__gte = mostRecentInDatabase;      // this instructs the API to only return bills
                                                                         // introduced on or after a certain date
-      billsAPIRequest(updateQueryString, function(error, response, body) {
-        if (error) {
+      billsAPIRequest(updateQueryString, function(err, response, body) {
+        if (err) {
           logger.log('Error updating Bills database: ' + err); 
         } else {
           retrieveAndStore(JSON.parse(body).count, updateQueryString, callback);
