@@ -1,6 +1,7 @@
 var request = require('request');
 var fs = require('fs');
 var config = require('./config');
+var apiConfig = require('./../server/lib/api_config');
 var Bill = require('./../db/models/bill');
 var logger = require('./logHelpers.js');
 var mongoose = require('mongoose');
@@ -21,10 +22,21 @@ var fetchBillsKeywords = function(callback) {
         if (err) {
           logger.log('Error retrieving bills from the database: ' + err);
         } else {
+          var billsSaved = 0;
           // for each bill, get the text of the bill
           bills.forEach(function(bill) {
             getBillText(bill, function(text) {
-              logger.log('Retrieved bill text: ' + text);
+              // use the text of the bill to get keywords via API
+              getBillKeywords(text, function(results) {
+                // save keywords back to the bills in the database
+                console.log('results.keyword: ' + results.keyword);
+                saveKeywords(bill, Object.keys(results.keyword), function() {
+                  billsSaved++;
+                  if (billsSaved === bills.length) {
+                    callback();
+                  }
+                }); 
+              });
             });
           });
         }
@@ -36,6 +48,34 @@ var fetchBillsKeywords = function(callback) {
 
   // populate keywords_generated in database using results of Twinword API 
 
+};
+
+var saveKeywords = function(bill, keywords, callback) {
+  bill.keywords_generated = keywords;
+  bill.save(function(err) {
+    if (err) {
+      logger.log('Error saving keywords back to database: ' + err);
+    }
+    callback();
+  });
+};
+
+var getBillKeywords = function(text, callback) {
+  request({
+    url: config.TOPIC_TAGGING_API_URL,
+    method: 'GET',
+    headers: {
+      'X-Mashape-Key': apiConfig.topicTaggingAPIk.key,
+      Accept: 'application/json',
+    },
+    qs: { text: text}
+  }, function(err, response, body) {
+    if (err) {
+      logger.log('Error retrieving bill keywords from API: ' + err);      
+    } else {
+      callback(JSON.parse(body));
+    }
+  });   
 };
 
 var getBillText = function(bill, callback) {
