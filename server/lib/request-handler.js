@@ -4,7 +4,6 @@ var path = require('path');
 var unirest = require('unirest');
 var User = require('./../../db/models/user');
 var util = require('./utility.js');
-//var db = require('/../../db');
 
 /////////////////////////////////////////////////////////////////
 //AUTHENTICATION
