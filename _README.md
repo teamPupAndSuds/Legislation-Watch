@@ -1,6 +1,6 @@
-# Project Grapefruit
+# !nformed!
 
-> Pithy project description
+An app for people who want to know what happens in congress about issues they care about. The app fetches the latest bills drafted in congress and delivers them to each user's in-app dashboard, and email. 
 
 ## Team
 
@@ -20,15 +20,12 @@
 
 ## Usage
 
-> Some usage instructions
+> (insert screencast here)
 
 ## Requirements
 
-- Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+- Node v6.x
+- mongoDB v3.4.1
 
 ## Development
 
@@ -37,15 +34,12 @@
 From within the root directory:
 
 ```sh
-sudo npm install -g bower
 npm install
-bower install
 ```
 
 ### Roadmap
 
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
-
+View the project roadmap [here](https://github.com/HR-Proudfoots/proudfoots/issues)
 
 ## Contributing
 
