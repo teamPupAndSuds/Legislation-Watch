@@ -27,7 +27,7 @@ class NavigationBar extends React.Component {
             </ul>
 
             <div className="navbar-right">
-                <p className="navbar-text">Logout</p>          
+                <Link to="/logout" className="navbar-text nav-link">Logout</Link>          
             </div>
           </div>
 
