@@ -1,15 +1,22 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
+
 const ReactRouter = require('react-router');
 const Link = ReactRouter.Link;
 const Router = ReactRouter.Router;
+const Route = ReactRouter.Route;
 const IndexRoute = ReactRouter.IndexRoute;
 const hashHistory = ReactRouter.hashHistory;
 
 const NavigationBar = require(__dirname + '/src/components/NavigationBar.jsx');
+const UserDashBoard = require(__dirname + '/src/components/UserDashBoard.jsx');
 const UserLegislatorsInfo = require(__dirname + '/src/components/UserLegislatorsInfo.jsx');
 const LegislationSearch = require(__dirname + '/src/components/LegislationSearch.jsx');
-const LegislatorData = require(__dirname + '/src/data/LegislatorData.js');
+const UserLogin = require(__dirname + '/src/components/UserLogin.jsx');
+const UserSignup = require(__dirname + '/src/components/UserSignup.jsx');
+
+// This is pre-download trimmed down version of Legislator data
+var LegislatorData = require(__dirname + '/src/data/LegislatorData.js');
 
 class App extends React.Component {
   constructor(props) {
@@ -18,7 +25,8 @@ class App extends React.Component {
     // This is an cache for storing legislator info retrieved from the Sunlight API.
     // This is design to reduce the number of API call to sunlight for legislator information
 
-    this.legislatorInfoCache = LegislatorData;
+    // Now handled by Router, to be removed
+    // this.legislatorInfoCache = LegislatorData;
   }
 
   render() {
@@ -31,7 +39,7 @@ class App extends React.Component {
               <UserLegislatorsInfo />
             </div>
             <div className="col-md-8">
-              <LegislationSearch legislatorCache={this.legislatorInfoCache}/>
+              {this.props.main}
             </div>
           </div>
         </div>
@@ -39,4 +47,32 @@ class App extends React.Component {
     );
   }
 }
-ReactDOM.render(<App />, document.getElementById('app'));
+
+//<LegislationSearch legislatorCache={this.legislatorInfoCache}/> 
+
+App.defaultProps = {
+  main: (<UserDashBoard />)
+};
+
+class Test extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <Router history = {hashHistory}>
+        <Route path="/login" component={UserLogin} />
+        <Route path="/signup" component={UserSignup} />
+        <Route path="/" component={App}>
+          <Route path="/search" components = {{main: () => <LegislationSearch legislatorCache={LegislatorData} />}} />
+          <Route path="/dashboard" components = {{main: () => <UserDashBoard />}} />
+        </Route>
+      </Router>
+    );
+  }
+} 
+
+
+
+ReactDOM.render(<Test />, document.getElementById('app'));

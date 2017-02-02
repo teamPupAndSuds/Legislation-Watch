@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var findOrCreate = require('mongoose-findorcreate');
 
 var billSchema = new mongoose.Schema({
   bill_id: {
@@ -42,6 +43,9 @@ var billSchema = new mongoose.Schema({
 
 //timestamps in options, set to true for both createdAt and updatedAt
 }, {timestamps: true});
+
+
+billSchema.plugin(findOrCreate);
 
 var BillModel = mongoose.model('Bill', billSchema);
 
