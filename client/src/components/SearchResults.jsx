@@ -22,7 +22,7 @@ class SearchResultsPresentational extends React.Component {
     //   return null;
     // }
 
-    if(this.props.searchResults.length === 0) {
+    if (this.props.searchResults.length === 0) {
       return (
         <div>
           No Results Found
