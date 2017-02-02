@@ -30,15 +30,15 @@ var userSchema = new mongoose.Schema({
 var UserModel = mongoose.model('User', userSchema);
 
 //Use this if not using Passport
-User.comparePassword = function(candidatePassword, savedPassword, cb) {
-  bcrypt.compare(candidatePassword, savedPassword, function(err, isMatch) {
-    if (err) {
-      return cb(err);
-    } else {
-      cb(null, isMatch);
-    }
-  });
-};
+// User.comparePassword = function(candidatePassword, savedPassword, cb) {
+//   bcrypt.compare(candidatePassword, savedPassword, function(err, isMatch) {
+//     if (err) {
+//       return cb(err);
+//     } else {
+//       cb(null, isMatch);
+//     }
+//   });
+// };
 
 //Use this if not using Passport
 userSchema.pre('save', function(next) {

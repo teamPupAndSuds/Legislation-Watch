@@ -8,13 +8,12 @@ exports.isLoggedIn = function(req, res) {
 	return req.session ? !!req.session.user : false;
 };
 
-exports.checkUser = function(req, res, next) {
+exports.checkUser = function(req, res) {
 	if (!exports.isLoggedIn(req)) {
 	    res.writeHead(401);
 	    res.end();
 	  } else {
-	    res.writeHead(200);
-	    res.end();
+	    res.send(req.session.user);
 	  }
 	};
 

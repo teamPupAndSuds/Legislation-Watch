@@ -1,5 +1,5 @@
 exports.wordAssocAPIk = 
-{'key': 'ZzApiC4FIEmshCpHYrOzI4CuPWtAp128yJxjsnmOnGthxRr3f3'};
+{'key': '8KmkzUb9EimshHx79k94P5FwiuMyp1F5QfpjsnnLO1PO56oj2J'};
 
 exports.geoCode = 
-{'key': 'AIzaSyDMG9wlkFHqPG0jmPYrLcpocskc65iS1Ao'};
+{'key': 'AIzaSyC-95LSE5kfVWPuFIKruiE0BWOV9phPTUc'};

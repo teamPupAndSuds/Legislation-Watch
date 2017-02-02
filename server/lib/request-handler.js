@@ -15,18 +15,22 @@ exports.userLogin = function(req, res) {
 
   User.findOne( {username: username} )
     .exec(function(err, user) {
-      if(!user) {
-        res.writeHead(401);
-        res.end();
+      if(!err) {
+        if(!user) {
+          res.writeHead(401);
+          res.end();
+        } else {
+          util.comparePassword(password, user.password, function(err, match) {
+            if (match) {
+              util.createSession(req, res, user);
+            } else {
+              res.writeHead(401);
+              res.end();
+            }
+          });
+        }
       } else {
-        util.comparePassword(password, user.password, function(err, match) {
-          if (match) {
-            util.createSession(req, res, user);
-          } else {
-            res.writeHead(401);
-            res.end();
-          }
-        });
+        res.send(err);
       }
     });
 };
@@ -57,7 +61,10 @@ exports.userSignup = function(req, res) {
   util.geoCodeit(res, streetAddress, function(err, response) {
     if (!err) {
       var geoLocation = response.json.results[0].geometry.location;
-      res.send(geoLocation);
+      var geoLoc = {location: {}};
+      geoLoc.location['lat'] = geoLocation.lat;
+      geoLoc.location['long'] = geoLocation.lng;
+      res.send(geoLoc);
     }
   });
 };
@@ -71,7 +78,7 @@ exports.termSearch = function(req, res) {
   //searchTerm format: "entry=term"
   var searchTerm = 'entry=';
 
-  //req.body.term comes in as an array of search terms input form user
+  //req.body.term comes in as an array of search terms input from user
   //convert search term array to string
   var searchTerms = req.body['term'].slice();
   searchTerms = searchTerms.toString();
@@ -84,7 +91,16 @@ exports.termSearch = function(req, res) {
     .header("Accept", "application/json")
     .send(searchTerm)
     .end(function (result) {
+      if (result.error) {
+        res.send("Error fetching associated keywords");
+      } else {
       //sends word association back to client as an array of words
-      res.send(result.body['associations_array']);
+        var words = result.body['associations_array'];
+        if (words !== undefined) {
+          res.send(result.body['associations_array']);
+        } else {
+          res.send('No associated keywords found');
+        }
+      }
   });
 };
