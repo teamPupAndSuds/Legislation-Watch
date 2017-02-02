@@ -2,7 +2,7 @@
 var apiKey = require('./api_config.js');
 var path = require('path');
 var unirest = require('unirest');
-var User = require('/../../db/models/user');
+var User = require('./../../db/models/user');
 var util = require('./utility.js');
 //var db = require('/../../db');
 
@@ -16,13 +16,15 @@ exports.userLogin = function(req, res) {
   User.findOne( {username: username} )
     .exec(function(err, user) {
       if(!user) {
-        res.writeHead(401).send();
+        res.writeHead(401);
+        res.end();
       } else {
         util.comparePassword(password, user.password, function(err, match) {
           if (match) {
             util.createSession(req, res, user);
           } else {
-            res.writeHead(401).send();
+            res.writeHead(401);
+            res.end();
           }
         });
       }
@@ -31,18 +33,20 @@ exports.userLogin = function(req, res) {
 
 exports.userLogout = function(req, res) {
   req.session.destroy(function() {
-    res.writeHead(200).send();
+    res.writeHead(200);
+    res.end();
   });
 };
 
 
 exports.userSignup = function(req, res) {
   var username = req.params.username;
-  var password = req.body.password;
-  var userEmail = req.body.email;
-  var userAddress = req.body.address;
+  var password = req.body['password'];
+  var userEmail = req.body['email'];
+  var userAddress = req.body['address'];
   var streetAddress = userAddress['houseNum'];
-  streeAddress.concat(
+  streetAddress = streetAddress.toString();
+  streetAddress = streetAddress.concat(
     userAddress['streetName'],
     ', ',
     userAddress['city'],
@@ -50,6 +54,12 @@ exports.userSignup = function(req, res) {
     userAddress['state']
     );
 
+  util.geoCodeit(res, streetAddress, function(err, response) {
+    if (!err) {
+      var geoLocation = response.json.results[0].geometry.location;
+      res.send(geoLocation);
+    }
+  });
 };
 
 
@@ -64,8 +74,8 @@ exports.termSearch = function(req, res) {
   //req.body.term comes in as an array of search terms input form user
   //convert search term array to string
   var searchTerms = req.body['term'].slice();
-  searchTerms.toString();
-  searchTerm.concat(searchTerms);
+  searchTerms = searchTerms.toString();
+  searchTerm = searchTerm.concat(searchTerms);
 
   //sends post request to Twinword API with user entered search term
   unirest.post("https://twinword-word-associations-v1.p.mashape.com/associations/")
@@ -75,6 +85,6 @@ exports.termSearch = function(req, res) {
     .send(searchTerm)
     .end(function (result) {
       //sends word association back to client as an array of words
-      res.writeHead(200).send(result.body['associations_array']);
+      res.send(result.body['associations_array']);
   });
 };

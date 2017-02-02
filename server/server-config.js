@@ -4,7 +4,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var mongoose = require('mongoose');
 var path = require('path');
-var handler = require('./lib/request-handler');
+var handler = requir('./lib/request-handler');
 var util = require('./lib/utility.js');
 
 var app = express();
