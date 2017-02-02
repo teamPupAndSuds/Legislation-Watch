@@ -1,4 +1,4 @@
-# Project Name #
+# !nformed! #
 
 <!-- 
 > This material was originally posted [here](http://www.quora.com/What-is-Amazons-approach-to-product-development-and-product-management). It is reproduced here for posterities sake.
@@ -15,27 +15,19 @@ Oh, and I also like to write press-releases in what I call "Oprah-speak" for mai
 
 Once the project moves into development, the press release can be used as a touchstone; a guiding light. The product team can ask themselves, "Are we building what is in the press release?" If they find they're spending time building things that aren't in the press release (overbuilding), they need to ask themselves why. This keeps product development focused on achieving the customer benefits and not building extraneous stuff that takes longer to build, takes resources to maintain, and doesn't provide real customer benefit (at least not enough to warrant inclusion in the press release).
  -->
- 
-## Heading ##
-  > Name the product in a way the reader (i.e. your target customers) will understand.
 
-## Sub-Heading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
-
-## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+An app for people who want to know what happens in congress about issues they care about
 
 ## Problem ##
-  > Describe the problem your product solves.
+In today's political climate in the United States, it's important to know what's going on in congress. Each on of us has topics of interest that we care deeply about, and want to make sure we know about the latest bills that have to do with these issues. The problem is, the average person doesn't have time to search government sites like congress.gov to find these bills. 
 
 ## Solution ##
-  > Describe how your product elegantly solves the problem.
+This is where !nformed! comes in. Each user will have a customized dashboard that will contain the latest bills of their chosen topics: no need to aimlessly search on congress.gov any longer! Each day, all users will also receive an email digest containing information about new bills relating to their personalized topics. It's that simple. 
 
-## Quote from You ##
-  > A quote from a spokesperson in your company.
+"It was difficult for me to search some goverment websites for the latest bills of a given topic. With !nformed!, the latest bills I'm interested in just show up on my dashboard! The daily email is also a great way to keep a record of topics I care about." 
 
 ## How to Get Started ##
-  > Describe how easy it is to get started.
+To get started, you will need to create an account. When you sign up, you will be asked to 
 
 ## Customer Quote ##
   > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
