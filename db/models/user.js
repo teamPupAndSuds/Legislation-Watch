@@ -3,7 +3,6 @@ var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
 
 var userSchema = new mongoose.Schema({
-  name: String,
   username: {
     type: String,
     required: true
