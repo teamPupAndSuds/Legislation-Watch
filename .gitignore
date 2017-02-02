@@ -1,4 +1,4 @@
 node_modules
 .DS_Store
 client/dist
-api_config.js
+server/lib/api_config.js
