@@ -32,22 +32,22 @@ exports.getAllByKeywordsGen = function(phrase, cb) {
 exports.billAssociate = function(keywordObj, cb) {
   //clears bills each call to avoid duplicates in bills property
   //first setting bills property to object in order to avoid duplicates
-  keywordObj['bills'] = {};
-  exports.getAllByKeywords(keywordObj['keyword'], function(err, results) {
+  keywordObj['relatedBills'] = {};
+  exports.getAllByKeywords(keywordObj['word'], function(err, results) {
     if (err) {
       console.log('Sorry, was not able to retrieve bills from field keywords');
       cb(err);
     } else {
       results.forEach(function(bill) {
-        keywordObj['bills'][bill.bill_id] = bill.bill_id;
+        keywordObj['relatedBills'][bill.bill_id] = bill.bill_id;
       });
-      exports.getAllByKeywordsGen(keywordObj['keyword'], function(err, resultsGen) {
+      exports.getAllByKeywordsGen(keywordObj['word'], function(err, resultsGen) {
         if (err) {
           console.log('Sorry, was not able to retrieve bills from field keywords_generated');
           cb(err);
         } else {
           resultsGen.forEach(function(bill) {
-            keywordObj['bills'][bill.bill_id] = bill.bill_id;
+            keywordObj['relatedBills'][bill.bill_id] = bill.bill_id;
           }); 
           console.log('Bills retrieved through main keyword');
           exports.retrieveBillsThroughAssociatedKeywords(keywordObj, function(err, result) {
@@ -58,10 +58,10 @@ exports.billAssociate = function(keywordObj, cb) {
               console.log(result);
 
               //process of converting bill_ids to array to align with client-side expectation
-              var tempObj = keywordObj['bills'];
-              keywordObj['bills'] = [];
+              var tempObj = keywordObj['relatedBills'];
+              keywordObj['relatedBills'] = [];
               for (var key in tempObj) {
-                keywordObj['bills'].push(tempObj[key]);
+                keywordObj['relatedBills'].push(tempObj[key]);
               }
               console.log('Keywords successfully added to keyword object');
               cb(null, keywordObj);  
@@ -81,22 +81,22 @@ exports.retrieveBillsThroughAssociatedKeywords = function(keywordObj, cb) {
         cb(err);
       } else {
         result.forEach(function(bill) {
-          keywordObj['bills'][bill.bill_id] = bill.bill_id;
+          keywordObj['relatedBills'][bill.bill_id] = bill.bill_id;
         });
-        exports.getAllByKeywordsGen(keywordObj['keyword'], function(err, resultsGen) {
+        exports.getAllByKeywordsGen(keyword, function(err, resultsGen) {
           if (err) {
             console.log('Sorry, was not able to retrieve bills from field keywords_generated');
             cb(err);
           } else {
             resultsGen.forEach(function(bill) {
-              keywordObj['bills'][bill.bill_id] = bill.bill_id;
+              keywordObj['relatedBills'][bill.bill_id] = bill.bill_id;
             });
+            cb(null, 'Bills retrieved through associated keywords');
           }
         });
       }
     });
   });
-  cb(null, 'Bills retrieved through associated keywords');
 };
 
 ///////////////////////////////////////////
@@ -107,7 +107,7 @@ exports.retrieveBillsThroughAssociatedKeywords = function(keywordObj, cb) {
 
 //sample keyword object
 var keyword = {
-  keyword: 'trade',
+  word: 'trade',
   associatedKeywords: ['foreign', 'money', 'tariffs', 'goods', 'profit']
 };
 
