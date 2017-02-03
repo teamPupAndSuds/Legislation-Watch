@@ -1,3 +1,10 @@
+////////////////////////////////////////////////////////////////////////////////
+// UserSignup.jsx
+// --------------------------
+// This is the user signup component.
+// 
+////////////////////////////////////////////////////////////////////////////////
+
 const React = require('react');
 const ReactRouter = require('react-router');
 const hashHistory = ReactRouter.hashHistory;
@@ -31,7 +38,7 @@ class UserSignup extends React.Component {
     newUserInformation.address.city = this.formFields.city;
     newUserInformation.address.state = this.formFields.state;
 
-    // Send a POST request to signup
+    // Send a AJAX POST request to the back-end server
     $.post('signup/' + this.formFields.username, newUserInformation)
       .done(function(data) {
         hashHistory.push('/login');
@@ -45,7 +52,8 @@ class UserSignup extends React.Component {
 
   }
 
-  // This populates the formFields object with the user's input as they type it
+  // Event handler to populate all values into the formFields object
+  // for later use by handleFormSubmit()
   handleInputFieldChange(event) {
     this.formFields[event.target.id] = event.target.value;
   }
@@ -53,6 +61,7 @@ class UserSignup extends React.Component {
   render() {
     return (
       <div className="container-fluid">
+        <h2>Legislation Watch</h2>      
         <div className="panel panel-primary">
           <div className="panel-heading">
             <h4>Signup</h4>
