@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 var path = require('path');
 var handler = require('./lib/request-handler');
 var util = require('./lib/utility.js');
-mongoose.connect('mongodb://localhost:LegislatureWatcher')
+mongoose.connect('mongodb://localhost:LegislatureWatcher');
 var app = express();
 app.use(bodyParser.json());
 
@@ -14,9 +14,9 @@ app.use(bodyParser.json());
 //AUTHENTICATION
 //express session
 app.use(session({
-	secret: 'shhh, it\'s a secret',
-	resave: false,
-	saveUnitialized: true,
+  secret: 'shhh, it\'s a secret',
+  resave: false,
+  saveUnitialized: true,
 }));
 //routes to login page
 app.get('/login', util.checkUser);
