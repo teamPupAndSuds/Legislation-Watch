@@ -2,9 +2,6 @@
 // SearchBar.jsx
 // --------------------------
 // This is the component for a simple search bar
-//
-// It uses Bootstrap's collapse feature to create nav menu that is responsive 
-// to mobile devices.
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
