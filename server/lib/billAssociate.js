@@ -70,11 +70,11 @@ exports.billAssociate = function(keywordObj, cb) {
 //////////////TESTING ZONE/////////////////
 ///////////////////////////////////////////
 
-//PLEASE COMMENT OUT THE CODE BELOW//
+// PLEASE COMMENT OUT THE CODE BELOW//
 
-//sample keyword object
+// // sample keyword object
 // var keyword = {
-//   word: 'medicare'
+//   word: 'marriage'
 // };
 
 // //print the userObj result to terminals
