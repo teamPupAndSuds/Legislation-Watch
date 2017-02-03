@@ -14,7 +14,8 @@ class UserDashBoardKeywordsEntryBar extends React.Component {
   }
 
   handleKeywordSubmit(event) {
-    console.log(this.userMonitorKeywords);
+    event.preventDefault();
+    this.props.onAddMonitoredWords(this.userMonitorKeywords);
   }
 
   render() {

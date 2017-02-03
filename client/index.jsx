@@ -14,47 +14,97 @@ const UserLegislatorsInfo = require(__dirname + '/src/components/UserLegislators
 const LegislationSearch = require(__dirname + '/src/components/LegislationSearch.jsx');
 const UserLogin = require(__dirname + '/src/components/UserLogin.jsx');
 const UserSignup = require(__dirname + '/src/components/UserSignup.jsx');
-
-// This is pre-download trimmed down version of Legislator data
-var LegislatorData = require(__dirname + '/src/data/LegislatorData.js');
+const UserLogout = require(__dirname + '/src/components/UserLogout.jsx');
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    // This is an cache for storing legislator info retrieved from the Sunlight API.
-    // This is design to reduce the number of API call to sunlight for legislator information
+    this.state = {
+      isVerifyingUserSession: true,
+      isUserLoggedIn: false,
+      username: '',
+      userLocation: {
+        lat: undefined,
+        long: undefined
+      }
+    };
+  }
 
-    // Now handled by Router, to be removed
-    // this.legislatorInfoCache = LegislatorData;
+  // Need check with the server to see if user is autheticated
+  componentDidMount() {
+    $.get('login')
+      .done(function(data) {
+        this.setState({        
+          isVerifyingUserSession: false,
+          isUserLoggedIn: true,
+          username: data.username,
+          userLocation: data.location
+        });
+      })
+      .fail(error => {
+        // If user is not logged in:
+        this.setState({
+          isVerifyingUserSession: false,
+          isUserLoggedIn: false
+
+          // Testing Only:
+          // isUserLoggedIn: true,
+          // username: 'boba',
+          // userLocation: {
+          //   lat: 37.795,
+          //   long: -122.40
+          // }      
+        });
+
+        // Redirect them to login
+        hashHistory.push('/login');
+      });
   }
 
   render() {
-    return (
-      <div>
-        <NavigationBar />
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-md-4">
-              <UserLegislatorsInfo />
-            </div>
-            <div className="col-md-8">
-              {this.props.main}
+    // If we are in the progress of checking if the user is logged in or not...
+    if (this.state.isVerifyingUserSession === true) {
+      return (
+        <div>
+          <h1>Authenticating...</h1>
+        </div>
+      );
+    }
+
+    // If the user is logged in...
+    if (this.state.isUserLoggedIn === true) {
+      return (
+        <div>
+          <NavigationBar username={this.state.username}/>
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-md-4">
+                <UserLegislatorsInfo userLat={this.state.userLocation.lat} userLong={this.state.userLocation.long} />
+              </div>
+              <div className="col-md-8">
+
+                {this.props.main.type === 'UserDashBoard' ? 
+                  <UserDashBoard username={this.state.username}/> :
+                  <LegislationSearch username={this.state.username} />
+                }
+
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+
+    return null;
   }
 }
 
-//<LegislationSearch legislatorCache={this.legislatorInfoCache}/> 
-
 App.defaultProps = {
-  main: (<UserDashBoard />)
+  main: 'UserDashBoard'
 };
 
-class Test extends React.Component {
+class AppRoutes extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -64,9 +114,10 @@ class Test extends React.Component {
       <Router history = {hashHistory}>
         <Route path="/login" component={UserLogin} />
         <Route path="/signup" component={UserSignup} />
+        <Route path="/logout" component={UserLogout} /> 
         <Route path="/" component={App}>
-          <Route path="/search" components = {{main: () => <LegislationSearch legislatorCache={LegislatorData} />}} />
-          <Route path="/dashboard" components = {{main: () => <UserDashBoard />}} />
+          <Route path="/search" components = {{main: 'LegislationSearch'}} />
+          <Route path="/dashboard" components = {{main: 'UserDashBoard'}} />
         </Route>
       </Router>
     );
@@ -75,4 +126,4 @@ class Test extends React.Component {
 
 
 
-ReactDOM.render(<Test />, document.getElementById('app'));
+ReactDOM.render(<AppRoutes />, document.getElementById('app'));

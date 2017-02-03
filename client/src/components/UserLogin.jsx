@@ -43,31 +43,33 @@ class UserLogin extends React.Component {
 
   render() {
     return (
-      <div className="panel panel-primary">
-        <div className="panel-heading">
-          <h4>Login</h4>
-        </div>
-        <div className="panel-body">
-          <form onSubmit={this.handleFormSubmit}>
-            <div className="form-group">
-              <label htmlFor="username">Username:</label>
-              <input type="text" className="form-control" id="username" placeholder="Enter Username" onChange={this.handleInputFieldChange}></input>
+      <div className="container-fluid">      
+        <div className="panel panel-primary">
+          <div className="panel-heading">
+            <h4>Login</h4>
+          </div>
+          <div className="panel-body">
+            <form onSubmit={this.handleFormSubmit}>
+              <div className="form-group">
+                <label htmlFor="username">Username:</label>
+                <input type="text" className="form-control" id="username" placeholder="Enter Username" onChange={this.handleInputFieldChange}></input>
 
-            </div>
-            <div className="form-group">
+              </div>
+              <div className="form-group">
 
-              <label htmlFor="password">Password:</label>
-              <input type="password" className="form-control" id="password" placeholder="Enter Password" onChange={this.handleInputFieldChange}></input>
+                <label htmlFor="password">Password:</label>
+                <input type="password" className="form-control" id="password" placeholder="Enter Password" onChange={this.handleInputFieldChange}></input>
 
-            </div>
-            <div className="form-group">
-              <button type="submit" className="btn btn-primary">Login</button>
-              {(this.state.isLoginError) ? <h5 style={{'color': 'red'}}>Login Failure: {this.state.loginErrorMessage}</h5> : <p></p> }
-            </div>
+              </div>
+              <div className="form-group">
+                <button type="submit" className="btn btn-primary">Login</button>
+                {(this.state.isLoginError) ? <h5 style={{'color': 'red'}}>Login Failure: {this.state.loginErrorMessage}</h5> : <p></p> }
+              </div>
 
-            or <Link to="/signup">Signup</Link> 
-          </form>
+              or <Link to="/signup">Signup</Link> 
+            </form>
 
+          </div>
         </div>
       </div>
     );

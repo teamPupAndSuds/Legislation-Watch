@@ -12,7 +12,7 @@ class NavigationBar extends React.Component {
       <nav className="navbar navbar-default navbar-fixed-top">
         <div className="container-fluid">
           <div className="navbar-header">
-            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="navbar-collapse-1" aria-expanded="false">
+            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
                 <span className="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
             </button>
             <a className="navbar-brand" href="#">
@@ -27,7 +27,8 @@ class NavigationBar extends React.Component {
             </ul>
 
             <div className="navbar-right">
-                <p className="navbar-text">Logout</p>          
+                <p className="navbar-text">[{this.props.username}]</p>
+                <Link to="/logout" className="navbar-text nav-link">Logout</Link>          
             </div>
           </div>
 
