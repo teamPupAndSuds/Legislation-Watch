@@ -1,3 +1,10 @@
+////////////////////////////////////////////////////////////////////////////////
+// UserLogin.jsx
+// --------------------------
+// This is the user login component.
+// 
+////////////////////////////////////////////////////////////////////////////////
+
 const React = require('react');
 const ReactRouter = require('react-router');
 const Link = ReactRouter.Link;
@@ -19,11 +26,12 @@ class UserLogin extends React.Component {
   handleFormSubmit(event) {
     event.preventDefault();
 
+    // Construct the data object to be sent to the back-end server
     let loginUserInfo = {};
     loginUserInfo.username = this.formFields.username;
     loginUserInfo.password = this.formFields.password;
 
-    // Send a POST request to signin
+    // Send a AJAX POST request to the back-end server
     $.post('login/', loginUserInfo)
       .done(function(data) {
         hashHistory.push('/dashboard');
@@ -37,13 +45,16 @@ class UserLogin extends React.Component {
 
   }
 
+  // Event handler to populate all values into the formFields object
+  // for later use by handleFormSubmit()
   handleInputFieldChange(event) {
     this.formFields[event.target.id] = event.target.value;
   }  
 
   render() {
     return (
-      <div className="container-fluid">      
+      <div className="container-fluid">
+        <h2>Legislation Watch</h2>      
         <div className="panel panel-primary">
           <div className="panel-heading">
             <h4>Login</h4>
