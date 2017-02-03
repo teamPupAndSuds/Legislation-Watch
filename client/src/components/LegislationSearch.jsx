@@ -1,3 +1,13 @@
+////////////////////////////////////////////////////////////////////////////////
+// LegislationSearch.jsx
+// --------------------------
+// This is the component that bundle the search bar and the results together
+//
+// Search related AJAX calls to the Sunlight server are made at this component
+// level
+// 
+////////////////////////////////////////////////////////////////////////////////
+
 const React = require('react');
 const SearchBar = require('./SearchBar.jsx');
 const SearchResults = require('./SearchResults.jsx');
@@ -25,7 +35,7 @@ class LegislationSearch extends React.Component {
   handleSearchSubmit(searchTerms) {
     this.setState({isFetchingSearchResults: true});
 
-    // Call Sunlight API to retrieve the bill information
+    // AJAX call for a full text search to the Sunlight server
     let ajaxSettings = {
       method: 'GET',
       context: this,
