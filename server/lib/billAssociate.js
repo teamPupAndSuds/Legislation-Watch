@@ -50,52 +50,19 @@ exports.billAssociate = function(keywordObj, cb) {
             keywordObj['relatedBills'][bill.bill_id] = bill.bill_id;
           }); 
           console.log('Bills retrieved through main keyword');
-          exports.retrieveBillsThroughAssociatedKeywords(keywordObj, function(err, result) {
-            if (err) {
-              console.log('There was an error in Associated Keywords');
-              cb(err);
-            } else {
-              console.log(result);
+          // console.log('result', keywordObj);
 
-              //process of converting bill_ids to array to align with client-side expectation
-              var tempObj = keywordObj['relatedBills'];
-              keywordObj['relatedBills'] = [];
-              for (var key in tempObj) {
-                keywordObj['relatedBills'].push(tempObj[key]);
-              }
-              console.log('Keywords successfully added to keyword object');
-              cb(null, keywordObj);  
-            }
-          });
+          //process of converting bill_ids to array to align with client-side expectation
+          var tempObj = keywordObj['relatedBills'];
+          keywordObj['relatedBills'] = [];
+          for (var key in tempObj) {
+            keywordObj['relatedBills'].push(tempObj[key]);
+          }
+          console.log('Keywords successfully added to keyword object');
+          cb(null, keywordObj);  
         }
       });
     }
-  });
-};
-
-exports.retrieveBillsThroughAssociatedKeywords = function(keywordObj, cb) {
-  keywordObj['associatedKeywords'].forEach(function(keyword) {
-    exports.getAllByKeywords(keyword, function(err, result) {
-      if (err) {
-        console.log('Sorry, was not able to retrieve bills from field keywords');
-        cb(err);
-      } else {
-        result.forEach(function(bill) {
-          keywordObj['relatedBills'][bill.bill_id] = bill.bill_id;
-        });
-        exports.getAllByKeywordsGen(keyword, function(err, resultsGen) {
-          if (err) {
-            console.log('Sorry, was not able to retrieve bills from field keywords_generated');
-            cb(err);
-          } else {
-            resultsGen.forEach(function(bill) {
-              keywordObj['relatedBills'][bill.bill_id] = bill.bill_id;
-            });
-            cb(null, 'Bills retrieved through associated keywords');
-          }
-        });
-      }
-    });
   });
 };
 
@@ -106,21 +73,20 @@ exports.retrieveBillsThroughAssociatedKeywords = function(keywordObj, cb) {
 //PLEASE COMMENT OUT THE CODE BELOW//
 
 //sample keyword object
-var keyword = {
-  word: 'trade',
-  associatedKeywords: ['foreign', 'money', 'tariffs', 'goods', 'profit']
-};
+// var keyword = {
+//   word: 'medicare'
+// };
 
-//print the userObj result to terminals
-exports.billAssociate(keyword, function(err, result) {
-  if (err) {
-    console.log('Something went wrong');
-    return;
-  } else {
-    console.log('Callback successfully executed');
-    console.log(result);
-  }
-});
+// //print the userObj result to terminals
+// exports.billAssociate(keyword, function(err, result) {
+//   if (err) {
+//     console.log('Something went wrong');
+//     return;
+//   } else {
+//     console.log('Callback successfully executed');
+//     console.log(result);
+//   }
+// });
 
 
 
