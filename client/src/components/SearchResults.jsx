@@ -1,3 +1,10 @@
+////////////////////////////////////////////////////////////////////////////////
+// SearchResults.jsx
+// --------------------------
+// This is the component for displaying Legislation search results
+// 
+////////////////////////////////////////////////////////////////////////////////
+
 const React = require('react');
 const BillResultSummary = require('./BillResultSummary.jsx');
 
@@ -17,10 +24,6 @@ class SearchResults extends React.Component {
 
 class SearchResultsPresentational extends React.Component {
   render() {
-
-    // if (!this.props.searchResults) {
-    //   return null;
-    // }
 
     if (this.props.searchResults.length === 0) {
       return (
