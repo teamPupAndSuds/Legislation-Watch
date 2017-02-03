@@ -1,3 +1,10 @@
+////////////////////////////////////////////////////////////////////////////////
+// UserLogout.jsx
+// --------------------------
+// This is the user logout component. This component will attempt to logout
+// the user prior to rendering.
+// 
+////////////////////////////////////////////////////////////////////////////////
 const React = require('react');
 
 class UserLogout extends React.Component {
@@ -9,10 +16,12 @@ class UserLogout extends React.Component {
       logoutErrorMessage: ''
     };
   }
+
+  // Send AJAX call to server for logging out
   componentDidMount() {
     $.get('logout')
       .done(function(data) {
-        hashHistory.push('/login');
+        hashHistory.push('/about');
       })
       .fail(error => {
         this.setState({
