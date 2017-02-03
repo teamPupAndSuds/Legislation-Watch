@@ -6,14 +6,14 @@ var logger = require('./logHelpers.js');
 // Use this query string in an http request when pulling the data used to initially populate the database.
 var initializationQueryString = {
   congress: config.congress,
-  fields: 'bill_id,chamber,introduced_on,last_action_at,last_vote_at,last_version_on,short_title,official_title,popular_title,sponsor.first_name,sponsor.last_name,sponsor.middle_name,sponsor.title,sponsor_id,cosponsor_ids,keywords,summary,summary_short,related_bill_ids',
+  fields: 'bill_id,chamber,introduced_on,last_action_at,last_vote_at,last_version_on,short_title,official_title,popular_title,sponsor.first_name,sponsor.last_name,sponsor.middle_name,sponsor.title,sponsor_id,last_version,cosponsor_ids,keywords,summary,summary_short,related_bill_ids',
   order: 'introduced_on',
   per_page: '50'
 };
 
 // Use this query string in an http request when updating the bills in the database.
 var updateQueryString = {
-  fields: 'bill_id,chamber,introduced_on,last_action_at,last_vote_at,last_version_on,short_title,official_title,popular_title,sponsor.first_name,sponsor.last_name,sponsor.middle_name,sponsor.title,sponsor_id,cosponsor_ids,keywords,summary,summary_short,related_bill_ids',
+  fields: 'bill_id,chamber,introduced_on,last_action_at,last_vote_at,last_version_on,short_title,official_title,popular_title,sponsor.first_name,sponsor.last_name,sponsor.middle_name,sponsor.title,sponsor_id,last_version,cosponsor_ids,keywords,summary,summary_short,related_bill_ids',
   order: 'introduced_on',
   per_page: '20'
 };
@@ -39,8 +39,8 @@ var updateBillsDatabase = function(callback) {
       // First, do an initial request to figure out how many new bills we need to download into the database
       updateQueryString.introduced_on__gte = mostRecentInDatabase;      // this instructs the API to only return bills
                                                                         // introduced on or after a certain date
-      billsAPIRequest(updateQueryString, function(error, response, body) {
-        if (error) {
+      billsAPIRequest(updateQueryString, function(err, response, body) {
+        if (err) {
           logger.log('Error updating Bills database: ' + err); 
         } else {
           retrieveAndStore(JSON.parse(body).count, updateQueryString, callback);
