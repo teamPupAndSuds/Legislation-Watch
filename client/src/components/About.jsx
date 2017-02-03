@@ -1,3 +1,13 @@
+////////////////////////////////////////////////////////////////////////////////
+// About.jsx
+// --------------------------
+// This is the landing page for the application.
+//
+// This is based on the "Projection" by TEMPLATED
+// Users are redirected to this page if they have not logged in
+// 
+////////////////////////////////////////////////////////////////////////////////
+
 const React = require('react');
 const ReactRouter = require('react-router');
 const Link = ReactRouter.Link;
@@ -9,10 +19,11 @@ class About extends React.Component {
         <div>
           <link rel="stylesheet" href="../../css/about.css" />
 
+          {/* Front Scene */}
           <section id="banner">
             <div className="inner">
               <header>
-                <h1>Welcome to Legislation Watcher</h1>
+                <h1>Welcome to Legislation Watch</h1>
               </header>
 
               <div className="flex ">
@@ -48,6 +59,7 @@ class About extends React.Component {
             </div>
           </section>
 
+          {/* About / Information  Section */}
           <section id="three" className="wrapper align-center">
             <div className="inner">
               <div className="flex flex-2">
@@ -56,29 +68,20 @@ class About extends React.Component {
                     <img src="images/pic01.jpg" alt="Pic 01" />
                   </div>
                   <header>
-                    <h3>Lorem ipsum<br /> dolor amet nullam</h3>
+                    <h3>Stay on the forefront<br /> of legislations that affects you.</h3>
                   </header>
-                  <p>Morbi in sem quis dui placerat ornare. Pellentesquenisi<br />euismod in, pharetra a, ultricies in diam sed arcu. Cras<br />consequat  egestas augue vulputate.</p>
+                  <p>An app for people who want to know what happens in congress about issues they care about. 
+                  The app fetches the latest bills drafted in congress and delivers them to your in-app dashboard, 
+                  and email.</p>
                   <footer>
-                    <a href="#" className="button">Learn More</a>
-                  </footer>
-                </article>
-                <article>
-                  <div className="image round">
-                    <img src="images/pic02.jpg" alt="Pic 02" />
-                  </div>
-                  <header>
-                    <h3>Sed feugiat<br /> tempus adipicsing</h3>
-                  </header>
-                  <p>Pellentesque fermentum dolor. Aliquam quam lectus<br />facilisis auctor, ultrices ut, elementum vulputate, nunc<br /> blandit ellenste egestagus commodo.</p>
-                  <footer>
-                    <a href="#" className="button">Learn More</a>
+                    <Link to="/signup" className="button">Signup</Link>
                   </footer>
                 </article>
               </div>
             </div>
           </section>
 
+        {/* Get In Touch Section */}
           <footer id="footer">
             <div className="inner">
 
@@ -102,10 +105,6 @@ class About extends React.Component {
                   <li><input value="Send Message" className="button alt" type="submit" /></li>
                 </ul>
               </form>
-
-              <div className="copyright">
-                &copy; Untitled. Design: <a href="https://templated.co">TEMPLATED</a>. Images: <a href="https://unsplash.com">Unsplash</a>.
-              </div>
 
             </div>
           </footer>          
