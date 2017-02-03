@@ -15,6 +15,7 @@ const LegislationSearch = require(__dirname + '/src/components/LegislationSearch
 const UserLogin = require(__dirname + '/src/components/UserLogin.jsx');
 const UserSignup = require(__dirname + '/src/components/UserSignup.jsx');
 const UserLogout = require(__dirname + '/src/components/UserLogout.jsx');
+const About = require(__dirname + '/src/components/about.jsx');
 
 class App extends React.Component {
   constructor(props) {
@@ -58,7 +59,7 @@ class App extends React.Component {
         });
 
         // Redirect them to login
-        hashHistory.push('/login');
+        hashHistory.push('/about');
       });
   }
 
@@ -112,6 +113,7 @@ class AppRoutes extends React.Component {
   render() {
     return (
       <Router history = {hashHistory}>
+        <Route path="/about" component={About} />
         <Route path="/login" component={UserLogin} />
         <Route path="/signup" component={UserSignup} />
         <Route path="/logout" component={UserLogout} /> 
