@@ -2,54 +2,60 @@ var Bill = require('./../../db/models/bill');
 var mongoose = require('mongoose');
 var apiKey = require('./api_config.js');
 
-//idk if this is necessary for later. 
+//connect for testing purposes, might need to connect for later
+//revisit name
 mongoose.connect('mongodb://localhost/billfetchertest');
 
-
-//input is a string, with the first letter lower-cased, to library of congress keywords
-exports.getAllLowerCaseKeywords = function(phrase) {
-  //take the phrase and lower-case the first letter
-  var lowerPhrase = phrase.charAt(0).toLowerCase() + phrase.slice(1);
-  console.log('This is the lowerPhrase', lowerPhrase);
-  //find with regex expression
-  Bill.find({"keywords" : {$regex : ".*" + lowerPhrase + ".*"}}, function(err, results) {
+exports.getAllByKeywords = function(phrase, cb) {
+  //the regex will search through the array of library of congress keywords and will be able to find the targeted phrase, case in-sensitive as indicated by $options: 'i'
+  Bill.find({"keywords" : {$regex : ".*" + phrase + ".*", $options: "i"}}, function(err, results) {
     if (err) {
       console.log('There was an error');
-      return;
+      cb(err);
     } else {
-      return results.forEach(function(bill) {
-        console.log(bill.bill_id);
-      });
+      cb(null, results);
     }
   });
 };
 
-//input is a string, with the first letter upper-cased, to library of congress keywords
-exports.getAllUpperCaseKeywords = function(phrase) {
-  //take the phrase and upper-case the first letter
-  //find with regex expression
-  //return query
+exports.getAllByKeywordsGen = function(phrase, cb) {
+  //the regex will search through the array of our generated keywords and will be able to find the targeted phrase, case in-sensitive as indicated by $options: 'i'
+  Bill.find({"keywords_generated" : {$regex : ".*" + phrase + ".*", $options: "i"}}, function(err, results) {
+    if (err) {
+      console.log('There was an error');
+      cb(err);
+    } else {
+      cb(null, results);
+    }
+  });
 };
 
-//input is a string, with the first letter lower-case, to our generate keywords
-exports.getAllLowerCaseKeywordsGen = function(phrase) {
-  //take the phrase and lower-case the first letter
-  //find with regex expression
-  //return query
-};
-
-
-//input is a string, with the first letter upper-case, to our generate keywords
-exports.getAllUpperCaseKeywordsGen = function(phrase) {
-  //take the phrase and upper-case the first letter
-  //find with regex expression
-  //return query
-};
-
-//billAssociate function will be called by server
-exports.billAssociate = function(userObj, cb) {
-  //retrieve keywords field
-  //var keywords = userObj.keywords;
+exports.billAssociate = function(keywordObj, cb) {
+  
+  //clears bills each call to avoid duplicates in bills 
+  keywordObj['bills'] = [];
+  exports.getAllByKeywords(keywordObj['keyword'], function(err, results) {
+    if (err) {
+      console.log('Sorry, was not able to retrieve bills from field keywords');
+      cb(err);
+    } else {
+      results.forEach(function(bill) {
+        keywordObj['bills'].push(bill.bill_id);
+      });
+      keywordObj['bills'].push('!!!!!!END OF KEYWORDS YAY!!!!!!!!!!');
+      exports.getAllByKeywordsGen(keywordObj['keyword'], function(err, resultsGen) {
+        if (err) {
+          console.log('Sorry, was not able to retrieve bills from field keywords_generated');
+          cb(err);
+        } else {
+          resultsGen.forEach(function(bill) {
+            keywordObj['bills'].push(bill.bill_id);
+          });
+          cb(null, keywordObj);
+        }
+      });
+    }
+  });
 };
 
 ///////////////////////////////////////////
@@ -57,7 +63,22 @@ exports.billAssociate = function(userObj, cb) {
 ///////////////////////////////////////////
 
 //test to see if it queries the database
-exports.getAllLowerCaseKeywords('Trade');
+var keywordObj = {
+  keyword: 'trade',
+  associatedKeywords: ['foreign', 'money', 'tariffs']
+};
+
+//print the userObj result to terminal
+exports.billAssociate(keywordObj, function(err, result) {
+  if (err) {
+    console.log('Something went wrong');
+    return;
+  } else {
+    console.log('lalalalallala');
+    console.log(result);
+    return;
+  }
+});
 
 
 
