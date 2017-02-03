@@ -14,8 +14,8 @@ exports.userLogin = function(req, res) {
 
   User.findOne( {username: username} )
     .exec(function(err, user) {
-      if(!err) {
-        if(!user) {
+      if (!err) {
+        if (!user) {
           res.status(401);
           res.end();
         } else {
@@ -93,11 +93,11 @@ exports.userSignup = function(req, res) {
             newUser.save(function(err, newUser) {
               if (err) {
                 res.status(500).send(err);
-              }else {
+              } else {
               ////////////////////////////////////////////
               //creates new client session for a successful sign-up
-              util.createSession(req, res, newUser);
-            }
+                util.createSession(req, res, newUser);
+              }
             });
           } else {
             res.status(401).send('Unable to get user geolocation');
@@ -121,24 +121,24 @@ exports.insertWordMonitor = function(req, res) {
 
   User.findOne( {username: username} ) 
     .exec(function(err, user) {
-      if(!err) {
-        if(!user) {
+      if (!err) {
+        if (!user) {
           res.status(401);
           res.end();
         } else {
           if (user['keywords'][keywords] !== undefined) {
             res.status(200).end();
-          }else{
-              util.keywordBuilder(user, keywords, function(err, user) {
-                if (!err) {
-                  //call billassociator
-                  res.status(200).end();
-                } else {
-                  res.status(500).send(err);
-                }
-              });
-            };
-          };
+          } else {
+            util.keywordBuilder(user, keywords, function(err, user) {
+              if (!err) {
+                //call billassociator
+                res.status(200).end();
+              } else {
+                res.status(500).send(err);
+              }
+            });
+          }
+        }
       } else {
         res.status(401).send(err);
       }
@@ -155,8 +155,8 @@ exports.deleteWordMonitor = function(req, res) {
 
   User.findOne( {username: username} )
     .exec(function(err, user) {
-      if(!err) {
-        if(!user) {
+      if (!err) {
+        if (!user) {
           res.status(401);
           res.end();
         } else {
@@ -190,14 +190,14 @@ exports.termSearch = function(req, res) {
   searchTerm = searchTerm.concat(searchTerms);
 
   //sends post request to Twinword API with user entered search term
-  unirest.post("https://twinword-word-associations-v1.p.mashape.com/associations/")
-    .header("X-Mashape-Key", apiKey.wordAssocAPIk['key'])
-    .header("Content-Type", "application/x-www-form-urlencoded")
-    .header("Accept", "application/json")
+  unirest.post('https://twinword-word-associations-v1.p.mashape.com/associations/')
+    .header('X-Mashape-Key', apiKey.wordAssocAPIk['key'])
+    .header('Content-Type', 'application/x-www-form-urlencoded')
+    .header('Accept', 'application/json')
     .send(searchTerm)
     .end(function (result) {
       if (result.error) {
-        res.status(401).end("Error fetching associated keywords");
+        res.status(401).end('Error fetching associated keywords');
       } else {
       //sends word association back to client as an array of words
         var words = result.body['associations_array'];
