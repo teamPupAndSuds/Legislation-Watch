@@ -67,7 +67,9 @@ exports.userSignup = function(req, res) {
         var userInfo = {
           username: username,
           password: password,
-          location: location
+          location: location,
+          email: userEmail,
+          keywords: {}
         }
         ///////////////////////////////////////////////
         //building address string to feed to geoCode
@@ -109,6 +111,68 @@ exports.userSignup = function(req, res) {
       }
     });
 };
+
+/////////////////////////////////////////////////////////////////
+//HANDLES NEW USER WORD MONITOR
+
+exports.insertWordMonitor = function(req, res) {
+  var username = req.params.username;
+  var keywords = req.params.keywords;
+  keywords = keywords.trim();
+
+  User.findOne( {username: username} ) 
+    .exec(function(err, user) {
+      if(!err) {
+        if(!user) {
+          res.writeHead(401);
+          res.end();
+        } else {
+          if (user['keywords'][keywords] !== undefined) {
+            res.status(200).send();
+          }else{
+              util.keywordBuilder(user, keywords, function(err, user) {
+                if (!err) {
+                  //call billassociator
+                } else {
+                  res.status(500).send(err);
+                }
+              });
+            };
+          };
+      } else {
+        res.send(err);
+      }
+    });
+};
+
+/////////////////////////////////////////////////////////////////
+//HANDLES DELETION OF WORD MONITOR
+
+exports.deleteWordMonitor = function(req, res) {
+  var username = req.params.username;
+  var keywords = req.params.keywords;
+  keywords = keywords.trim();
+
+  User.findOne( {username: username} )
+    .exec(function(err, user) {
+      if(!err) {
+        if(!user) {
+          res.writeHead(401);
+          res.end();
+        } else {
+          if (user['keywords'][keywords] !== undefined) {
+            delete user['keywords'][keywords];
+            util.sendUserData(req, res);
+          } else {
+            util.sendUserData(req, res);
+          }
+        }
+      } else {
+        res.send(err);
+      }
+    }); 
+};
+
 
 
 /////////////////////////////////////////////////////////////////
