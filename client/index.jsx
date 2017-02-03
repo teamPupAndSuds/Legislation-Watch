@@ -1,3 +1,13 @@
+////////////////////////////////////////////////////////////////////////////////
+// index.jsx
+// --------------------------
+// This is the entry point for the single page application.
+//
+// The AppRoutes class defines the client side routes
+// The App class is the main view after a user has logged-in
+// Other view with non-nested component: login, signup, logout and about
+// 
+////////////////////////////////////////////////////////////////////////////////
 const React = require('react');
 const ReactDOM = require('react-dom');
 
@@ -8,6 +18,7 @@ const Route = ReactRouter.Route;
 const IndexRoute = ReactRouter.IndexRoute;
 const hashHistory = ReactRouter.hashHistory;
 
+// Import project custom components
 const NavigationBar = require(__dirname + '/src/components/NavigationBar.jsx');
 const UserDashBoard = require(__dirname + '/src/components/UserDashBoard.jsx');
 const UserLegislatorsInfo = require(__dirname + '/src/components/UserLegislatorsInfo.jsx');
@@ -32,7 +43,7 @@ class App extends React.Component {
     };
   }
 
-  // Need check with the server to see if user is autheticated
+  // Checks the authentication status of the user
   componentDidMount() {
     $.get('login')
       .done(function(data) {
@@ -58,7 +69,7 @@ class App extends React.Component {
           // }      
         });
 
-        // Redirect them to login
+        // Redirect them to login if the session is not valid
         hashHistory.push('/about');
       });
   }
@@ -73,7 +84,7 @@ class App extends React.Component {
       );
     }
 
-    // If the user is logged in...
+    // If the user is logged in, we render the main "dashboard"
     if (this.state.isUserLoggedIn === true) {
       return (
         <div>
@@ -105,6 +116,7 @@ App.defaultProps = {
   main: 'UserDashBoard'
 };
 
+// Routes definitions
 class AppRoutes extends React.Component {
   constructor(props) {
     super(props);
@@ -125,7 +137,5 @@ class AppRoutes extends React.Component {
     );
   }
 } 
-
-
 
 ReactDOM.render(<AppRoutes />, document.getElementById('app'));
