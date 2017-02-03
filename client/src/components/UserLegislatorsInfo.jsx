@@ -1,3 +1,15 @@
+////////////////////////////////////////////////////////////////////////////////
+// UserLegislatorsInfo.jsx
+// --------------------------
+// This is the "Legislation Side Panel" component that include the user's
+// congress and senate representatives based on their location (lat/long)
+// information.
+//
+// It is responsible for the AJAX call to the Sunlight API to retrieve the 
+// relevant legislator information.
+// 
+////////////////////////////////////////////////////////////////////////////////
+
 const React = require('react');
 const LegislatorInfo = require('./LegislatorInfo.jsx');
 
@@ -40,7 +52,8 @@ class UserLegislatorsInfo extends React.Component {
   }
   componentDidMount() {
 
-    // Initiate AJAX calls to external API for legislator and district info
+    // Initiate AJAX calls to Sunlight server for legislator and district info
+    // based on user supplied lat and long information
     this.setState({
       isFetchingRepData: true,
       isFetchingElectoralData: true
@@ -50,6 +63,7 @@ class UserLegislatorsInfo extends React.Component {
     this.fetchElectoralDataFromExternalSources();
   }
 
+  // Retrieves the User's representatives' information
   fetchLegislatorDataFromExternalSources() {
     let queryParameters = {
       latitude: this.props.userLat,
@@ -65,6 +79,7 @@ class UserLegislatorsInfo extends React.Component {
     }
   }
 
+  // Retrieves the electrol information (Congressional District & State) for the user
   fetchElectoralDataFromExternalSources() {
     let queryParameters = {
       latitude: this.props.userLat,
@@ -80,7 +95,7 @@ class UserLegislatorsInfo extends React.Component {
     }
   }
 
-  // Converts district API data to a more readable format for display
+  // Format the Congressional Data from the Sunlight server to a more readable format
   getElectoralInfo() {
     let readableElectoralInfo = {};
 
@@ -93,7 +108,8 @@ class UserLegislatorsInfo extends React.Component {
       readableElectoralInfo.state = this.getHouseRepInfo().state_name;
     }
 
-    // Handle case where the state is a district At-large
+    // Handle case where the state is a district 'At-large'
+    // TODO: We need to better handle the suffix to the district number (ie. 2nd, 3rd, 21st, etc)
     if (this.state.electoralInfo.district === 0) {
       readableElectoralInfo.districtName = 'At-Large Congressional District';
     } else {
@@ -104,6 +120,7 @@ class UserLegislatorsInfo extends React.Component {
   }
 
   getHouseRepInfo() {
+    // note that there is only ever one House Rep for a particular Congressional District
     return this.state.electoralRepresentativesInfo.filter(isHouseRep)[0];
 
     function isHouseRep(legislatorInfo) {
