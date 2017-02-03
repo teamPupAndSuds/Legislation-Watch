@@ -1,4 +1,16 @@
+////////////////////////////////////////////////////////////////////////////////
+// BillResultSummary.jsx
+// --------------------------
+// This component is used to display an individual bill's summary.
+//
+// This is based on the "Projection" by TEMPLATED
+// Users are redirected to this page if they have not logged in
+// 
+////////////////////////////////////////////////////////////////////////////////
+
 const React = require('react');
+
+// Load Legislator cache to minimise AJAX call to the Sunlight Server
 const LegislatorData = require('../data/LegislatorData.js');
 
 class BillResultSummary extends React.Component {
@@ -14,16 +26,27 @@ class BillResultSummaryPresentational extends React.Component {
     let info = this.props.info;
     let legislatorCache = this.props.legislatorCache;
 
-    // Retrieve the cosponsor's name and party from the supplied ids
+    // Bills may have 'co-sponsors' that are supplied as an array of <string> Bioguide IDs
+    // We match the supplied Bioguide IDs with the Legislator Cache to obtain the name and party information for display
+    //
+    // TODO: The Legislator Data CSV downloaded from Sunlight's website does not include *all* of legislators for some reason.
+    //       In that scenario, the component renders the Bioguide IDs as-is (rather than name + party). 
+    //         -  we need to implement a way to update the cache on server side, probably with the client code providing 
+    //            a list of Bioguide ids that were not cached
+
     let cosponsorElements = [];
 
     if (info.cosponsor_ids && info.cosponsor_ids.length !== 0) {
       info.cosponsor_ids.forEach(function(id) {
+        // Attempt to locate the Legislator's information from the Cache
         let cosponsor = legislatorCache[id];
+
+        // Handle un-cached Bioguide_ids
         if (cosponsor === undefined) {
           console.log('Uncached Legislator bioguide_id:', id);
           cosponsorElements.push(id + ' ');
         } else {
+          // Construct Legislator information for display
           cosponsorElements.push(cosponsor.firstname + ' ' + cosponsor.lastname + ' (' + cosponsor.party + ') ');
         }
       });
@@ -34,6 +57,7 @@ class BillResultSummaryPresentational extends React.Component {
         <div className="panel-heading">
           <div className="container-fluid">
             <div className="row">
+              {/* Bill title with link to full text */}
               <div className="col-sm-9" style={{padding: 0}}>
                 <strong><a href={info.urls.congress + '/text'} target="_blank">{info.short_title}{!info.short_title && info.official_title}</a></strong>
                 <small className="text-uppercase"> ({info.chamber})</small>
@@ -45,6 +69,7 @@ class BillResultSummaryPresentational extends React.Component {
           </div>        
         </div>
         <div className="panel-body">
+          {/* Bill sponsor, co-sponsor and summary information */}
           <table>
             <tbody>
               <tr>
