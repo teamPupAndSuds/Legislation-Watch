@@ -42,7 +42,7 @@ exports.comparePassword = function(candidatePassword, savedPassword, cb) {
 	});
 };
 
-exports.geoCodeit = function(res, streetAddress, cb) {
+exports.geoCodeit = function(res, userInfo, streetAddress, cb) {
   	googleMapsClient.geocode({
   		address: streetAddress
 	}, function(err, response) {

@@ -29,7 +29,7 @@ app.post('/login', handler.userLogin);
 app.get('/logout', handler.userLogout);
 
 //handles user signup action
-app.post('/signup', handler.userSignup);
+app.post('/signup:username', handler.userSignup);
 
 /////////////////////////////////////////////////////////////////
 //server up static files
