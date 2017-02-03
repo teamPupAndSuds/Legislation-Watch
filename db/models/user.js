@@ -21,7 +21,7 @@ var userSchema = new mongoose.Schema({
   },
   latitude: Number,
   longitude: Number,
-  keywords: Array,
+  keywords: Object,
   email: String
 });
 
