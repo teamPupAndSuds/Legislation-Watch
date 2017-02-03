@@ -22,7 +22,12 @@ class App extends React.Component {
 
     this.state = {
       isVerifyingUserSession: true,
-      isUserLoggedIn: false 
+      isUserLoggedIn: false,
+      username: '',
+      userLocation: {
+        lat: undefined,
+        long: undefined
+      }
     };
   }
 
@@ -32,19 +37,28 @@ class App extends React.Component {
       .done(function(data) {
         this.setState({        
           isVerifyingUserSession: false,
-          isUserLoggedIn: true
+          isUserLoggedIn: true,
+          username: data.username,
+          userLocation: data.location
         });
       })
       .fail(error => {
         // If user is not logged in:
         this.setState({
           isVerifyingUserSession: false,
-          // isUserLoggedIn: false
-          isUserLoggedIn: true          
+          isUserLoggedIn: false
+
+          // Testing Only:
+          // isUserLoggedIn: true,
+          // username: 'boba',
+          // userLocation: {
+          //   lat: 37.795,
+          //   long: -122.40
+          // }      
         });
 
         // Redirect them to login
-        // hashHistory.push('/login');
+        hashHistory.push('/login');
       });
   }
 
@@ -62,14 +76,19 @@ class App extends React.Component {
     if (this.state.isUserLoggedIn === true) {
       return (
         <div>
-          <NavigationBar />
+          <NavigationBar username={this.state.username}/>
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-4">
-                <UserLegislatorsInfo />
+                <UserLegislatorsInfo userLat={this.state.userLocation.lat} userLong={this.state.userLocation.long} />
               </div>
               <div className="col-md-8">
-                {this.props.main}
+
+                {this.props.main.type === 'UserDashBoard' ? 
+                  <UserDashBoard username={this.state.username}/> :
+                  <LegislationSearch username={this.state.username} />
+                }
+
               </div>
             </div>
           </div>
@@ -82,7 +101,7 @@ class App extends React.Component {
 }
 
 App.defaultProps = {
-  main: (<UserDashBoard />)
+  main: 'UserDashBoard'
 };
 
 class AppRoutes extends React.Component {
@@ -97,8 +116,8 @@ class AppRoutes extends React.Component {
         <Route path="/signup" component={UserSignup} />
         <Route path="/logout" component={UserLogout} /> 
         <Route path="/" component={App}>
-          <Route path="/search" components = {{main: () => <LegislationSearch />}} />
-          <Route path="/dashboard" components = {{main: () => <UserDashBoard />}} />
+          <Route path="/search" components = {{main: 'LegislationSearch'}} />
+          <Route path="/dashboard" components = {{main: 'UserDashBoard'}} />
         </Route>
       </Router>
     );
