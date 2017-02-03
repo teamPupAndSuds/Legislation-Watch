@@ -1,3 +1,14 @@
+////////////////////////////////////////////////////////////////////////////////
+// UserDashBoardMonitoredWordResult.jsx
+// --------------------------
+// This is the component that renders User's individual "monitored keywords"
+// and the associated results.
+//
+// It also provide the UI to remove existing entries. The events are passed onto
+// the parent component.
+//
+////////////////////////////////////////////////////////////////////////////////
+
 const React = require('react');
 const BillResultSummary = require('./BillResultSummary.jsx');
 
