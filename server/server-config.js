@@ -31,7 +31,7 @@ app.post('/signup/:username', handler.userSignup);
 /////////////////////////////////////////////////////////////////
 app.put('/user/:username/:keywords', handler.insertWordMonitor);
 
-//app.delete('/user/:username/:keywords', handler.deleteWordMonitor);
+app.delete('/user/:username/:keywords', handler.deleteWordMonitor);
 
 /////////////////////////////////////////////////////////////////
 //server up static files
