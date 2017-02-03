@@ -16,27 +16,27 @@ exports.userLogin = function(req, res) {
     .exec(function(err, user) {
       if(!err) {
         if(!user) {
-          res.writeHead(401);
+          res.status(401);
           res.end();
         } else {
           util.comparePassword(password, user.password, function(err, match) {
             if (match) {
               util.createSession(req, res, user);
             } else {
-              res.writeHead(401);
+              res.status(401);
               res.end();
             }
           });
         }
       } else {
-        res.send(err);
+        res.status(401).send(err);
       }
     });
 };
 
 exports.userLogout = function(req, res) {
   req.session.destroy(function() {
-    res.writeHead(200);
+    res.status(200);
     res.end();
   });
 };
@@ -44,7 +44,6 @@ exports.userLogout = function(req, res) {
 
 exports.userSignup = function(req, res) {
   var username = req.params.username;
-  username = username.slice(1);
 
 /////////////////////////////////////////////////////////////////
 //CHECKS USER DB 
@@ -84,7 +83,6 @@ exports.userSignup = function(req, res) {
 
         ////////////////////////////////////////////
         util.geoCodeit(res, userInfo, streetAddress, function(err, response) {
-          console.log('In geoCode');
           if (!err) {
             var geoLocation = response.json.results[0].geometry.location;
             userInfo['latitude'] = geoLocation.lat;
@@ -95,10 +93,11 @@ exports.userSignup = function(req, res) {
             newUser.save(function(err, newUser) {
               if (err) {
                 res.status(500).send(err);
-              }
+              }else {
               ////////////////////////////////////////////
               //creates new client session for a successful sign-up
               util.createSession(req, res, newUser);
+            }
             });
           } else {
             res.status(401).send('Unable to get user geolocation');
@@ -106,8 +105,8 @@ exports.userSignup = function(req, res) {
         });
       } else {
         //USER PROFILE IN USE
-        res.writeHead(401);
-        res.end();
+        res.status(401);
+        res.send('Username already in use');
       }
     });
 };
@@ -124,15 +123,16 @@ exports.insertWordMonitor = function(req, res) {
     .exec(function(err, user) {
       if(!err) {
         if(!user) {
-          res.writeHead(401);
+          res.status(401);
           res.end();
         } else {
           if (user['keywords'][keywords] !== undefined) {
-            res.status(200).send();
+            res.status(200).end();
           }else{
               util.keywordBuilder(user, keywords, function(err, user) {
                 if (!err) {
                   //call billassociator
+                  res.status(200).end();
                 } else {
                   res.status(500).send(err);
                 }
@@ -140,7 +140,7 @@ exports.insertWordMonitor = function(req, res) {
             };
           };
       } else {
-        res.send(err);
+        res.status(401).send(err);
       }
     });
 };
@@ -157,7 +157,7 @@ exports.deleteWordMonitor = function(req, res) {
     .exec(function(err, user) {
       if(!err) {
         if(!user) {
-          res.writeHead(401);
+          res.status(401);
           res.end();
         } else {
           if (user['keywords'][keywords] !== undefined) {
@@ -168,7 +168,7 @@ exports.deleteWordMonitor = function(req, res) {
           }
         }
       } else {
-        res.send(err);
+        res.status(401).send(err);
       }
     }); 
 };
@@ -197,14 +197,14 @@ exports.termSearch = function(req, res) {
     .send(searchTerm)
     .end(function (result) {
       if (result.error) {
-        res.send("Error fetching associated keywords");
+        res.status(401).end("Error fetching associated keywords");
       } else {
       //sends word association back to client as an array of words
         var words = result.body['associations_array'];
         if (words !== undefined) {
-          res.send(result.body['associations_array']);
+          res.status(200).send(result.body['associations_array']);
         } else {
-          res.send('No associated keywords found');
+          res.status(200).send('No associated keywords found');
         }
       }
   });

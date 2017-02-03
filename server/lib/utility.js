@@ -9,28 +9,28 @@ exports.isLoggedIn = function(req, res) {
 	return req.session ? !!req.session.user : false;
 };
 
-exports.sendUserData = function(req, res) {
+exports.sendUserData = function(req, res, newUser) {
 	req.session.user = newUser;
 	var userInfo = {};
-	userInfo['name'] = res.session.user.name;
-	userInfo['username'] = res.session.user.username;
-	userInfo['location'] = res.session.user.location;
+	userInfo['name'] = req.session.user.name;
+	userInfo['username'] = req.session.user.username;
+	userInfo['location'] = req.session.user.location;
 	userInfo['geoLocation'] = {};
-	userInfo['geoLocation']['lat'] = res.session.user.latitude;
-	userInfo['geoLocation']['long'] = res.session.user.longitude;
+	userInfo['geoLocation']['lat'] = req.session.user.latitude;
+	userInfo['geoLocation']['long'] = req.session.user.longitude;
 	var keywords = [];
-	for (var key in res.session.user.keywords) {
+	for (var key in req.session.user.keywords) {
 		var word = {};
-		word[key] = res.session.user.keywords[key];
+		word[key] = req.session.user.keywords[key];
 		keywords.push(word);
 	}
 	userInfo['keywords'] = keywords;
-    res.send(userInfo);
+    res.status(200).send(userInfo);
 };
 
 exports.checkUser = function(req, res) {
 	if (!exports.isLoggedIn(req)) {
-	    res.writeHead(401);
+	    res.status(401);
 	    res.end();
 	 } else {
 	  	exports.sendUserData(req, res);
@@ -40,7 +40,7 @@ exports.checkUser = function(req, res) {
 exports.createSession = function(req, res, newUser) {
   return req.session.regenerate(function() {
       req.session.user = newUser;
-      exports.sendUserData(req, res);
+      exports.sendUserData(req, res, newUser);
     });
 };
 
