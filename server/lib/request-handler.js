@@ -44,29 +44,135 @@ exports.userLogout = function(req, res) {
 
 exports.userSignup = function(req, res) {
   var username = req.params.username;
-  var password = req.body['password'];
-  var userEmail = req.body['email'];
-  var userAddress = req.body['address'];
-  var streetAddress = userAddress['houseNum'];
-  streetAddress = streetAddress.toString();
-  streetAddress = streetAddress.concat(
-    userAddress['streetName'],
-    ', ',
-    userAddress['city'],
-    ', ',
-    userAddress['state']
-    );
+  username = username.slice(1);
 
-  util.geoCodeit(res, streetAddress, function(err, response) {
-    if (!err) {
-      var geoLocation = response.json.results[0].geometry.location;
-      var geoLoc = {location: {}};
-      geoLoc.location['lat'] = geoLocation.lat;
-      geoLoc.location['long'] = geoLocation.lng;
-      res.send(geoLoc);
-    }
-  });
+/////////////////////////////////////////////////////////////////
+//CHECKS USER DB 
+  User.findOne({ username: username})
+    .exec(function(err, user) {
+      if (!user) {
+      //If user profile is not taken, creates a new user profile
+        var password = req.body['password'];
+        var userEmail = req.body['email'];
+        var userAddress = req.body['address'];
+        var streetAddress = userAddress['houseNum'];
+        streetAddress = streetAddress.toString();
+        ///////////////////////////////////////////////
+        //building location object to save to userdb
+        var location = {};
+        location['houseNum'] = streetAddress;
+        location['street'] = userAddress['streetName'];
+        location['city'] = userAddress['city'];
+        location['state'] = userAddress['state'];
+        var userInfo = {
+          username: username,
+          password: password,
+          location: location,
+          email: userEmail,
+          keywords: {}
+        }
+        ///////////////////////////////////////////////
+        //building address string to feed to geoCode
+        streetAddress = streetAddress.concat(
+          ' ',
+          userAddress['streetName'],
+          ', ',
+          userAddress['city'],
+          ', ',
+          userAddress['state']
+          );
+
+        ////////////////////////////////////////////
+        util.geoCodeit(res, userInfo, streetAddress, function(err, response) {
+          console.log('In geoCode');
+          if (!err) {
+            var geoLocation = response.json.results[0].geometry.location;
+            userInfo['latitude'] = geoLocation.lat;
+            userInfo['longitude'] = geoLocation.lng;
+            ////////////////////////////////////////////
+            //creates new user and save to DB
+            var newUser = new User(userInfo);
+            newUser.save(function(err, newUser) {
+              if (err) {
+                res.status(500).send(err);
+              }
+              ////////////////////////////////////////////
+              //creates new client session for a successful sign-up
+              util.createSession(req, res, newUser);
+            });
+          } else {
+            res.status(401).send('Unable to get user geolocation');
+          }
+        });
+      } else {
+        //USER PROFILE IN USE
+        res.writeHead(401);
+        res.end();
+      }
+    });
 };
+
+/////////////////////////////////////////////////////////////////
+//HANDLES NEW USER WORD MONITOR
+
+exports.insertWordMonitor = function(req, res) {
+  var username = req.params.username;
+  var keywords = req.params.keywords;
+  keywords = keywords.trim();
+
+  User.findOne( {username: username} ) 
+    .exec(function(err, user) {
+      if(!err) {
+        if(!user) {
+          res.writeHead(401);
+          res.end();
+        } else {
+          if (user['keywords'][keywords] !== undefined) {
+            res.status(200).send();
+          }else{
+              util.keywordBuilder(user, keywords, function(err, user) {
+                if (!err) {
+                  //call billassociator
+                } else {
+                  res.status(500).send(err);
+                }
+              });
+            };
+          };
+      } else {
+        res.send(err);
+      }
+    });
+};
+
+/////////////////////////////////////////////////////////////////
+//HANDLES DELETION OF WORD MONITOR
+
+exports.deleteWordMonitor = function(req, res) {
+  var username = req.params.username;
+  var keywords = req.params.keywords;
+  keywords = keywords.trim();
+
+  User.findOne( {username: username} )
+    .exec(function(err, user) {
+      if(!err) {
+        if(!user) {
+          res.writeHead(401);
+          res.end();
+        } else {
+          if (user['keywords'][keywords] !== undefined) {
+            delete user['keywords'][keywords];
+            util.sendUserData(req, res);
+          } else {
+            util.sendUserData(req, res);
+          }
+        }
+      } else {
+        res.send(err);
+      }
+    }); 
+};
+
 
 
 /////////////////////////////////////////////////////////////////
