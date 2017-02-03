@@ -3,7 +3,6 @@ var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
 
 var userSchema = new mongoose.Schema({
-  name: String,
   username: {
     type: String,
     required: true
@@ -15,15 +14,14 @@ var userSchema = new mongoose.Schema({
   },
 
   location: {
+    houseNum: String,
     street: String,
     city: String,
     state: String,
-    //zipcode a string b/c some states have codes beginning with 0
-    zip: String
   },
   latitude: Number,
   longitude: Number,
-  keywords: Array,
+  keywords: Object,
   email: String
 });
 
