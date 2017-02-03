@@ -56,21 +56,29 @@ class App extends React.Component {
       })
       .fail(error => {
         // If user is not logged in:
-        this.setState({
-          isVerifyingUserSession: false,
-          isUserLoggedIn: false
 
+        // // Production
+        // this.setState({
+        //   // Live Configuration
+        //   // isVerifyingUserSession: false,
+        //   // isUserLoggedIn: false
+        // });
+
+        // // Redirect them to login if the session is not valid
+        // hashHistory.push('/about');
+
+        // Testing
+        this.setState({
           // Testing Only:
-          // isUserLoggedIn: true,
-          // username: 'boba',
-          // userLocation: {
-          //   lat: 37.795,
-          //   long: -122.40
-          // }      
+          isVerifyingUserSession: false,          
+          isUserLoggedIn: true,
+          username: 'boba',
+          userLocation: {
+            lat: 37.795,
+            long: -122.40
+          }      
         });
 
-        // Redirect them to login if the session is not valid
-        hashHistory.push('/about');
       });
   }
 
