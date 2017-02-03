@@ -2,8 +2,7 @@ var Bill = require('./../../db/models/bill');
 var mongoose = require('mongoose');
 var apiKey = require('./api_config.js');
 
-//connect for testing purposes, might need to connect for later
-//revisit name
+//connected to billdatabase for testing purposes
 mongoose.connect('mongodb://localhost/billfetchertest');
 
 exports.getAllByKeywords = function(phrase, cb) {
@@ -31,52 +30,95 @@ exports.getAllByKeywordsGen = function(phrase, cb) {
 };
 
 exports.billAssociate = function(keywordObj, cb) {
-  
-  //clears bills each call to avoid duplicates in bills 
-  keywordObj['bills'] = [];
+  //clears bills each call to avoid duplicates in bills property
+  //first setting bills property to object in order to avoid duplicates
+  keywordObj['bills'] = {};
   exports.getAllByKeywords(keywordObj['keyword'], function(err, results) {
     if (err) {
       console.log('Sorry, was not able to retrieve bills from field keywords');
       cb(err);
     } else {
       results.forEach(function(bill) {
-        keywordObj['bills'].push(bill.bill_id);
+        keywordObj['bills'][bill.bill_id] = bill.bill_id;
       });
-      keywordObj['bills'].push('!!!!!!END OF KEYWORDS YAY!!!!!!!!!!');
       exports.getAllByKeywordsGen(keywordObj['keyword'], function(err, resultsGen) {
         if (err) {
           console.log('Sorry, was not able to retrieve bills from field keywords_generated');
           cb(err);
         } else {
           resultsGen.forEach(function(bill) {
-            keywordObj['bills'].push(bill.bill_id);
+            keywordObj['bills'][bill.bill_id] = bill.bill_id;
+          }); 
+          console.log('Bills retrieved through main keyword');
+          exports.retrieveBillsThroughAssociatedKeywords(keywordObj, function(err, result) {
+            if (err) {
+              console.log('There was an error in Associated Keywords');
+              cb(err);
+            } else {
+              console.log(result);
+
+              //process of converting bill_ids to array to align with client-side expectation
+              var tempObj = keywordObj['bills'];
+              keywordObj['bills'] = [];
+              for (var key in tempObj) {
+                keywordObj['bills'].push(tempObj[key]);
+              }
+              console.log('Keywords successfully added to keyword object');
+              cb(null, keywordObj);  
+            }
           });
-          cb(null, keywordObj);
         }
       });
     }
   });
 };
 
+exports.retrieveBillsThroughAssociatedKeywords = function(keywordObj, cb) {
+  keywordObj['associatedKeywords'].forEach(function(keyword) {
+    exports.getAllByKeywords(keyword, function(err, result) {
+      if (err) {
+        console.log('Sorry, was not able to retrieve bills from field keywords');
+        cb(err);
+      } else {
+        result.forEach(function(bill) {
+          keywordObj['bills'][bill.bill_id] = bill.bill_id;
+        });
+        exports.getAllByKeywordsGen(keywordObj['keyword'], function(err, resultsGen) {
+          if (err) {
+            console.log('Sorry, was not able to retrieve bills from field keywords_generated');
+            cb(err);
+          } else {
+            resultsGen.forEach(function(bill) {
+              keywordObj['bills'][bill.bill_id] = bill.bill_id;
+            });
+          }
+        });
+      }
+    });
+  });
+  cb(null, 'Bills retrieved through associated keywords');
+};
+
 ///////////////////////////////////////////
 //////////////TESTING ZONE/////////////////
 ///////////////////////////////////////////
 
-//test to see if it queries the database
-var keywordObj = {
+//PLEASE COMMENT OUT THE CODE BELOW//
+
+//sample keyword object
+var keyword = {
   keyword: 'trade',
-  associatedKeywords: ['foreign', 'money', 'tariffs']
+  associatedKeywords: ['foreign', 'money', 'tariffs', 'goods', 'profit']
 };
 
 //print the userObj result to terminal
-exports.billAssociate(keywordObj, function(err, result) {
+exports.billAssociate(keyword, function(err, result) {
   if (err) {
     console.log('Something went wrong');
     return;
   } else {
-    console.log('lalalalallala');
+    console.log('Callback successfully executed');
     console.log(result);
-    return;
   }
 });
 
