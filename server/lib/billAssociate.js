@@ -111,7 +111,7 @@ var keyword = {
   associatedKeywords: ['foreign', 'money', 'tariffs', 'goods', 'profit']
 };
 
-//print the userObj result to terminal
+//print the userObj result to terminals
 exports.billAssociate(keyword, function(err, result) {
   if (err) {
     console.log('Something went wrong');
