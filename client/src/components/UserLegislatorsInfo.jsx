@@ -138,10 +138,10 @@ class UserLegislatorsInfo extends React.Component {
 }      
 
 // Temporary Default Props for Testing
-UserLegislatorsInfo.defaultProps = { 
-  userLat: 37.795,
-  userLong: -122.40
-};
+// UserLegislatorsInfo.defaultProps = { 
+//   userLat: 37.795,
+//   userLong: -122.40
+// };
 
 
 class UserLegislatorsInfoPresentational extends React.Component {
