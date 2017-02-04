@@ -42,6 +42,7 @@ class UserDashBoard extends React.Component {
       .done(function(data) {
         // Add the new monitored keywords and the results into our dash-board
         if (data !== undefined) {
+          console.log('UserDashBoard.jsx: handleAddMonitoredWords: ', data);
           this.setState({
             monitoringResults: data.keywords
           });
@@ -83,11 +84,12 @@ class UserDashBoard extends React.Component {
 
         {/* Render monitored keyword entries and results */}
         {this.state.monitoringResults.map(function(bill) {
+          console.log(bill);
           return (
             <UserDashBoardMonitoredWordResult 
               key={bill.keyword}
               monitoredWords={bill.keyword}
-              billIds={bill.relevantBills} 
+              billIds={bill.relatedBills} 
               onMonitoredWordsRemove={this.handleRemoveMonitoredWords} />
           );
         }.bind(this))}
