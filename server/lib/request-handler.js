@@ -190,7 +190,8 @@ exports.insertWordMonitor = function(req, res) {
 
                 BillAssociate.billAssociate(user['keywords'][keywords], function(error, data) {
                   if (error) {
-
+                    res.stats(500).send(error);
+                    res.end();
                   } else {
                   // Save to DB
                   
