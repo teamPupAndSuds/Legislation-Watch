@@ -101,16 +101,14 @@ class App extends React.Component {
           <NavigationBar username={this.state.username}/>
           <div className="container-fluid">
             <div className="row">
-              <div className="col-md-4">
-                <UserLegislatorsInfo userLat={this.state.userLocation.lat} userLong={this.state.userLocation.long} />
-              </div>
-              <div className="col-md-8">
-
+              <div className="col-lg-8 col-lg-push-4">
                 {this.props.main.type === 'UserDashBoard' ? 
                   <UserDashBoard username={this.state.username} userMonitoredKeywords={this.state.userMonitoredKeywords} /> :
                   <LegislationSearch username={this.state.username} />
                 }
-
+              </div>
+              <div className="col-lg-4 col-lg-pull-8">
+                <UserLegislatorsInfo userLat={this.state.userLocation.lat} userLong={this.state.userLocation.long} />
               </div>
             </div>
           </div>
