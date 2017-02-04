@@ -88,7 +88,7 @@ exports.userSignup = function(req, res) {
           password: password,
           location: location,
           email: userEmail,
-          keywords: []
+          keywords: {}
         };
 
         console.log('request-handler.js: userSignup: userinfo:', userInfo);
@@ -172,7 +172,7 @@ exports.insertWordMonitor = function(req, res) {
 
           // Initialize User Keyword if it doesn't already exist
           if (user['keywords'] === undefined) {
-            user['keywords'] = [];
+            user['keywords'] = {};
           }
 
           // See if this keyword already exist
@@ -189,16 +189,17 @@ exports.insertWordMonitor = function(req, res) {
                 // TODO: call billassociator
                 // ****************************                
 
-                // Send the client the user object with the new results
+                // Save to DB
+                user.markModified('keywords');
                 user.save(function (err) {
                   if (err) {
                     console.log('request-handler.js: insertWordMonitor: saving user object failed', err);
                     res.stats(500).send(err);
                     res.end();
                   } else {
+                    // Send the client the user object with the new results
                     console.log('request-handler.js: insertWordMonitor: keyword added, sending user object back to client:', user);
-                    res.status(200).send(user);
-                    res.end();
+                    util.sendUserData(req, res, user);
                   }
                 });
               } else {
@@ -233,26 +234,25 @@ exports.deleteWordMonitor = function(req, res) {
           res.end();
         } else {
           // Locate and delete the keyword
-          for (var i = 0; i < user['keywords'].length; i++) {
-            if (user['keywords'][i].keyword === keywordsToBeDeleted) {
-              // console.log('request-handler.js: deleteWordMonitor: keyword to be deleted found: before', user['keywords']);
-              user['keywords'].splice(i, 1);
-              // console.log('request-handler.js: deleteWordMonitor: keyword to be deleted found: after', user['keywords']);
+          if (user['keywords'][keywordsToBeDeleted] !== undefined) {
+            // console.log('request-handler.js: deleteWordMonitor: keyword to be deleted found: before', user['keywords']);
+            delete user['keywords'][keywordsToBeDeleted];
+            // console.log('request-handler.js: deleteWordMonitor: keyword to be deleted found: after', user['keywords']);
 
-              // Save to database
-              user.save(function(err) {
-                if (err) {
-                  res.statu(500);
-                  res.end(err);
-                } else {
-                  // Ensure the session is pointed to this newly updated user model instance
-                  req.session.user = user;                  
-                  util.sendUserData(req, res);
-                }
-              });
+            // Save to database
+            user.markModified('keywords');
+            user.save(function(err) {
+              if (err) {
+                res.statu(500);
+                res.end(err);
+              } else {
+                // Ensure the session is pointed to this newly updated user model instance
+                req.session.user = user;
+                util.sendUserData(req, res);
+              }
+            });
 
-              return;
-            }
+            return;
           }
           // If we did not manage to find the keyword to be deleted
           console.log('request-handler.js: deleteWordMonitor: keyword to be deleted not found');

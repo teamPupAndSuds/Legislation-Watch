@@ -25,9 +25,20 @@ exports.sendUserData = function(req, res, newUser) {
   userInfo['geoLocation'] = {};
   userInfo['geoLocation']['lat'] = req.session.user.latitude;
   userInfo['geoLocation']['long'] = req.session.user.longitude;
-  userInfo['keywords'] = req.session.user.keywords;
+
+  // Convert user monitored keywords object to an Array for the client
+  console.log('utility.js: sendUserData: keywords', req.session.user.keywords);
+  var userMonitoredWordsAsArray = [];
+  for (monitoredWord in req.session.user.keywords) {
+    userMonitoredWordsAsArray.push(req.session.user.keywords[monitoredWord]);
+  }
+  userInfo['keywords'] = userMonitoredWordsAsArray;
+
+  console.log('utility.js: sendUserData: dataToBeSent', userInfo);
+
 
   res.status(200).send(userInfo);
+  res.end();
 };
 
 exports.checkUser = function(req, res) {
@@ -84,7 +95,7 @@ exports.keywordBuilder = function(user, searchWord, cb) {
 
   if (strArr.length > 1) {
     keywordObj['associatedKeywords'] = [];
-    user.keywords.push(keywordObj);
+    user.keywords[searchWord] = keywordOb;
     console.log('utility.js: keywordBuilder: multiple keywords detected, user.keywords:', user.keywords);
     cb(null, user);
   } else {
@@ -113,9 +124,12 @@ exports.keywordBuilder = function(user, searchWord, cb) {
             words.forEach(function(word) {
               keywordObj['associatedKeywords'].push(word);
             });
-            user.keywords.push(keywordObj);
+            user.keywords[searchWord] = keywordObj;
+            // Object deep copy
+            user.keywords = JSON.parse(JSON.stringify(user.keywords));
 
             console.log('utility.js: keywordBuilder: word association API call success: results:', keywordObj);
+            console.log('utility.js: keywordBuilder: word association API call success: user.keywords:', user.keywords);
 
             cb(null, user);
           } else {
