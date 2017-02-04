@@ -25,13 +25,8 @@ exports.sendUserData = function(req, res, newUser) {
   userInfo['geoLocation'] = {};
   userInfo['geoLocation']['lat'] = req.session.user.latitude;
   userInfo['geoLocation']['long'] = req.session.user.longitude;
-  var keywords = [];
-  for (var key in req.session.user.keywords) {
-    var word = {};
-    word[key] = req.session.user.keywords[key];
-    keywords.push(word);
-  }
-  userInfo['keywords'] = keywords;
+  userInfo['keywords'] = req.session.user.keywords;
+
   res.status(200).send(userInfo);
 };
 
@@ -59,6 +54,7 @@ exports.createSession = function(req, res, newUser) {
 };
 
 exports.comparePassword = function(candidatePassword, savedPassword, cb) {
+  console.log('utility.js: comaprePassword: candidate & savedpassword:', candidatePassword, savedPassword);
   bcrypt.compare(candidatePassword, savedPassword, function(err, isMatch) {
     if (err) {
       return cb(err);
