@@ -21,11 +21,9 @@ var userSchema = new mongoose.Schema({
   },
   latitude: Number,
   longitude: Number,
-  keywords: Object,
+  keywords: Array,
   email: String
 });
-
-var UserModel = mongoose.model('User', userSchema);
 
 userSchema.pre('save', function(next) {
   var cipher = Promise.promisify(bcrypt.hash);
@@ -35,5 +33,7 @@ userSchema.pre('save', function(next) {
     next();
   });
 });
+
+var UserModel = mongoose.model('User', userSchema);
 
 module.exports = UserModel;
