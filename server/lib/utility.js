@@ -10,9 +10,16 @@ exports.isLoggedIn = function(req, res) {
 };
 
 exports.sendUserData = function(req, res, newUser) {
-  req.session.user = newUser;
+
+  // If this is a new user signup
+  if (newUser !== undefined) {
+    req.session.user = newUser;
+  }
+
+  // Construct the logged-in user's information to send back to the client
   var userInfo = {};
-  userInfo['name'] = req.session.user.name;
+  // NOT used at the moment
+  // userInfo['name'] = req.session.user.name;
   userInfo['username'] = req.session.user.username;
   userInfo['location'] = req.session.user.location;
   userInfo['geoLocation'] = {};
@@ -29,10 +36,17 @@ exports.sendUserData = function(req, res, newUser) {
 };
 
 exports.checkUser = function(req, res) {
+  console.log('utility.js: entered checkUser');
+
   if (!exports.isLoggedIn(req)) {
+
+    console.log('utility.js: user NOT logged in, sending 401');
+
     res.status(401);
     res.end();
   } else {
+    console.log('utility.js: user logged in, sending user data back to client');
+    console.log('utility.js: user logged in: requ.session.user', req.session.user);
     exports.sendUserData(req, res);
   }
 };
@@ -67,23 +81,35 @@ exports.geoCodeit = function(res, userInfo, streetAddress, cb) {
 };
 
 exports.keywordBuilder = function(user, searchWord, cb) {
-  var strArr = searchTerm.split(' ');
+  var strArr = searchWord.split(' ');
   var keywordObj = {keyword: searchWord, associatedKeywords: []};
+
+  console.log('utility.js: keywordBuilder: entered with new keyword:', keywordObj);   
 
   if (strArr.length > 1) {
     keywordObj['associatedKeywords'] = [];
     user.keywords.push(keywordObj);
+    console.log('utility.js: keywordBuilder: multiple keywords detected, user.keywords:', user.keywords);
     cb(null, user);
   } else {
+
+    console.log('utility.js: keywordBuilder: single keywords detected, user.keywords:', user.keywords);
+
     var searchTerm = 'entry=';
-    searchTerm.concat(searchWord);
+    searchTerm = searchTerm.concat(searchWord);
+    console.log('utility.js: keywordBuilder: sending API with searchWord:', searchWord);    
+    console.log('utility.js: keywordBuilder: sending API with term:', searchTerm);
+
     unirest.post('https://twinword-word-associations-v1.p.mashape.com/associations/')
       .header('X-Mashape-Key', apiKey.wordAssocAPIk['key'])
       .header('Content-Type', 'application/x-www-form-urlencoded')
       .header('Accept', 'application/json')
       .send(searchTerm)
       .end(function (result) {
+        console.log('utility.js: keywordBuilder: word association API call complete: result.body', result.body);
+        console.log('utility.js: keywordBuilder: word association API call complete: result.error', result.error);
         if (result.error) {
+          console.log('utility.js: keywordBuilder: word association API call failed:', result.error);   
           cb(result.error);
         } else {
           var words = result.body['associations_array'];
@@ -92,11 +118,14 @@ exports.keywordBuilder = function(user, searchWord, cb) {
               keywordObj['associatedKeywords'].push(word);
             });
             user.keywords.push(keywordObj);
+
+            console.log('utility.js: keywordBuilder: word association API call success: results:', keywordObj);
+
             cb(null, user);
           } else {
             cb(null, user);
           }
         }
-    });
+      });
   }
 };
