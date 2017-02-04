@@ -182,14 +182,26 @@ exports.insertWordMonitor = function(req, res) {
             console.log('request-handler.js: insertWordMonitor: adding new keyword', keywords);
             util.keywordBuilder(user, keywords, function(err, user) {
               if (!err) {
-                //call billassociator
+                // ****************************
+                // TODO: call billassociator
+                // ****************************                
 
                 // Send the client the user object with the new results
-                console.log('request-handler.js: insertWordMonitor: keyword added, sending user object back to client:', user);      
-                res.status(200).send(user);
+                user.save(function (err) {
+                  if (err) {
+                    console.log('request-handler.js: insertWordMonitor: saving user object failed', err);
+                    res.stats(500).send(err);
+                    res.end();
+                  } else {
+                    console.log('request-handler.js: insertWordMonitor: keyword added, sending user object back to client:', user);
+                    res.status(200).send(user);
+                    res.end();
+                  }
+                });
               } else {
                 console.log('request-handler.js: insertWordMonitor: keyword adding failed');                   
                 res.status(500).send(err);
+                res.end();
               }
             });
           }
