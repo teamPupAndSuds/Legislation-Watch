@@ -37,8 +37,14 @@ class NavigationBar extends React.Component {
             </ul>
 
             <div className="navbar-right">
-                <p className="navbar-text">[{this.props.username}]</p>
-                <Link to="/logout" className="navbar-text nav-link">Logout</Link>          
+
+              <p className="navbar-text nav-link">[{this.props.username}]</p>     
+
+
+              <ul className="nav navbar-nav">
+         
+                <li><Link to="/logout" className="nav-link">Logout</Link></li>      
+              </ul> 
             </div>
           </div>
 
