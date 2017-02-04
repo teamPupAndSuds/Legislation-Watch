@@ -50,8 +50,10 @@ var addBills = function(keywordObj, date, cb) {
             } else {
               var resultDate = bill['last_version_on'];
               if (resultDate === date) {
-                result += "<h2><span style='text-align:left;'> Keyword: " + key + "</span><span style='text-align:right;'>Bill ID: " + bill['bill_id'] + "</span></h2>";
+                result += "<h2> Keyword: " + key + "</h2>";
+                result += "<h4 style='color:grey;'> Bill ID: " + bill['bill_id'] + "</h2>";
                 result += '<h3>' + bill['official_title'] + '</h3>';
+                result += '<h3>--------------------------</h3>';
               }
               billsToGo--;
               allKeys[key] = key;
@@ -73,10 +75,10 @@ exports.sendMail = function(userObj, cb) {
   //start construction body of email
   let insertHtml = "<h1>Here's what's happening today in congress. Visit <span style='color:blue;'>Legislature Watch</span> for more results!<br>";
 
-  //test date 2017-01-09
-  var date = '2017-01-09';
+  //FOR TESTING ONLY: 2017-01-09
+  var date = '2017-01-24';
 
-  //use this for the real thing******
+  //USE THIS DATE FOR THE REAL THING
   // var date = formatDate();
 
   addBills(userObj.keywords, date, function(err, result) {
@@ -90,7 +92,7 @@ exports.sendMail = function(userObj, cb) {
       let mailOptions = {
         from: '"Legislature Watch" <legislaturewatch@gmail.com>', // sender address
         to: userObj.email, // list of receivers
-        subject: '(Legislature Watch) YOUR DAILY DIGEST FOR ' + date, // Subject line
+        subject: '[Legislature Watch] Your Daily Digest ' + date, // Subject line
         html: insertHtml // html body
       };
 
@@ -185,6 +187,62 @@ var user = {
      's226-115',
      'hr502-115',
      'hr827-115' ]
+    },
+    'veteran': {
+      word: 'veteran',
+      relatedBills: ['hr91-115',
+     's12-115',
+     'hr28-115',
+     'hr95-115',
+     'hr63-115',
+     'hr103-115',
+     'hr42-115',
+     'hr245-115',
+     'hr105-115',
+     'hr307-115',
+     's57-115',
+     'hr303-115',
+     'hr244-115',
+     'hr104-115',
+     'hr325-115',
+     'hr101-115',
+     'sres4-115',
+     'hr299-115',
+     'hr333-115',
+     'hr343-115',
+     'hr328-115',
+     'hr337-115',
+     's23-115',
+     'hr369-115',
+     's24-115',
+     'sres8-115',
+     's35-115',
+     'sres7-115',
+     'hr293-115',
+     'hr334-115',
+     'hr127-115',
+     'hres46-115',
+     'hr22-115',
+     'hr149-115',
+     'hr27-115',
+     'hres6-115',
+     's86-115',
+     's66-115',
+     'hr90-115',
+     'hr67-115',
+     'hr93-115',
+     'hr388-115',
+     'hr43-115',
+     'hr107-115',
+     'hr161-115',
+     'hr166-115',
+     'hr92-115',
+     'hr102-115',
+     'hr154-115',
+     'hr106-115',
+     'hr32-115',
+     'hr94-115',
+     'hr252-115']
     }
   },
   email: 'c.bathgate1@gmail.com'
