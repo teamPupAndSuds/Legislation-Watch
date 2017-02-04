@@ -125,11 +125,8 @@ exports.keywordBuilder = function(user, searchWord, cb) {
               keywordObj['associatedKeywords'].push(word);
             });
             user.keywords[searchWord] = keywordObj;
-            // Object deep copy
-            user.keywords = JSON.parse(JSON.stringify(user.keywords));
 
             console.log('utility.js: keywordBuilder: word association API call success: results:', keywordObj);
-            console.log('utility.js: keywordBuilder: word association API call success: user.keywords:', user.keywords);
 
             cb(null, user);
           } else {
