@@ -25,14 +25,14 @@ var userSchema = new mongoose.Schema({
   email: String
 });
 
-userSchema.pre('save', function(next) {
+userSchema.methods.encryptPassword = function (callback) {
   var cipher = Promise.promisify(bcrypt.hash);
-  return cipher(this.password, null, null).bind(this)
+  cipher(this.password, null, null).bind(this)
   .then(function(hash) {
     this.password = hash;
-    next();
+    callback();
   });
-});
+};
 
 var UserModel = mongoose.model('User', userSchema);
 
