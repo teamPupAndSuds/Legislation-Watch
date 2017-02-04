@@ -38,8 +38,15 @@ class UserSignup extends React.Component {
     newUserInformation.address.city = this.formFields.city;
     newUserInformation.address.state = this.formFields.state;
 
+    let ajaxOptions = {
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(newUserInformation),
+      dataType: 'json',      
+    };
+
     // Send a AJAX POST request to the back-end server
-    $.post('signup/' + this.formFields.username, newUserInformation)
+    $.ajax('signup/' + this.formFields.username, ajaxOptions)
       .done(function(data) {
         hashHistory.push('/login');
       })

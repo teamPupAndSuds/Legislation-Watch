@@ -7,6 +7,7 @@
 
 const React = require('react');
 const ReactRouter = require('react-router');
+const hashHistory = ReactRouter.hashHistory;
 const Link = ReactRouter.Link;
 
 class UserLogin extends React.Component {
@@ -31,8 +32,15 @@ class UserLogin extends React.Component {
     loginUserInfo.username = this.formFields.username;
     loginUserInfo.password = this.formFields.password;
 
+    let ajaxOptions = {
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(loginUserInfo),
+      dataType: 'json',      
+    };
+
     // Send a AJAX POST request to the back-end server
-    $.post('login/', loginUserInfo)
+    $.ajax('login/', ajaxOptions)
       .done(function(data) {
         hashHistory.push('/dashboard');
       })

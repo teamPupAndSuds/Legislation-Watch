@@ -6,6 +6,9 @@
 // 
 ////////////////////////////////////////////////////////////////////////////////
 const React = require('react');
+const ReactRouter = require('react-router');
+const hashHistory = ReactRouter.hashHistory;
+const Link = ReactRouter.Link;
 
 class UserLogout extends React.Component {
   constructor(props) {
