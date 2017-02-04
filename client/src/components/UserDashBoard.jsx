@@ -19,51 +19,31 @@ class UserDashBoard extends React.Component {
     super(props);
 
     this.state = {
-      isFetching: true,
-      monitoringResults: this.props.monitoringResults,
+      isFetching: false,
+      monitoringResults: this.props.userMonitoredKeywords,
       errorMessage: ''
     };
 
     this.handleAddMonitoredWords = this.handleAddMonitoredWords.bind(this);
     this.handleRemoveMonitoredWords = this.handleRemoveMonitoredWords.bind(this);
   }
-  componentDidMount() { 
-    // Retrieve user monitored keywords and associated bills to populate the dashboard
-    $.get('user/' + this.props.username + '/keywords')
-      .done(data => this.setState({
-        isFetching: false,
-        monitoringResults: data,
-        'errorMessage': ''
-      }))
-      .fail(error => this.setState({
-        isFetching: false,
-        monitoringResults: [],
-        errorMessage: error.status + '-' + error.statusText
-      }));
-  }
 
   handleAddMonitoredWords(words) {
     // Send a PUT AJAX message to back-end server to add a new monitored word(s) string
     $.ajax('user/' + this.props.username + '/keywords', {
       method: 'PUT',
+      contentType: 'application/json',      
       context: this,
-      data: {
-        keyword: words
-      },
+      data: JSON.stringify({
+        keywords: words
+      }),
       dataType: 'json'
     })
       .done(function(data) {
         // Add the new monitored keywords and the results into our dash-board
-        //
-        // We need to make a copy of the existing results because the component state is suppose to be
-        // immutable
-
-        let revisedMonitoringResults = this.state.monitoringResults.slice();
-        revisedMonitoringResults.unshift(data);
-
         if (data !== undefined) {
           this.setState({
-            monitoringResults: revisedMonitoringResults
+            monitoringResults: data.keywords
           });
         }
       });
@@ -73,30 +53,21 @@ class UserDashBoard extends React.Component {
     //Send a DELETE AJAX message to back-end server to remove a monitored word(s) string
     $.ajax('user/' + this.props.username + '/keywords', {
       method: 'DELETE',
+      contentType: 'application/json',          
       context: this,
-      data: {
-        keyword: words
-      },
+      data: JSON.stringify({
+        keywords: words
+      }),
       dataType: 'json'
     })
-    .done(function() {
-      // Once the back-end server successfully removed the monitored keyword, we will remove the entry
-      // from our dashboard on the client-side to save on a AJAX request to the back-end.
-      //
-      // We need to make a copy of the existing results because the component state is suppose to be
-      // immutable
-      let revisedMonitoringResults = [];
-      
-      this.state.monitoringResults.forEach(function(bill) {
-        if (bill.word !== words) {
-          revisedMonitoringResults.push(bill);
+      .done(function(data) {
+        // Add the revised monitored keywords and the results into our dash-board
+        if (data !== undefined) {
+          this.setState({
+            monitoringResults: data.keywords
+          });
         }
       });
-
-      this.setState({
-        monitoringResults: revisedMonitoringResults
-      });
-    });
   }  
 
   render() {
@@ -114,8 +85,8 @@ class UserDashBoard extends React.Component {
         {this.state.monitoringResults.map(function(bill) {
           return (
             <UserDashBoardMonitoredWordResult 
-              key={bill.word} 
-              monitoredWords={bill.word} 
+              key={bill.keyword}
+              monitoredWords={bill.keyword}
               billIds={bill.relevantBills} 
               onMonitoredWordsRemove={this.handleRemoveMonitoredWords} />
           );
@@ -128,7 +99,7 @@ class UserDashBoard extends React.Component {
 
 // defaultProps for testing purposes
 UserDashBoard.defaultProps = {
-  monitoringResults: [
+  userMonitoredKeywords: [
     {
       word: 'Testing',
       relevantBills: ['hr1761-112', 'hr2276-114', 'hr2279-114']
