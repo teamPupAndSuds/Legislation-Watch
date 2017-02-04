@@ -25,7 +25,7 @@ var userSchema = new mongoose.Schema({
   email: String
 });
 
-userSchema.methods.encryptPassword = function (callback) {
+userSchema.methods.hashPassword = function (callback) {
   var cipher = Promise.promisify(bcrypt.hash);
   cipher(this.password, null, null).bind(this)
   .then(function(hash) {
