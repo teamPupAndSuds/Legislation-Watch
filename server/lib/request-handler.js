@@ -88,7 +88,7 @@ exports.userSignup = function(req, res) {
           password: password,
           location: location,
           email: userEmail,
-          keywords: {}
+          keywords: []
         };
 
         console.log('request-handler.js: userSignup: userinfo:', userInfo);
@@ -119,17 +119,19 @@ exports.userSignup = function(req, res) {
             // creates new user and save to DB
             ////////////////////////////////////////////
             var newUser = new User(userInfo);
-            newUser.save(function(err, newUser) {
-              if (err) {
-                console.log('request-handler.js: userSignup: fail to SaveUser to DB');
-                res.status(500).send(err);
-              } else {
-              /////////////////////////////////////////////////////////
-              // creates new client session for a successful sign-up
-              /////////////////////////////////////////////////////////
-                console.log('request-handler.js: userSignup: save user OK: newUser is:', newUser);
-                util.createSession(req, res, newUser);
-              }
+            newUser.hashPassword(function() {
+              newUser.save(function(err, newUser) {
+                if (err) {
+                  console.log('request-handler.js: userSignup: fail to SaveUser to DB');
+                  res.status(500).send(err);
+                } else {
+                /////////////////////////////////////////////////////////
+                // creates new client session for a successful sign-up
+                /////////////////////////////////////////////////////////
+                  console.log('request-handler.js: userSignup: save user OK: newUser is:', newUser);
+                  util.createSession(req, res, newUser);
+                }
+              });
             });
           } else {
             console.log('request-handler.js: userSignup: geolocation failed');
@@ -148,7 +150,8 @@ exports.userSignup = function(req, res) {
 };
 
 /////////////////////////////////////////////////////////////////
-//HANDLES NEW USER WORD MONITOR
+// HANDLES NEW USER MONITORED WORDS
+/////////////////////////////////////////////////////////////////
 
 exports.insertWordMonitor = function(req, res) {
   var username = req.params.username;
@@ -213,12 +216,14 @@ exports.insertWordMonitor = function(req, res) {
 };
 
 /////////////////////////////////////////////////////////////////
-//HANDLES DELETION OF WORD MONITOR
-
+// HANDLES DELETION OF MONITORED WORDS
+/////////////////////////////////////////////////////////////////
 exports.deleteWordMonitor = function(req, res) {
   var username = req.params.username;
-  var keywords = req.body.keywords;
-  keywords = keywords.trim();
+  var keywordsToBeDeleted = req.body.keywords;
+  keywordsToBeDeleted = keywordsToBeDeleted.trim();
+
+  console.log('request-handler.js: deleteWordMonitor: entered: keyword to delete:', keywordsToBeDeleted);
 
   User.findOne( {username: username} )
     .exec(function(err, user) {
@@ -227,15 +232,36 @@ exports.deleteWordMonitor = function(req, res) {
           res.status(401);
           res.end();
         } else {
-          if (user['keywords'][keywords] !== undefined) {
-            delete user['keywords'][keywords];
-            util.sendUserData(req, res);
-          } else {
-            util.sendUserData(req, res);
+          // Locate and delete the keyword
+          for (var i = 0; i < user['keywords'].length; i++) {
+            if (user['keywords'][i].keyword === keywordsToBeDeleted) {
+              // console.log('request-handler.js: deleteWordMonitor: keyword to be deleted found: before', user['keywords']);
+              user['keywords'].splice(i, 1);
+              // console.log('request-handler.js: deleteWordMonitor: keyword to be deleted found: after', user['keywords']);
+
+              // Save to database
+              user.save(function(err) {
+                if (err) {
+                  res.statu(500);
+                  res.end(err);
+                } else {
+                  // Ensure the session is pointed to this newly updated user model instance
+                  req.session.user = user;                  
+                  util.sendUserData(req, res);
+                }
+              });
+
+              return;
+            }
           }
+          // If we did not manage to find the keyword to be deleted
+          console.log('request-handler.js: deleteWordMonitor: keyword to be deleted not found');
+          res.status(404);
+          res.end();
         }
       } else {
         res.status(401).send(err);
+        res.end();
       }
     }); 
 };
