@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var apiKey = require('./api_config.js');
 
 //connected to billdatabase for testing purposes
-mongoose.connect('mongodb://localhost/billfetchertest');
+// mongoose.connect('mongodb://localhost/billfetchertest');
 
 exports.getAllByKeywords = function(phrase, cb) {
   //the regex will search through the array of library of congress keywords and will be able to find the targeted phrase, case in-sensitive as indicated by $options: 'i'
