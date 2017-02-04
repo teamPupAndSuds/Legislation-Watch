@@ -25,6 +25,16 @@ class UserDashBoardMonitoredWordResult extends React.Component {
 
   componentDidMount() { 
     // retrieve the bill information from Sunlight API for all of the supplied billIds
+
+    // Do not retrieve bills if there is none to retrieve
+    if (this.props.billIds === undefined || this.props.billIds.length === 0) {
+      this.setState({
+        isFetching: false,
+        billData: []
+      });
+      return;
+    }
+
     let requestQueryString = {
       'bill_id__in': this.props.billIds.join('|'),
       fields: 'bill_id,bill_type,chamber,introduced_on,last_action_at,short_title,official_title,keywords,summary_short,urls,sponsor,sponsor_id,cosponsor_ids,cosponsors.legislator,related_bill_ids,upcoming',
