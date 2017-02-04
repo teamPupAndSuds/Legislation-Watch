@@ -39,45 +39,46 @@ class App extends React.Component {
       userLocation: {
         lat: undefined,
         long: undefined
-      }
+      },
+      userMonitoredKeywords: []
     };
   }
 
   // Checks the authentication status of the user
   componentDidMount() {
     $.get('login')
-      .done(function(data) {
+      .done((data) => {
+        console.log(data);
         this.setState({        
           isVerifyingUserSession: false,
           isUserLoggedIn: true,
           username: data.username,
-          userLocation: data.location
+          userLocation: data.geoLocation,
+          userMonitoredKeywords: data.keywords
         });
       })
       .fail(error => {
         // If user is not logged in:
 
         // // Production
-        // this.setState({
-        //   // Live Configuration
-        //   // isVerifyingUserSession: false,
-        //   // isUserLoggedIn: false
-        // });
+        this.setState({
+          isVerifyingUserSession: false,
+          isUserLoggedIn: false
+        });
 
-        // // Redirect them to login if the session is not valid
-        // hashHistory.push('/about');
+        hashHistory.push('/about');
 
         // Testing
-        this.setState({
-          // Testing Only:
-          isVerifyingUserSession: false,          
-          isUserLoggedIn: true,
-          username: 'boba',
-          userLocation: {
-            lat: 37.795,
-            long: -122.40
-          }      
-        });
+        // this.setState({
+        //   // Testing Only:
+        //   isVerifyingUserSession: false,          
+        //   isUserLoggedIn: true,
+        //   username: 'boba',
+        //   userLocation: {
+        //     lat: 37.795,
+        //     long: -122.40
+        //   }      
+        // });
 
       });
   }
@@ -105,7 +106,7 @@ class App extends React.Component {
               <div className="col-md-8">
 
                 {this.props.main.type === 'UserDashBoard' ? 
-                  <UserDashBoard username={this.state.username}/> :
+                  <UserDashBoard username={this.state.username} userMonitoredKeywords={this.state.userMonitoredKeywords} /> :
                   <LegislationSearch username={this.state.username} />
                 }
 
