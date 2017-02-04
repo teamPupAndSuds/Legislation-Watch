@@ -186,10 +186,6 @@ exports.insertWordMonitor = function(req, res) {
             console.log('request-handler.js: insertWordMonitor: adding new keyword', keywords);
             util.keywordBuilder(user, keywords, function(err, user) {
               if (!err) {
-                // ****************************
-                // TODO: call billassociator
-                // ****************************
-
                 BillAssociate.billAssociate(user['keywords'][keywords], function(error, data) {
                     // Save to DB
                   user.markModified('keywords');
