@@ -1,3 +1,13 @@
+////////////////////////////////////////////////////////////////////////////////
+// index.jsx
+// --------------------------
+// This is the entry point for the single page application.
+//
+// The AppRoutes class defines the client side routes
+// The App class is the main view after a user has logged-in
+// Other view with non-nested component: login, signup, logout and about
+// 
+////////////////////////////////////////////////////////////////////////////////
 const React = require('react');
 const ReactDOM = require('react-dom');
 
@@ -8,6 +18,7 @@ const Route = ReactRouter.Route;
 const IndexRoute = ReactRouter.IndexRoute;
 const hashHistory = ReactRouter.hashHistory;
 
+// Import project custom components
 const NavigationBar = require(__dirname + '/src/components/NavigationBar.jsx');
 const UserDashBoard = require(__dirname + '/src/components/UserDashBoard.jsx');
 const UserLegislatorsInfo = require(__dirname + '/src/components/UserLegislatorsInfo.jsx');
@@ -15,6 +26,7 @@ const LegislationSearch = require(__dirname + '/src/components/LegislationSearch
 const UserLogin = require(__dirname + '/src/components/UserLogin.jsx');
 const UserSignup = require(__dirname + '/src/components/UserSignup.jsx');
 const UserLogout = require(__dirname + '/src/components/UserLogout.jsx');
+const About = require(__dirname + '/src/components/about.jsx');
 
 class App extends React.Component {
   constructor(props) {
@@ -27,38 +39,48 @@ class App extends React.Component {
       userLocation: {
         lat: undefined,
         long: undefined
-      }
+      },
+      userMonitoredKeywords: []
     };
   }
 
-  // Need check with the server to see if user is autheticated
+  // Checks the authentication status of the user
   componentDidMount() {
     $.get('login')
-      .done(function(data) {
+      .done((data) => {
+        // Debug
+        // console.log(data);
         this.setState({        
           isVerifyingUserSession: false,
           isUserLoggedIn: true,
           username: data.username,
-          userLocation: data.location
+          userLocation: data.geoLocation,
+          userMonitoredKeywords: data.keywords
         });
       })
       .fail(error => {
         // If user is not logged in:
+
+        // // Production
         this.setState({
           isVerifyingUserSession: false,
           isUserLoggedIn: false
-
-          // Testing Only:
-          // isUserLoggedIn: true,
-          // username: 'boba',
-          // userLocation: {
-          //   lat: 37.795,
-          //   long: -122.40
-          // }      
         });
 
-        // Redirect them to login
-        hashHistory.push('/login');
+        hashHistory.push('/about');
+
+        // Testing
+        // this.setState({
+        //   // Testing Only:
+        //   isVerifyingUserSession: false,          
+        //   isUserLoggedIn: true,
+        //   username: 'boba',
+        //   userLocation: {
+        //     lat: 37.795,
+        //     long: -122.40
+        //   }      
+        // });
+
       });
   }
 
@@ -72,7 +94,7 @@ class App extends React.Component {
       );
     }
 
-    // If the user is logged in...
+    // If the user is logged in, we render the main "dashboard"
     if (this.state.isUserLoggedIn === true) {
       return (
         <div>
@@ -85,7 +107,7 @@ class App extends React.Component {
               <div className="col-md-8">
 
                 {this.props.main.type === 'UserDashBoard' ? 
-                  <UserDashBoard username={this.state.username}/> :
+                  <UserDashBoard username={this.state.username} userMonitoredKeywords={this.state.userMonitoredKeywords} /> :
                   <LegislationSearch username={this.state.username} />
                 }
 
@@ -104,6 +126,7 @@ App.defaultProps = {
   main: 'UserDashBoard'
 };
 
+// Routes definitions
 class AppRoutes extends React.Component {
   constructor(props) {
     super(props);
@@ -112,6 +135,7 @@ class AppRoutes extends React.Component {
   render() {
     return (
       <Router history = {hashHistory}>
+        <Route path="/about" component={About} />
         <Route path="/login" component={UserLogin} />
         <Route path="/signup" component={UserSignup} />
         <Route path="/logout" component={UserLogout} /> 
@@ -123,7 +147,5 @@ class AppRoutes extends React.Component {
     );
   }
 } 
-
-
 
 ReactDOM.render(<AppRoutes />, document.getElementById('app'));

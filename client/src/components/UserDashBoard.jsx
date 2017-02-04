@@ -1,3 +1,15 @@
+////////////////////////////////////////////////////////////////////////////////
+// UserDashBoard.jsx
+// --------------------------
+// This is the parent component for displaying the dashboard user interface.
+// 
+// It is responsible for AJAX call to the back-end to retrieve the user's
+// monitored keywords and associated bills. It is also responsible for
+// reacting to user request to add and remove monitored keywords and translating
+// it into calls to the back-end
+//
+////////////////////////////////////////////////////////////////////////////////
+
 const React = require('react');
 const UserDashBoardKeywordsEntryBar = require('./UserDashBoardKeywordsEntryBar.jsx');
 const UserDashBoardMonitoredWordResult = require('./UserDashBoardMonitoredWordResult.jsx');
@@ -7,97 +19,74 @@ class UserDashBoard extends React.Component {
     super(props);
 
     this.state = {
-      isFetching: true,
-      monitoringResults: this.props.monitoringResults,
+      isFetching: false,
+      monitoringResults: this.props.userMonitoredKeywords,
       errorMessage: ''
     };
 
     this.handleAddMonitoredWords = this.handleAddMonitoredWords.bind(this);
     this.handleRemoveMonitoredWords = this.handleRemoveMonitoredWords.bind(this);
   }
-  componentDidMount() { 
-    // Retrieve user monitored keywords and associated bills to populate the dashboard
-    $.get('user/' + this.props.username + '/keywords')
-      .done(data => this.setState({
-        isFetching: false,
-        monitoringResults: data,
-        'errorMessage': ''
-      }))
-      .fail(error => this.setState({
-        isFetching: false,
-        monitoringResults: [],
-        errorMessage: error.status + '-' + error.statusText
-      }));
-  }
 
   handleAddMonitoredWords(words) {
-    // PUT message to server to add a new monitored word(s) string
+    // Send a PUT AJAX message to back-end server to add a new monitored word(s) string
     $.ajax('user/' + this.props.username + '/keywords', {
       method: 'PUT',
+      contentType: 'application/json',      
       context: this,
-      data: {
-        keyword: words
-      },
+      data: JSON.stringify({
+        keywords: words
+      }),
       dataType: 'json'
     })
       .done(function(data) {
-
-        let revisedMonitoringResults = this.state.monitoringResults.slice();
-        revisedMonitoringResults.unshift(data);
-
-        console.log(revisedMonitoringResults);
-        // Add the new entry into our dashboard, along with the monitored keywords 'hits' returned
-        // by our server
+        // Add the new monitored keywords and the results into our dash-board
         if (data !== undefined) {
           this.setState({
-            monitoringResults: revisedMonitoringResults
+            monitoringResults: data.keywords
           });
         }
       });
   }
 
   handleRemoveMonitoredWords(words) {
-    //DELETE message to server to remove a monitored word(s) string
+    //Send a DELETE AJAX message to back-end server to remove a monitored word(s) string
     $.ajax('user/' + this.props.username + '/keywords', {
       method: 'DELETE',
+      contentType: 'application/json',          
       context: this,
-      data: {
-        keyword: words
-      },
+      data: JSON.stringify({
+        keywords: words
+      }),
       dataType: 'json'
     })
-    .done(function() {
-      // We will now remove the keyword and associated relevant bills from our results
-      // but we're making copies (and not splice) because any modification must be done via setState
-      let revisedMonitoringResults = [];
-      
-      this.state.monitoringResults.forEach(function(bill) {
-        if (bill.word !== words) {
-          revisedMonitoringResults.push(bill);
+      .done(function(data) {
+        // Add the revised monitored keywords and the results into our dash-board
+        if (data !== undefined) {
+          this.setState({
+            monitoringResults: data.keywords
+          });
         }
       });
-
-      this.setState({
-        monitoringResults: revisedMonitoringResults
-      });
-    });
   }  
 
   render() {
     return (
       <div>
-        <h3>Dash Board</h3>
+        <h3>Dashboard</h3>
         <UserDashBoardKeywordsEntryBar onAddMonitoredWords={this.handleAddMonitoredWords}/>
 
+        {/* Display 'Loading' messages when user monitored keywords and results is being fetched */}
         {this.state.isFetching &&
           <div><h3>Fetching Data</h3></div>
         }
 
+        {/* Render monitored keyword entries and results */}
         {this.state.monitoringResults.map(function(bill) {
           return (
             <UserDashBoardMonitoredWordResult 
-              key={bill.word} 
-              monitoredWords={bill.word} 
+              key={bill.keyword}
+              monitoredWords={bill.keyword}
               billIds={bill.relevantBills} 
               onMonitoredWordsRemove={this.handleRemoveMonitoredWords} />
           );
@@ -110,7 +99,7 @@ class UserDashBoard extends React.Component {
 
 // defaultProps for testing purposes
 UserDashBoard.defaultProps = {
-  monitoringResults: [
+  userMonitoredKeywords: [
     {
       word: 'Testing',
       relevantBills: ['hr1761-112', 'hr2276-114', 'hr2279-114']

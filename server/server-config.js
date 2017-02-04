@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 var path = require('path');
 var handler = require('./lib/request-handler');
 var util = require('./lib/utility.js');
-mongoose.connect('mongodb://localhost:LegislatureWatcher')
+mongoose.connect('mongodb://localhost:LegislatureWatcher');
 var app = express();
 app.use(bodyParser.json());
 
@@ -14,13 +14,17 @@ app.use(bodyParser.json());
 //AUTHENTICATION
 //express session
 app.use(session({
-	secret: 'shhh, it\'s a secret',
-	resave: false,
-	saveUnitialized: true,
+  secret: 'shhh, it\'s a secret',
+  resave: false,
+  saveUnitialized: true,
 }));
-//routes to login page
+
+//endpoint for client request for current session's validity
+//if current session logged in: respond with logged in user's information to client (status code: 200)
+//if current session is not logged in: response with (status:code 401)
 app.get('/login', util.checkUser);
-//routes user login action
+
+//endpoint for user attempting to login with {username, password}
 app.post('/login', handler.userLogin);
 
 //handles user logout action
@@ -28,12 +32,14 @@ app.get('/logout', handler.userLogout);
 
 //handles user signup action
 app.post('/signup/:username', handler.userSignup);
-/////////////////////////////////////////////////////////////////
-app.put('/user/:username/:keywords', handler.insertWordMonitor);
 
-app.delete('/user/:username/:keywords', handler.deleteWordMonitor);
-
+//endpoints for adding and deleteing 'monitored keywords' for a particular user with :username
 /////////////////////////////////////////////////////////////////
+app.put('/user/:username/keywords', handler.insertWordMonitor);
+
+app.delete('/user/:username/keywords', handler.deleteWordMonitor);
+/////////////////////////////////////////////////////////////////
+
 //server up static files
 app.use(express.static(path.join(__dirname + '/../client')));
 

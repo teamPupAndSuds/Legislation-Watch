@@ -1,3 +1,10 @@
+////////////////////////////////////////////////////////////////////////////////
+// SearchBar.jsx
+// --------------------------
+// This is the component for a simple search bar
+// 
+////////////////////////////////////////////////////////////////////////////////
+
 var React = require('react');
 
 class SearchBar extends React.Component {
@@ -10,6 +17,7 @@ class SearchBar extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  // This update the userSearchTerm property as the user type into the input element
   handleSearchInputChange(event) {
     this.userSearchTerms = event.target.value;
   }
