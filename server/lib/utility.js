@@ -19,7 +19,7 @@ exports.sendUserData = function(req, res, newUser) {
   // Construct the logged-in user's information to send back to the client
   var userInfo = {};
   // NOT used at the moment
-  // userInfo['name'] = req.session.user.name;
+  // userInfo['name'] = req.sessikeywordObon.user.name;
   userInfo['username'] = req.session.user.username;
   userInfo['location'] = req.session.user.location;
   userInfo['geoLocation'] = {};
@@ -95,7 +95,7 @@ exports.keywordBuilder = function(user, searchWord, cb) {
 
   if (strArr.length > 1) {
     keywordObj['associatedKeywords'] = [];
-    user.keywords[searchWord] = keywordOb;
+    user.keywords[searchWord] = keywordObj;
     console.log('utility.js: keywordBuilder: multiple keywords detected, user.keywords:', user.keywords);
     cb(null, user);
   } else {
