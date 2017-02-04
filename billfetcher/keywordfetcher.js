@@ -5,6 +5,10 @@ var apiConfig = require('./../server/lib/api_config');
 var Bill = require('./../db/models/bill');
 var logger = require('./logHelpers.js');
 
+// This function watches for any new bills in the database and calls the Twinword API to generate keywords
+// based on the title and text (if available) of the bill. This keyword generation helps us alert users to new 
+// bills as soon as they are introduced, rather than waiting for the full text to become available or for the
+// Library of Congress to assign keywords to the bill.
 var fetchBillsKeywords = function(callback) {
 
   // check flat file for the last time this module was run
@@ -48,6 +52,17 @@ var fetchBillsKeywords = function(callback) {
                     if (!results.keyword) {
                       results.keyword = {};
                     }
+                    // The Twinword API returns keywords in an object under the property 'keyword'.
+                    // Each keyword is its own property, hence the use of Object.keys.
+                    // Example response: 
+                    // {
+                    //   "keyword": {
+                    //     "taxation": 1,
+                    //     "alcoholic": 1,
+                    //     "beverage": 1,
+                    //     "reform": 1,
+                    //      ...
+                    // }
                     saveKeywords(bill, Object.keys(results.keyword), function(err) {
                       checkIfDone(++billsSaved, bills.length, callback); 
                     });
@@ -62,6 +77,11 @@ var fetchBillsKeywords = function(callback) {
   });
 };
 
+// A function used to determine when all asynchronous calls have completed.
+// Arguments:
+// billsSaved: the number of bills processed asynchronously so far
+// totalBills: the total number of bills we need to process
+// callback: a callback with no arguments, invoked when all asynchronous calls have completed 
 var checkIfDone = function(billsSaved, totalBills, callback) {
   console.log('Processed bill number: ' + billsSaved);
   if (billsSaved === totalBills) {
@@ -71,6 +91,10 @@ var checkIfDone = function(billsSaved, totalBills, callback) {
   }
 };
 
+// Helper function for retrieving the full text of a bill, or the title if full text is not available.
+// Arguments:
+// bill: A mongoose bill model object
+// callback: A callback with the signature (err, text)
 var getBillText = function(bill, callback) {
   if (!bill.last_version.urls.html) {
     // the text of the bill is not available, so all we have to work with is the title
@@ -80,6 +104,10 @@ var getBillText = function(bill, callback) {
   }
 };
 
+// Helper function for getBillText. This function scrapes the website containing the bill's full text.
+// Arguments:
+// bill: A mongoose bill model object
+// callback: A callback with the signature (err, text)
 var requestBillText = function(bill, callback) {
   request({
     url: bill.last_version.urls.html,
@@ -94,6 +122,11 @@ var requestBillText = function(bill, callback) {
   });  
 };
 
+// Helper function for getting keywords associated with a bill. The function makes an API call to the Twinword
+// topic tagging API, which returns topic keywords based on the full text of the bill.
+// Arguments:
+// text: a string representing the text of the bill
+// callback: a callback with signature (err, results) that is passed the result of the API call on success
 var getBillKeywords = function(text, callback) {
   request({
     url: config.TOPIC_TAGGING_API_URL,
@@ -119,6 +152,11 @@ var getBillKeywords = function(text, callback) {
   });   
 };
 
+// Helper function for saving generated keywords back to the database.
+// Arguments:
+// bill: a mongoose bill model object
+// keywords: an array of strings
+// callback: a callback with the signature (err)
 var saveKeywords = function(bill, keywords, callback) {
   bill.keywords_generated = keywords;
   bill.save(function(err) {
@@ -131,6 +169,8 @@ var saveKeywords = function(bill, keywords, callback) {
   });
 };
 
+// Helper function for writing the current time to a text file. Used to store a timestamp that can be
+// referenced the next time this module is run.
 var writeCurrentTimeToFile = function(filePath, callback) {
   var newTimestamp = (new Date()).toISOString();
   fs.writeFile(config.keywordFetcherTimestampFile, newTimestamp, function(err) { 
