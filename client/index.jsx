@@ -48,7 +48,8 @@ class App extends React.Component {
   componentDidMount() {
     $.get('login')
       .done((data) => {
-        console.log(data);
+        // Debug
+        // console.log(data);
         this.setState({        
           isVerifyingUserSession: false,
           isUserLoggedIn: true,
