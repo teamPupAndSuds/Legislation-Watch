@@ -69,9 +69,9 @@ class UserSignup extends React.Component {
     return (
       <div className="container-fluid">
         <h2>Legislation Watch</h2>      
-        <div className="panel panel-primary">
+        <div className="panel panel-info">
           <div className="panel-heading">
-            <h4>Signup</h4>
+            <h4 className="panel-title">Signup</h4>
           </div>
           <div className="panel-body">
             <form onSubmit={this.handleFormSubmit}>
