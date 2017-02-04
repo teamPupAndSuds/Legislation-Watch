@@ -4,6 +4,7 @@ var path = require('path');
 var unirest = require('unirest');
 var User = require('./../../db/models/user');
 var util = require('./utility.js');
+var BillAssociate = require('./billAssociate.js');
 
 /////////////////////////////////////////////////////////////////
 //AUTHENTICATION
@@ -187,20 +188,22 @@ exports.insertWordMonitor = function(req, res) {
               if (!err) {
                 // ****************************
                 // TODO: call billassociator
-                // ****************************                
+                // ****************************
 
-                // Save to DB
-                user.markModified('keywords');
-                user.save(function (err) {
-                  if (err) {
-                    console.log('request-handler.js: insertWordMonitor: saving user object failed', err);
-                    res.stats(500).send(err);
-                    res.end();
-                  } else {
-                    // Send the client the user object with the new results
-                    console.log('request-handler.js: insertWordMonitor: keyword added, sending user object back to client:', user);
-                    util.sendUserData(req, res, user);
-                  }
+                BillAssociate.billAssociate(user['keywords'][keywords], function(error, data) {
+                    // Save to DB
+                  user.markModified('keywords');
+                  user.save(function (err) {
+                    if (err) {
+                      console.log('request-handler.js: insertWordMonitor: saving user object failed', err);
+                      res.stats(500).send(err);
+                      res.end();
+                    } else {
+                      // Send the client the user object with the new results
+                      console.log('request-handler.js: insertWordMonitor: keyword added, sending user object back to client:', user);
+                      util.sendUserData(req, res, user);
+                    }
+                  });
                 });
               } else {
                 console.log('request-handler.js: insertWordMonitor: keyword adding failed');                   
