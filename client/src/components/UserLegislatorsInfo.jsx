@@ -153,7 +153,7 @@ class UserLegislatorsInfoPresentational extends React.Component {
           <h4>{this.props.electoralInfo.state} - {this.props.electoralInfo.districtName}</h4>
         </div>
         <div className = "panel-body">
-          <h3>House of Representative</h3>
+          <h3>House of Representatives</h3>
           <LegislatorInfo info={this.props.houseRepInfo}/>
           <h3>Senate</h3>
           {this.props.senatorsInfo.map((senatorInfo) => {

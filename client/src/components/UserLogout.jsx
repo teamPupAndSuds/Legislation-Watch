@@ -37,9 +37,9 @@ class UserLogout extends React.Component {
   render() {
     return (
       <div className="container-fluid">
-        <div className="panel panel-primary">
+        <div className="panel panel-info">
           <div className="panel-heading">
-            <h4>Logout</h4>
+            <h4 className="panel-title">Logout</h4>
           </div>
           <div className="panel-body">
             Logging Out...

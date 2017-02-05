@@ -1,3 +1,7 @@
+// Initiate connection to DB
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/billfetchertest');
+
 var app = require('./server-config.js');
 
 var port = process.env.PORT || 8080;

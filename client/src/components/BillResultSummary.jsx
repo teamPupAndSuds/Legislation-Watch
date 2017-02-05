@@ -47,7 +47,7 @@ class BillResultSummaryPresentational extends React.Component {
           cosponsorElements.push(id + ' ');
         } else {
           // Construct Legislator information for display
-          cosponsorElements.push(cosponsor.firstname + ' ' + cosponsor.lastname + ' (' + cosponsor.party + ') ');
+          cosponsorElements.push(' ' + cosponsor.firstname + ' ' + cosponsor.lastname + ' (' + cosponsor.party + ')');
         }
       });
     }
@@ -59,11 +59,18 @@ class BillResultSummaryPresentational extends React.Component {
             <div className="row">
               {/* Bill title with link to full text */}
               <div className="col-sm-9" style={{padding: 0}}>
-                <strong><a href={info.urls.congress + '/text'} target="_blank">{info.short_title}{!info.short_title && info.official_title}</a></strong>
-                <small className="text-uppercase"> ({info.chamber})</small>
+                <h3 className="panel-title"><a href={info.urls.congress + '/text'} target="_blank">{info.short_title}{!info.short_title && info.official_title}</a>
+                <small className="text-uppercase panel-title"><small>&nbsp;({info.chamber}) </small></small></h3>
               </div>
               <div className="col-sm-3" style={{padding: 0}}>
-                <span className="pull-right"><small><span className="text-uppercase">{info.bill_id}</span> <strong>introduced - </strong>: {info.introduced_on}</small></span>
+                <span className="pull-right panel-title">
+                  <small>
+                    <h3 className="text-uppercase panel-title"><small>
+                      {info.bill_id} | 
+                      INTRODUCED : {info.introduced_on}
+                    </small></h3>
+                  </small>
+                </span>
               </div>
             </div>
           </div>        
