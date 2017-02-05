@@ -76,7 +76,7 @@ exports.sendMail = function(userObj, cb) {
   let insertHtml = "<h1>Here's what's happening today in congress. Visit <span style='color:blue;'>Legislature Watch</span> for more results!<br>";
 
   //FOR TESTING ONLY: 2017-01-09
-  //var date = '2017-01-24';
+  //var date = '2017-01-09';
 
   //USE THIS DATE FOR THE REAL THING - Grabs today's date
   var date = formatDate();
