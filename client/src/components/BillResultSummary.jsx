@@ -47,7 +47,7 @@ class BillResultSummaryPresentational extends React.Component {
           cosponsorElements.push(id + ' ');
         } else {
           // Construct Legislator information for display
-          cosponsorElements.push(cosponsor.firstname + ' ' + cosponsor.lastname + ' (' + cosponsor.party + ') ');
+          cosponsorElements.push(' ' + cosponsor.firstname + ' ' + cosponsor.lastname + ' (' + cosponsor.party + ')');
         }
       });
     }
