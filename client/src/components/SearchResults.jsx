@@ -33,6 +33,15 @@ class SearchResultsPresentational extends React.Component {
       );
     }
 
+    // Sort the returned results by introduced_on date (newest on top)
+    this.props.searchResults.sort(function (a, b) {
+      if (a.introduced_on < b.introduced_on) {
+        return 1;
+      } else {
+        return -1;
+      }
+
+    });
     let billResultComponents = this.props.searchResults.map(
       function(bill) {
         return <BillResultSummary key={bill.bill_id} info={bill} legislatorCache={this.props.legislatorCache}/>;
