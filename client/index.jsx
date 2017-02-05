@@ -26,7 +26,7 @@ const LegislationSearch = require(__dirname + '/src/components/LegislationSearch
 const UserLogin = require(__dirname + '/src/components/UserLogin.jsx');
 const UserSignup = require(__dirname + '/src/components/UserSignup.jsx');
 const UserLogout = require(__dirname + '/src/components/UserLogout.jsx');
-const About = require(__dirname + '/src/components/about.jsx');
+const About = require(__dirname + '/src/components/About.jsx');
 
 class App extends React.Component {
   constructor(props) {
