@@ -15,6 +15,7 @@ let transporter = nodemailer.createTransport({
   }
 });
 
+//create date format to match date format in bill table
 var formatDate = function() {
   var d = new Date(),
     month = '' + (d.getMonth() + 1),
@@ -30,18 +31,32 @@ var formatDate = function() {
   return [year, month, day].join('-');
 };
 
-//mvp way of adding the bills to email
 var addBills = function(keywordObj, date, cb) {
   var result = '';
+
+
+  //allKeys object acts as a way to keep track of all the keywords 
+  //that have been called on the Bills database so far
   var allKeys = {};
+
+  //counts the total amount of keywords the user has
+  //when tasksTotal === Object.keys(allKeys).length, all keys have been looked up and added to result string
   var keys = Object.keys(keywordObj);
   var tasksTotal = keys.length;
+
+  //if a user hasn't added topics yet
   if (tasksTotal === 0) {
     cb(null, '<h2>Please add topics to your profile. Visit Legislature Watch for more info</h2>');
+
   } else {
     for (var key in keywordObj) {
+      //using an immediately invoked function to keep reference to key name
       (function(key) {
+
+        //when billsToGo reaches 0, that means all bills in array have been processed
         var billsToGo = keywordObj[key]['relatedBills'].length;
+
+        //go through each bill in relatedBills array that has to do with keyword
         for (var i = 0; i < keywordObj[key]['relatedBills'].length; i++) {
           Bill.findOne({'bill_id': keywordObj[key]['relatedBills'][i]}, function(err, bill) {
             if (err) {
@@ -57,6 +72,8 @@ var addBills = function(keywordObj, date, cb) {
               }
               billsToGo--;
               allKeys[key] = key;
+
+              //invoke the callback only if all keys processed and the last bill in the final key has been processed
               if (tasksTotal === Object.keys(allKeys).length && billsToGo === 0) {
                 if (result.length === 0) {
                   result = '<h3>No new bills related to your topics today.</h3>';
@@ -72,6 +89,7 @@ var addBills = function(keywordObj, date, cb) {
 };
 
 exports.sendMail = function(userObj, cb) {
+
   //start construction body of email
   let insertHtml = "<h1>Here's what's happening today in congress. Visit <a href='http://159.203.239.137:8080/' style='color:blue;'>Legislature Watch</a> for more results!<br>";
 
@@ -91,7 +109,7 @@ exports.sendMail = function(userObj, cb) {
 
       let mailOptions = {
         from: '"Legislature Watch" <legislaturewatch@gmail.com>', // sender address
-        to: userObj.email, // list of receivers
+        to: userObj.email, // email from user object
         subject: '[Legislature Watch] Your Daily Digest ' + date, // Subject line
         html: insertHtml // html body
       };
