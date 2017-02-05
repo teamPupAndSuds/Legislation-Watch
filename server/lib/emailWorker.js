@@ -1,10 +1,10 @@
 var nodemailer = require('nodemailer');
 var Bill = require('./../../db/models/bill');
+var User = require('./../../db/models/user');
 var mongoose = require('mongoose');
 var emailPassword = require('./api_config.js');
 
-//comment me out when we know where this db is going to be initialized
-// mongoose.connect('mongodb://localhost/billfetchertest');
+mongoose.connect('mongodb://localhost/billfetchertest');
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
@@ -102,14 +102,42 @@ exports.sendMail = function(userObj, cb) {
           return console.log(error);
         }
         console.log('Message %s sent: %s', info.messageId, info.response);
+        cb(null, userObj);
         process.exit();
       });
     }
   });
 };
 
+//Access the user database, then calls exports.sendMail for each user in result array
+User.find({}, function(err, result) {
+  if (err) {
+    console.log('Something went wrong when accessing users table', err);
+  } else {
+    console.log(result);
 
-//assume passing in whole user object
+    //to prevent the process from exiting before all mail is sent
+    var count = 0;
+
+    result.forEach(function(user) {
+      console.log('Before sendMail called', user.username);
+      exports.sendMail(user, function(err, end) {
+        if (err) {
+          console.log('There was an error with sendMail', err);
+        } else {
+          console.log('Mail for' + end.username + 'sent');
+          count++;
+          //if count equals the length of users in database minus 1
+          if (count === result.length - 1) {
+            console.log('sendMail complete');
+            process.exit();
+          }
+        }
+      });
+    });
+  }
+});
+
 
 /////////////////////////////////////
 //////////TESTING ZONE///////////////
