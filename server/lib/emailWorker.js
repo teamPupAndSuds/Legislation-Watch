@@ -73,10 +73,10 @@ var addBills = function(keywordObj, date, cb) {
 
 exports.sendMail = function(userObj, cb) {
   //start construction body of email
-  let insertHtml = "<h1>Here's what's happening today in congress. Visit <span style='color:blue;'>Legislature Watch</span> for more results!<br>";
+  let insertHtml = "<h1>Here's what's happening today in congress. Visit <a href='http://159.203.239.137:8080/' style='color:blue;'>Legislature Watch</a> for more results!<br>";
 
   //FOR TESTING ONLY: 2017-01-09
-  // var date = '2017-01-03';
+  // var date = '2017-01-05';
 
   //USE THIS DATE FOR THE REAL THING - Grabs today's date
   var date = formatDate();
