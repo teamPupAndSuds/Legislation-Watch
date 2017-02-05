@@ -85,6 +85,14 @@ class App extends React.Component {
   }
 
   render() {
+    let mainScreen = this.props.main.type;
+    function isShowing(mainPage) {
+      if (mainScreen === mainPage) {
+        return {display: 'initial'};
+      } else {
+        return {display: 'none'};
+      }
+    }
     // If we are in the progress of checking if the user is logged in or not...
     if (this.state.isVerifyingUserSession === true) {
       return (
@@ -102,10 +110,13 @@ class App extends React.Component {
           <div className="container-fluid">
             <div className="row">
               <div className="col-lg-8 col-lg-push-4">
-                {this.props.main.type === 'UserDashBoard' ? 
-                  <UserDashBoard username={this.state.username} userMonitoredKeywords={this.state.userMonitoredKeywords} /> :
-                  <LegislationSearch username={this.state.username} />
-                }
+                <span style={isShowing('UserDashBoard')}>
+                  <UserDashBoard username={this.state.username} userMonitoredKeywords={this.state.userMonitoredKeywords} />
+                </span>
+
+                <span style={isShowing('LegislationSearch')}>
+                  <LegislationSearch style={isShowing('LegislationSearch')} username={this.state.username} />
+                </span>
               </div>
               <div className="col-lg-4 col-lg-pull-8">
                 <UserLegislatorsInfo userLat={this.state.userLocation.lat} userLong={this.state.userLocation.long} />
