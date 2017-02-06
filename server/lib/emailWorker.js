@@ -46,7 +46,7 @@ var addBills = function(keywordObj, date, cb) {
 
   //if a user hasn't added topics yet
   if (tasksTotal === 0) {
-    cb(null, '<h2>Please add topics to your profile. Visit Legislature Watch for more info</h2>');
+    cb(null, '<h2>Please add topics to your profile. Visit Legislation Watch for more info</h2>');
 
   } else {
     for (var key in keywordObj) {
@@ -91,7 +91,7 @@ var addBills = function(keywordObj, date, cb) {
 exports.sendMail = function(userObj, cb) {
 
   //start construction body of email
-  let insertHtml = "<h1>Here's what's happening today in congress. Visit <a href='http://159.203.239.137:8080/' style='color:blue;'>Legislature Watch</a> for more results!<br>";
+  let insertHtml = "<h1>Here's what's happening today in congress. Visit <a href='http://159.203.239.137:8080/' style='color:blue;'>Legislation Watch</a> for more results!<br>";
 
   //FOR TESTING ONLY: 2017-01-09
   // var date = '2017-01-05';
