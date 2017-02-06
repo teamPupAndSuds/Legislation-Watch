@@ -42,7 +42,7 @@ class About extends React.Component {
 
                 <div>
                   <span className="glyphicon glyphicon-envelope"></span>
-                  <h3>Notifiy</h3>
+                  <h3>Notify</h3>
                   <p>by Email</p>
                 </div>
 
@@ -70,9 +70,9 @@ class About extends React.Component {
                   <header>
                     <h3>Stay on the forefront<br /> of legislations that affects you.</h3>
                   </header>
-                  <p>An app for people who want to know what happens in congress about issues they care about. 
-                  The app fetches the latest bills drafted in congress and delivers them to your in-app dashboard, 
-                  and email.</p>
+                  <p>An app for people who want to know what's happening in congress about issues they care about. 
+                  The app fetches the latest bills drafted in congress and matches them to keywords you're interested in.
+                  Then delivers them to your in-app dashboard, and email.</p>
                   <footer>
                     <Link to="/signup" className="button">Signup</Link>
                   </footer>
