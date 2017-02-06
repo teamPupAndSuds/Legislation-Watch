@@ -16,11 +16,11 @@ exports.getAllByKeywords = function(phrase, cb) {
       //5 days in milliseconds: 4.32 E^8
       var fivedaysInmilsec = 432000000;
       var currDate = results[0]['updatedAt'];
-      var currDateSeconds = currDate.getTime();
-      var newDateSeconds = currDate - fivedaysInmilsec;
+      var currDateInMilsec = currDate.getTime();
+      var newDateInMilsec = currDateInMilsec - fivedaysInmilsec;
       var newDate = new Date();
       //cutoff date
-      newDate.setTime(newDateSeconds);
+      newDate.setTime(newDateInMilsec);
 
       var filteredRes = results.filter(function(obj) {
         return obj['updatedAt'] > newDate;
@@ -44,11 +44,11 @@ exports.getAllByKeywordsGen = function(phrase, cb) {
       //5 days in milliseconds: 4.32 E^8
       var fivedaysInmilsec = 432000000;
       var currDate = results[0]['updatedAt'];
-      var currDateSeconds = currDate.getTime();
-      var newDateSeconds = currDate - fivedaysInmilsec;
+      var currDateInMilsec = currDate.getTime();
+      var newDateInMilsec = currDateInMilsec - fivedaysInmilsec;
       var newDate = new Date();
       //cutoff date
-      newDate.setTime(newDateSeconds);
+      newDate.setTime(newDateInMilsec);
 
       var filteredRes = results.filter(function(obj) {
         return obj['updatedAt'] > newDate;
