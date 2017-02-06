@@ -15,16 +15,17 @@ exports.getAllByKeywords = function(phrase, cb) {
       //filter for bills in database with updates within 5 days of the most recently updated bill.
       //5 days in milliseconds: 4.32 E^8
       var fivedaysInmilsec = 432000000;
-      var curr_date = results[0]['updatedAt'];
-      var curr_date_seconds = curr_date.getTime();
-      var new_date_seconds = curr_date - fivedaysInmilsec;
-      var new_date = new Date();
+      var currDate = results[0]['updatedAt'];
+      var currDateSeconds = currDate.getTime();
+      var newDateSeconds = currDate - fivedaysInmilsec;
+      var newDate = new Date();
       //cutoff date
-      new_date.setTime(new_date_seconds);
+      newDate.setTime(newDateSeconds);
 
       var filteredRes = results.filter(function(obj) {
-        return obj['updatedAt'] > new_date;
+        return obj['updatedAt'] > newDate;
       })
+
       console.log('billAssociate.js: getAllByKeywords: phrase supplied:', phrase);      
       console.log('billAssociate.js: getAllByKeywords: results:', results);
       cb(null, filteredRes);
@@ -42,15 +43,15 @@ exports.getAllByKeywordsGen = function(phrase, cb) {
       //filter for bills in database with updates within 5 days of the most recently updated bill.
       //5 days in milliseconds: 4.32 E^8
       var fivedaysInmilsec = 432000000;
-      var curr_date = results[0]['updatedAt'];
-      var curr_date_seconds = curr_date.getTime();
-      var new_date_seconds = curr_date - fivedaysInmilsec;
-      var new_date = new Date();
+      var currDate = results[0]['updatedAt'];
+      var currDateSeconds = currDate.getTime();
+      var newDateSeconds = currDate - fivedaysInmilsec;
+      var newDate = new Date();
       //cutoff date
-      new_date.setTime(new_date_seconds);
+      newDate.setTime(newDateSeconds);
 
       var filteredRes = results.filter(function(obj) {
-        return obj['updatedAt'] > new_date;
+        return obj['updatedAt'] > newDate;
       })
 
       console.log('billAssociate.js: getAllByKeywordsGen: phrase supplied:', phrase);            
