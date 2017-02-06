@@ -1,19 +1,54 @@
-# !nformed!
+# Server Side Code #
 
-An app for people who want to know what happens in congress about issues they care about. The app fetches the latest bills drafted in congress and delivers them to each user's in-app dashboard, and email.
+Technology Used: Express, Express-session, Mongoose, Twinword API, Google Maps Geocoding API
 
-## Team
+The file structure of this folder is as follows:
 
-  - __Product Owner__: Cynthia Bathgate
-  - __Scrum Master__: Benze Gong
-  - __Development Team Members__: Stephen Chan, James Falkoff
+```
+├── README.md
+├── lib
+│   ├── api_config.js
+│   ├── billAssociate.js
+│   ├── emailWorker.js
+│   ├── insertSampleUsers.js
+│   ├── request-handler.js
+│   ├── sampleUserData.json
+│   └── utility.js
+├── server-config.js
+└── server.js
+```
 
-## Table of Contents
+server.js: It includes specification for the http server port as well as db server port.
 
-1. [Usage](#Usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
-    1. [Installing Dependencies](#installing-dependencies)
-    1. [Tasks](#tasks)
-1. [Team](#team)
-1. [Contributing](#contributing)
+server-config.js: This file is required by server.js. It includes specifications for the REST API endpoints.
+
+request-handler.js: This file is required by server-config.js. It includes handler functions used by server for:
+
+  Creating user profile and managing client authentication with user database
+    -userLogin
+	-userLogout
+	-userSignup
+
+  Managing app requests with user database
+	-insertWordMonitor
+	-deleteWordMonitor
+
+  Managing app request with api calls to Twinword API
+	-termSearch
+
+utility.js: This file is required by server-config.js and request-handler.js. It includes helper functions used by server for:
+	
+  Check user authentation
+    -isLoggedIn
+    -checkUser
+    -comparePassword
+
+  Create user session
+    -sendUserData
+    -createSession
+
+  Managing word monitor with api calls to Twinword API
+    -keywordBuilder
+
+  Geocoding user address into longitude and latitude with api calls to Google Maps Geocode service
+    -geoCodeIt
