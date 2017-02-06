@@ -1,4 +1,4 @@
-# Legislature Watch #
+# Legislation Watch #
 
 <!-- 
 > This material was originally posted [here](http://www.quora.com/What-is-Amazons-approach-to-product-development-and-product-management). It is reproduced here for posterities sake.
@@ -22,9 +22,9 @@ An app for people who want to know what happens in congress about issues they ca
 In today's political climate, it's important to know what's going on in congress. Each one of us has topics of interest that we care deeply about, and want to make sure we know about the latest bills that have to do with these issues. The problem is, the average person doesn't have time to search government sites every day to find and keep track of these bills.
 
 ## Solution ##
-This is where Legislature Watch comes in. Each user will have a customized dashboard that will contain the latest bills of their chosen topics: no need to aimlessly search on various government websites any longer! Each day, all users will also receive an email digest containing information about new bills relating to their personalized topics. It's that simple. 
+This is where Legislation Watch comes in. Each user will have a customized dashboard that will contain the latest bills of their chosen topics: no need to aimlessly search on various government websites any longer! Each day, all users will also receive an email digest containing information about new bills relating to their personalized topics. It's that simple. 
 
-"We created Legislature Watch to help the average citizen stay informed about the latest bills introduced in congress. Our app makes it easy for anybody to know exactly what's going on in the government." -Founder of Legislature Watch
+"We created Legislation Watch to help the average citizen stay informed about the latest bills introduced in congress. Our app makes it easy for anybody to know exactly what's going on in the government." -Founder of Legislation Watch
 
 ## How to Get Started ##
 To get started, all you need to do is sign up [here](http://159.203.239.137:8080/)! Once you sign up, you can simply add topics you want to keep track of to your dashboard. Our app will present you with the latest bills for each topic chosen. 
@@ -34,7 +34,7 @@ Don't know what topics to add? Start exploring with our search feature: simply t
 See a bill that interests/concerns you? Contact information for your local representatives will always be accessible through your sidebar. 
 
 ## Customer Quotes ##
-"As a social activist, I must know what's happening in congress at all times. New bills are introduced every day, and it's hard to sort through them all. Legislature Watch makes it so easy for me to keep track of new bills that interest me. It's crazy: the minute a bill is given a title, I get to know about it! This allows us to hold conversations with our representatives early on in the bill making process." -Glinda Hopper, Social Activist
+"As a social activist, I must know what's happening in congress at all times. New bills are introduced every day, and it's hard to sort through them all. Legislation Watch makes it so easy for me to keep track of new bills that interest me. It's crazy: the minute a bill is given a title, I get to know about it! This allows us to hold conversations with our representatives early on in the bill making process." -Glinda Hopper, Social Activist
 
 "As a med student, I hardly have any time to search a million websites to find all the bills introduced to congress for a given day. I like the email digest feature so that I can see what's happening at a quick glance." -Abraham Aviles, Medical Student
 
