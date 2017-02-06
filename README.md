@@ -8,6 +8,9 @@ An app for people who want to know what happens in congress about issues they ca
   - __Scrum Master__: Benze Gong
   - __Development Team Members__: Stephen Chan, James Falkoff
 
+![Screencast of App]
+(http://i.imgur.com/XCValfq.gif)
+
 ## Table of Contents
 
 1. [Usage](#Usage)
