@@ -125,11 +125,10 @@ exports.keywordBuilder = function(user, searchWord, cb) {
               keywordObj['associatedKeywords'].push(word);
             });
             user.keywords[searchWord] = keywordObj;
-
             console.log('utility.js: keywordBuilder: word association API call success: results:', keywordObj);
-
             cb(null, user);
           } else {
+            user.keywords[searchWord] = keywordObj;
             cb(null, user);
           }
         }
