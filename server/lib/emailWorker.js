@@ -26,7 +26,6 @@ var createEmailTimestamp = function(date, cb) {
     if (err) {
       console.log('Could not write to email timestamp file', err);
     } else {
-      console.log('in createEmailTimestamp');
       cb();
     }
   });
@@ -69,7 +68,6 @@ var addBills = function(keywordObj, cb) {
     if (err) {
       console.log('There was an error in readEmailTimestamp function', err);
     } else {
-      console.log('THIS IS THE RESULT OK!', resultTime);
       lastBillsSent = resultTime;
       //format lastBillSent for comparison
       lastBillsSent = new Date(lastBillsSent);
@@ -103,17 +101,13 @@ var addBills = function(keywordObj, cb) {
                   console.log('This is an error in addBills');
                   cb(err);
                 } else {
-                  var resultLastVersion = bill['last_version_on'];
+                  var resultLastVersion = bill['introduced_on'];
 
                   //format result date for comparison 
                   resultDate = new Date(resultLastVersion);
                   resultDate = resultDate.setDate(resultDate.getDate() + 1);
 
-                  console.log('result date', resultDate);
-                  console.log('last bill sent', lastBillsSent);
-
                   if (resultDate > lastBillsSent) {
-                    console.log('*****************TRUEEEEEEEEEEEEEEE*****************');
                     result += "<h2> Keyword: " + key + "</h2>";
                     result += "<h4 style='color:grey;'> Bill ID: " + bill['bill_id'] + "</h2>";
                     result += '<h3>' + bill['official_title'] + '</h3>';
@@ -128,13 +122,13 @@ var addBills = function(keywordObj, cb) {
                       result = '<h3>No new bills related to your topics today.</h3>';
                     }
 
-                    //write to logFile here, need to grab all bills and then report the most current 'last_version_on.'
-
                     var lastVersion;
                     var rawDate;
 
-                    //convert the format of 'last_version', then compare. searches to find most recent
+                    //convert the format of 'last_version_on', then compare. searches to find most recent
                     var countVersion = 0;
+
+                    //REFACTOR GOAL: process time is relatively slow because it has to cycle through every single bill, convert the date, and then do a comparison to find out the lastVersion. Is there a way to construct a query that will just return one bill with the most recent 'last_version_on' date
                     Bill.find({}, function(err, resultBills) {
                       if (err) {
                         console.log('Could not find Bill database', err);
@@ -142,21 +136,15 @@ var addBills = function(keywordObj, cb) {
                         var amountResult = resultBills.length;
                         resultBills.forEach(function(checkBill) {
                           countVersion++;
-                          var dateBill = new Date(checkBill['last_version_on']);
+                          var dateBill = new Date(checkBill['introduced_on']);
                           dateBill = dateBill.setDate(dateBill.getDate() + 1);
                           if (lastVersion === undefined || lastVersion < dateBill) {
                             lastVersion = dateBill;
-                            rawDate = checkBill['last_version_on'];
+                            rawDate = checkBill['introduced_on'];
                           }
-                          //console.log('this is the rawDate', rawDate);
-                          //console.log('this is the countVersion', countVersion);
-                          //console.log('amount result', amountResult);
                           if (countVersion === amountResult) {  
-                            console.log('got in here');
                             createEmailTimestamp(rawDate, function() {
                               cb(null, result);
-                              //console.log(result);
-                              //process.exit();
                             });
                           }
                         });
