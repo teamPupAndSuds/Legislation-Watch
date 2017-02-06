@@ -7,28 +7,55 @@ var apiKey = require('./api_config.js');
 
 exports.getAllByKeywords = function(phrase, cb) {
   //the regex will search through the array of library of congress keywords and will be able to find the targeted phrase, case in-sensitive as indicated by $options: 'i'
-  Bill.find({"keywords" : {$regex : ".*" + phrase + ".*", $options: "i"}}, function(err, results) {
+  Bill.find({"keywords" : {$regex : ".*" + phrase + ".*", $options: "i"}}).sort({'updatedAt': -1}).exec(function(err, results) {
     if (err) {
       console.log('There was an error');
       cb(err);
     } else {
+      //filter for bills in database with updates within 5 days of the most recently updated bill.
+      //5 days in milliseconds: 4.32 E^8
+      var fivedaysInmilsec = 432000000;
+      var curr_date = results[0]['updatedAt'];
+      var curr_date_seconds = curr_date.getTime();
+      var new_date_seconds = curr_date - fivedaysInmilsec;
+      var new_date = new Date();
+      //cutoff date
+      new_date.setTime(new_date_seconds);
+
+      var filteredRes = results.filter(function(obj) {
+        return obj['updatedAt'] > new_date;
+      })
       console.log('billAssociate.js: getAllByKeywords: phrase supplied:', phrase);      
       console.log('billAssociate.js: getAllByKeywords: results:', results);
-      cb(null, results);
-    }
+      cb(null, filteredRes);
+    } 
   });
 };
 
 exports.getAllByKeywordsGen = function(phrase, cb) {
   //the regex will search through the array of our generated keywords and will be able to find the targeted phrase, case in-sensitive as indicated by $options: 'i'
-  Bill.find({"keywords_generated" : {$regex : ".*" + phrase + ".*", $options: "i"}}, function(err, results) {
+  Bill.find({"keywords_generated" : {$regex : ".*" + phrase + ".*", $options: "i"}}).sort({'updatedAt': -1}).exec(function(err, results) {
     if (err) {
       console.log('There was an error');
       cb(err);
     } else {
+      //filter for bills in database with updates within 5 days of the most recently updated bill.
+      //5 days in milliseconds: 4.32 E^8
+      var fivedaysInmilsec = 432000000;
+      var curr_date = results[0]['updatedAt'];
+      var curr_date_seconds = curr_date.getTime();
+      var new_date_seconds = curr_date - fivedaysInmilsec;
+      var new_date = new Date();
+      //cutoff date
+      new_date.setTime(new_date_seconds);
+
+      var filteredRes = results.filter(function(obj) {
+        return obj['updatedAt'] > new_date;
+      })
+
       console.log('billAssociate.js: getAllByKeywordsGen: phrase supplied:', phrase);            
       console.log('billAssociate.js: getAllByKeywordsGen: results:', results);      
-      cb(null, results);
+      cb(null, filteredRes);
     }
   });
 };
