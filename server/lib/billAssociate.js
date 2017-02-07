@@ -9,7 +9,7 @@ exports.getAllByKeywords = function(phrase, cb) {
   //the regex will search through the array of library of congress keywords and will be able to find the targeted phrase, case in-sensitive as indicated by $options: 'i'
   Bill.find({"keywords" : {$regex : ".*" + phrase + ".*", $options: "i"}}).sort({'updatedAt': -1}).exec(function(err, results) {
     if (err) {
-      console.log('There was an error');
+      //console.log('There was an error');
       cb(err);
     } else {
       //filter for bills in database with updates within 5 days of the most recently updated bill.
@@ -27,8 +27,8 @@ exports.getAllByKeywords = function(phrase, cb) {
           return obj['updatedAt'] > newDate;
         });
 
-        console.log('billAssociate.js: getAllByKeywords: phrase supplied:', phrase);      
-        console.log('billAssociate.js: getAllByKeywords: results:', results);
+        //console.log('billAssociate.js: getAllByKeywords: phrase supplied:', phrase);      
+        //console.log('billAssociate.js: getAllByKeywords: results:', results);
         cb(null, filteredRes);
       } else {
         cb(null, results);
@@ -41,7 +41,7 @@ exports.getAllByKeywordsGen = function(phrase, cb) {
   //the regex will search through the array of our generated keywords and will be able to find the targeted phrase, case in-sensitive as indicated by $options: 'i'
   Bill.find({"keywords_generated" : {$regex : ".*" + phrase + ".*", $options: "i"}}).sort({'updatedAt': -1}).exec(function(err, results) {
     if (err) {
-      console.log('There was an error');
+      //console.log('There was an error');
       cb(err);
     } else {
       //filter for bills in database with updates within 5 days of the most recently updated bill.
@@ -59,8 +59,8 @@ exports.getAllByKeywordsGen = function(phrase, cb) {
           return obj['updatedAt'] > newDate;
         })
 
-        console.log('billAssociate.js: getAllByKeywordsGen: phrase supplied:', phrase);            
-        console.log('billAssociate.js: getAllByKeywordsGen: results:', results);      
+        //console.log('billAssociate.js: getAllByKeywordsGen: phrase supplied:', phrase);            
+        //console.log('billAssociate.js: getAllByKeywordsGen: results:', results);      
         cb(null, filteredRes);
       } else {
         cb(null, results);
@@ -81,7 +81,7 @@ exports.billAssociate = function(keywordObj, cb) {
 
   exports.getAllByKeywords(keywordObj['keyword'], function(err, results) {
     if (err) {
-      console.log('Sorry, was not able to retrieve bills from field keywords');
+      //console.log('Sorry, was not able to retrieve bills from field keywords');
       cb(err);
     } else {
       results.forEach(function(bill) {
@@ -89,14 +89,14 @@ exports.billAssociate = function(keywordObj, cb) {
       });
       exports.getAllByKeywordsGen(keywordObj['keyword'], function(err, resultsGen) {
         if (err) {
-          console.log('Sorry, was not able to retrieve bills from field keywords_generated');
+          //console.log('Sorry, was not able to retrieve bills from field keywords_generated');
           cb(err);
         } else {
-          console.log('billAssociate.js: results generated', resultsGen);
+          //console.log('billAssociate.js: results generated', resultsGen);
           resultsGen.forEach(function(bill) {
             keywordObj['relatedBills'][bill.bill_id] = bill.bill_id;
           }); 
-          console.log('billAssociate.js: Bills retrieved through main keyword: keywordObj:', keywordObj);
+          //console.log('billAssociate.js: Bills retrieved through main keyword: keywordObj:', keywordObj);
 
           //process of converting bill_ids to array to align with client-side expectation
           var tempObj = keywordObj['relatedBills'];
@@ -104,37 +104,13 @@ exports.billAssociate = function(keywordObj, cb) {
           for (var key in tempObj) {
             keywordObj['relatedBills'].push(tempObj[key]);
           }
-          console.log('Keywords successfully added to keyword object');
-          console.log('Related Bill Results', keywordObj['relatedBills']);
+          //console.log('Keywords successfully added to keyword object');
+          //console.log('Related Bill Results', keywordObj['relatedBills']);
           cb(null, keywordObj);  
         }
       });
     }
   });
 };
-
-///////////////////////////////////////////
-//////////////TESTING ZONE/////////////////
-///////////////////////////////////////////
-
-// PLEASE COMMENT OUT THE CODE BELOW//
-
-// // sample keyword object
-// var keyword = {
-//   word: 'marriage'
-// };
-
-// //print the userObj result to terminals
-// exports.billAssociate(keyword, function(err, result) {
-//   if (err) {
-//     console.log('Something went wrong');
-//     return;
-//   } else {
-//     console.log('Callback successfully executed');
-//     console.log(result);
-//   }
-// });
-
-
 
 

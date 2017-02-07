@@ -27,32 +27,26 @@ exports.sendUserData = function(req, res, newUser) {
   userInfo['geoLocation']['long'] = req.session.user.longitude;
 
   // Convert user monitored keywords object to an Array for the client
-  console.log('utility.js: sendUserData: keywords', req.session.user.keywords);
+  //console.log('utility.js: sendUserData: keywords', req.session.user.keywords);
   var userMonitoredWordsAsArray = [];
   for (monitoredWord in req.session.user.keywords) {
     userMonitoredWordsAsArray.push(req.session.user.keywords[monitoredWord]);
   }
   userInfo['keywords'] = userMonitoredWordsAsArray;
-
-  console.log('utility.js: sendUserData: dataToBeSent', userInfo);
-
-
+  //console.log('utility.js: sendUserData: dataToBeSent', userInfo);
   res.status(200).send(userInfo);
   res.end();
 };
 
 exports.checkUser = function(req, res) {
-  console.log('utility.js: entered checkUser');
-
+  //console.log('utility.js: entered checkUser');
   if (!exports.isLoggedIn(req)) {
-
-    console.log('utility.js: user NOT logged in, sending 401');
-
+    // console.log('utility.js: user NOT logged in, sending 401');
     res.status(401);
     res.end();
   } else {
-    console.log('utility.js: user logged in, sending user data back to client');
-    console.log('utility.js: user logged in: requ.session.user', req.session.user);
+    // console.log('utility.js: user logged in, sending user data back to client');
+    // console.log('utility.js: user logged in: requ.session.user', req.session.user);
     exports.sendUserData(req, res);
   }
 };
@@ -65,7 +59,7 @@ exports.createSession = function(req, res, newUser) {
 };
 
 exports.comparePassword = function(candidatePassword, savedPassword, cb) {
-  console.log('utility.js: comaprePassword: candidate & savedpassword:', candidatePassword, savedPassword);
+  //console.log('utility.js: comaprePassword: candidate & savedpassword:', candidatePassword, savedPassword);
   bcrypt.compare(candidatePassword, savedPassword, function(err, isMatch) {
     if (err) {
       return cb(err);
@@ -90,44 +84,41 @@ exports.geoCodeit = function(res, userInfo, streetAddress, cb) {
 exports.keywordBuilder = function(user, searchWord, cb) {
   var strArr = searchWord.split(' ');
   var keywordObj = {keyword: searchWord, associatedKeywords: []};
-
-  console.log('utility.js: keywordBuilder: entered with new keyword:', keywordObj);   
-
+  //console.log('utility.js: keywordBuilder: entered with new keyword:', keywordObj);   
   if (strArr.length > 1) {
     keywordObj['associatedKeywords'] = [];
     user.keywords[searchWord] = keywordObj;
-    console.log('utility.js: keywordBuilder: multiple keywords detected, user.keywords:', user.keywords);
+    //console.log('utility.js: keywordBuilder: multiple keywords detected, user.keywords:', user.keywords);
     cb(null, user);
   } else {
-
-    console.log('utility.js: keywordBuilder: single keywords detected, user.keywords:', user.keywords);
-
+    //console.log('utility.js: keywordBuilder: single keywords detected, user.keywords:', user.keywords);
     var searchTerm = 'entry=';
     searchTerm = searchTerm.concat(searchWord);
-    console.log('utility.js: keywordBuilder: sending API with searchWord:', searchWord);    
-    console.log('utility.js: keywordBuilder: sending API with term:', searchTerm);
-
+    // console.log('utility.js: keywordBuilder: sending API with searchWord:', searchWord);    
+    // console.log('utility.js: keywordBuilder: sending API with term:', searchTerm);
     unirest.post('https://twinword-word-associations-v1.p.mashape.com/associations/')
       .header('X-Mashape-Key', apiKey.wordAssocAPIk['key'])
       .header('Content-Type', 'application/x-www-form-urlencoded')
       .header('Accept', 'application/json')
       .send(searchTerm)
       .end(function (result) {
-        console.log('utility.js: keywordBuilder: word association API call complete: result.body', result.body);
-        console.log('utility.js: keywordBuilder: word association API call complete: result.error', result.error);
+        // console.log('utility.js: keywordBuilder: word association API call complete: result.body', result.body);
+        // console.log('utility.js: keywordBuilder: word association API call complete: result.error', result.error);
         if (result.error) {
-          console.log('utility.js: keywordBuilder: word association API call failed:', result.error);   
+          // console.log('utility.js: keywordBuilder: word association API call failed:', result.error);   
           cb(result.error);
         } else {
           var words = result.body['associations_array'];
           if (words !== undefined) {
+            //if there are associated words found by API, map through results array from api and push to keyword object
             words.forEach(function(word) {
               keywordObj['associatedKeywords'].push(word);
             });
             user.keywords[searchWord] = keywordObj;
-            console.log('utility.js: keywordBuilder: word association API call success: results:', keywordObj);
+            // console.log('utility.js: keywordBuilder: word association API call success: results:', keywordObj);
             cb(null, user);
           } else {
+            //just set keyword without associated keywords
             user.keywords[searchWord] = keywordObj;
             cb(null, user);
           }
