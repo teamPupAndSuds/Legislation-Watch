@@ -1,4 +1,3 @@
-//import { wordAssocAPIk } from './api_config.js';
 var apiKey = require('./api_config.js');
 var path = require('path');
 var unirest = require('unirest');
@@ -29,7 +28,9 @@ exports.userLogin = function(req, res) {
           console.log('request-handler.js: userLogin: username found, comparing passwords');          
           util.comparePassword(password, user.password, function(err, match) {
             if (match) {
-              console.log('request-handler.js: userLogin: username found, password match');                 
+              console.log('request-handler.js: userLogin: username found, password match');
+              //After successful authentication, an express session is created for the user
+                //and user data is sent to client. See utility.js - createSession/sendUserData for more info.   
               util.createSession(req, res, user);
             } else {
               console.log('request-handler.js: userLogin: username found, password DO NOT match');                    
@@ -242,10 +243,7 @@ exports.deleteWordMonitor = function(req, res) {
         } else {
           // Locate and delete the keyword
           if (user['keywords'][keywordsToBeDeleted] !== undefined) {
-            // console.log('request-handler.js: deleteWordMonitor: keyword to be deleted found: before', user['keywords']);
             delete user['keywords'][keywordsToBeDeleted];
-            // console.log('request-handler.js: deleteWordMonitor: keyword to be deleted found: after', user['keywords']);
-
             // Save to database
             user.markModified('keywords');
             user.save(function(err) {
