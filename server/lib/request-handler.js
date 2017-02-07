@@ -4,6 +4,10 @@ var unirest = require('unirest');
 var User = require('./../../db/models/user');
 var util = require('./utility.js');
 var BillAssociate = require('./billAssociate.js');
+var Favorites = ('./../../db/models/favorites');
+var Q = require('q');
+var addFavorite = Q.nbind(Favorites.create, Favorites);
+var getUser = Q.nbind(User.find, User);
 
 /////////////////////////////////////////////////////////////////
 //AUTHENTICATION
@@ -305,5 +309,23 @@ exports.termSearch = function(req, res) {
           res.status(200).send('No associated keywords found');
         }
       }
+  });
+};
+
+/////////////////////////////////////////////////////////////////
+//FAVORITE LEGISLATION ADD
+exports.insertFavoriteBills = function(req, res) {
+  var newFavorite = {
+    legislationId: req.body.legislationId,
+    username: req.params.username
+  };
+
+  addFavorite(newFavorite).then(function(data) {
+    console.log('Favorite saved');
+    return res.status(200).end();
+  }).fail(function(err) {
+    console.log('error saving favorite');
+    console.log(err);
+    return res.status(404).end();
   });
 };

@@ -6,8 +6,10 @@ var mongoose = require('mongoose');
 var path = require('path');
 var handler = require('./lib/request-handler');
 var util = require('./lib/utility.js');
+var cors = require('cors');
 
 var app = express();
+app.use(cors());
 app.use(bodyParser.json());
 
 /////////////////////////////////////////////////////////////////
@@ -39,6 +41,8 @@ app.put('/user/:username/keywords', handler.insertWordMonitor);
 
 app.delete('/user/:username/keywords', handler.deleteWordMonitor);
 /////////////////////////////////////////////////////////////////
+
+app.post('/user/:username/favorites', handler.insertFavoriteBills);
 
 //server up static files
 app.use(express.static(path.join(__dirname + '/../client')));

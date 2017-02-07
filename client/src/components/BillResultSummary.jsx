@@ -68,6 +68,7 @@ class BillResultSummaryPresentational extends React.Component {
                     <h3 className="text-uppercase panel-title"><small>
                       {info.bill_id} | 
                       INTRODUCED : {info.introduced_on}
+                      <h3>Add Favorite</h3>
                     </small></h3>
                   </small>
                 </span>
