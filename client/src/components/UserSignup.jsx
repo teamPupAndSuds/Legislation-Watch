@@ -2,7 +2,7 @@
 // UserSignup.jsx
 // --------------------------
 // This is the user signup component.
-// 
+//
 ////////////////////////////////////////////////////////////////////////////////
 
 const React = require('react');
@@ -42,7 +42,7 @@ class UserSignup extends React.Component {
       type: 'POST',
       contentType: 'application/json',
       data: JSON.stringify(newUserInformation),
-      dataType: 'json',      
+      dataType: 'json',
     };
 
     // Send a AJAX POST request to the back-end server
@@ -62,13 +62,23 @@ class UserSignup extends React.Component {
   // Event handler to populate all values into the formFields object
   // for later use by handleFormSubmit()
   handleInputFieldChange(event) {
-    this.formFields[event.target.id] = event.target.value;
+    if (event.target.id === 'streetName') {
+      var address = event.target.value.split(' ');
+      var houseNum = address.shift();
+      var street = address.join(' ');
+      // console.log('houseNum = ', houseNum);
+      // console.log('street = ', street);
+      this.formFields['houseNum'] = houseNum;
+      this.formFields[event.target.id] = street;
+    } else {
+      this.formFields[event.target.id] = event.target.value;
+    }
   }
 
   render() {
     return (
       <div className="container-fluid">
-        <h2>Legislation Watch</h2>      
+        <h2>Legislation Watch</h2>
         <div className="panel panel-info">
           <div className="panel-heading">
             <h4 className="panel-title">Signup</h4>
@@ -83,7 +93,7 @@ class UserSignup extends React.Component {
               <div className="form-group">
                 <label htmlFor="email">Email:</label>
                 <input type="text" className="form-control" id="email" placeholder="Enter Email" onChange={this.handleInputFieldChange}></input>
-              </div>          
+              </div>
 
               <div className="form-group">
                 <label htmlFor="password">Password:</label>
@@ -92,31 +102,27 @@ class UserSignup extends React.Component {
 
               <hr />
               <h4> Address </h4>
-              <div className="form-group">
-                <label htmlFor="houseNum">House / Apartment Number:</label>
-                <input type="text" className="form-control" id="houseNum" placeholder="Enter House / Apartment Number" onChange={this.handleInputFieldChange}></input>
-              </div>
 
               <div className="form-group">
-                <label htmlFor="streetName">Street Name:</label>
-                <input type="text" className="form-control" id="streetName" placeholder="Enter Street Name" onChange={this.handleInputFieldChange}></input>
+                <label htmlFor="streetName">Street Address:</label>
+                <input type="text" className="form-control" id="streetName" placeholder="Enter Street Address" onChange={this.handleInputFieldChange}></input>
               </div>
 
               <div className="form-group">
                 <label htmlFor="city">City:</label>
                 <input type="text" className="form-control" id="city" placeholder="Enter City" onChange={this.handleInputFieldChange}></input>
-              </div>           
+              </div>
 
               <div className="form-group">
                 <label htmlFor="state">State:</label>
                 <input type="text" className="form-control" id="state" placeholder="Enter State" onChange={this.handleInputFieldChange}></input>
-              </div>         
+              </div>
 
               <div className="form-group">
                 <button type="submit" className="btn btn-primary">Signup</button>{(this.state.isSignupError) ? <h5 style={{'color': 'red'}}>Signup Failure: {this.state.signupErrorMessage}</h5> : <p></p> }
               </div>
 
-              or <Link to="/login">Login</Link> 
+              or <Link to="/login">Login</Link>
             </form>
           </div>
         </div>
