@@ -14,21 +14,25 @@ exports.getAllByKeywords = function(phrase, cb) {
     } else {
       //filter for bills in database with updates within 5 days of the most recently updated bill.
       //5 days in milliseconds: 4.32 E^8
-      var fivedaysInmilsec = 432000000;
-      var currDate = results[0]['updatedAt'];
-      var currDateInMilsec = currDate.getTime();
-      var newDateInMilsec = currDateInMilsec - fivedaysInmilsec;
-      var newDate = new Date();
-      //cutoff date
-      newDate.setTime(newDateInMilsec);
+      if (results.length > 0) {
+        var fivedaysInmilsec = 432000000;
+        var currDate = results[0]['updatedAt'];
+        var currDateInMilsec = currDate.getTime();
+        var newDateInMilsec = currDateInMilsec - fivedaysInmilsec;
+        var newDate = new Date();
+        //cutoff date
+        newDate.setTime(newDateInMilsec);
 
-      var filteredRes = results.filter(function(obj) {
-        return obj['updatedAt'] > newDate;
-      })
+        var filteredRes = results.filter(function(obj) {
+          return obj['updatedAt'] > newDate;
+        });
 
-      console.log('billAssociate.js: getAllByKeywords: phrase supplied:', phrase);      
-      console.log('billAssociate.js: getAllByKeywords: results:', results);
-      cb(null, filteredRes);
+        console.log('billAssociate.js: getAllByKeywords: phrase supplied:', phrase);      
+        console.log('billAssociate.js: getAllByKeywords: results:', results);
+        cb(null, filteredRes);
+      } else {
+        cb(null, results);
+      }
     } 
   });
 };
@@ -42,21 +46,25 @@ exports.getAllByKeywordsGen = function(phrase, cb) {
     } else {
       //filter for bills in database with updates within 5 days of the most recently updated bill.
       //5 days in milliseconds: 4.32 E^8
-      var fivedaysInmilsec = 432000000;
-      var currDate = results[0]['updatedAt'];
-      var currDateInMilsec = currDate.getTime();
-      var newDateInMilsec = currDateInMilsec - fivedaysInmilsec;
-      var newDate = new Date();
-      //cutoff date
-      newDate.setTime(newDateInMilsec);
+      if (results.length > 0) {
+        var fivedaysInmilsec = 432000000;
+        var currDate = results[0]['updatedAt'];
+        var currDateInMilsec = currDate.getTime();
+        var newDateInMilsec = currDateInMilsec - fivedaysInmilsec;
+        var newDate = new Date();
+        //cutoff date
+        newDate.setTime(newDateInMilsec);
 
-      var filteredRes = results.filter(function(obj) {
-        return obj['updatedAt'] > newDate;
-      })
+        var filteredRes = results.filter(function(obj) {
+          return obj['updatedAt'] > newDate;
+        })
 
-      console.log('billAssociate.js: getAllByKeywordsGen: phrase supplied:', phrase);            
-      console.log('billAssociate.js: getAllByKeywordsGen: results:', results);      
-      cb(null, filteredRes);
+        console.log('billAssociate.js: getAllByKeywordsGen: phrase supplied:', phrase);            
+        console.log('billAssociate.js: getAllByKeywordsGen: results:', results);      
+        cb(null, filteredRes);
+      } else {
+        cb(null, results);
+      }
     }
   });
 };
