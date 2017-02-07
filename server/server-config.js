@@ -4,11 +4,20 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var mongoose = require('mongoose');
 var path = require('path');
+var morgan = require('morgan');
+var cors = require('cors');
 var handler = require('./lib/request-handler');
 var util = require('./lib/utility.js');
 
+var corsOptions = {
+  origin: 'http://127.0.0.1:8080',
+  credentials: true
+};
+
 var app = express();
 app.use(bodyParser.json());
+app.use(morgan('dev'));
+app.use(cors(corsOptions));
 
 /////////////////////////////////////////////////////////////////
 //AUTHENTICATION
@@ -16,7 +25,7 @@ app.use(bodyParser.json());
 app.use(session({
   secret: 'shhh, it\'s a secret',
   resave: false,
-  saveUnitialized: true,
+  saveUninitialized: true,
 }));
 
 //endpoint for client request for current session's validity
