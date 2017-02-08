@@ -124,7 +124,8 @@ class App extends React.Component {
           {
             //data - response from server
             console.log('updating state...');
-            that.setState({favoriteList: success});           
+            that.setState({favoriteList: success});
+            that.updateFavoriteBillList(that.state.favoriteList);         
           },
           error: function (errorThrown)
           {
@@ -144,6 +145,31 @@ class App extends React.Component {
 
         hashHistory.push('/about');
       });
+  }
+
+  updateFavoriteBillList(favoriteIds) {
+    // let ajaxSettings = {
+    //   method: 'GET',
+    //   context: this,
+    //   data: {
+    //     query: searchTerms,
+    //     fields: 'bill_id,bill_type,chamber,introduced_on,last_action_at,short_title,official_title,keywords,summary_short,urls,sponsor,sponsor_id,cosponsor_ids,cosponsors.legislator,related_bill_ids,upcoming'
+    //   },
+    //   dataType: 'jsonp',
+    //   success: this.handleSearchComplete.bind(this)
+
+    // };
+
+    console.log('inside updateFavoriteBillList');
+    //$.ajax('https://congress.api.sunlightfoundation.com/bills/search', ajaxSettings);
+  }
+
+  handleSearchComplete(data) {
+    this.setState({
+      isFetchingSearchResults: false,
+      searchResults: data.results
+    });
+
   }
 
   render() {
