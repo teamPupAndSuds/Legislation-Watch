@@ -41,7 +41,8 @@ class App extends React.Component {
         lat: undefined,
         long: undefined
       },
-      userMonitoredKeywords: []
+      userMonitoredKeywords: [],
+      favoriteList: []
     };
   }
 
@@ -56,7 +57,25 @@ class App extends React.Component {
           isUserLoggedIn: true,
           username: data.username,
           userLocation: data.geoLocation,
-          userMonitoredKeywords: data.keywords
+          userMonitoredKeywords: data.keywords,
+        });
+        var that = this;
+        $.ajax({
+          method: "GET",
+          url : "/user/" + data.username + "/favorites",
+          contentType: "application/json",
+          success: function(success)
+          {
+            //data - response from server
+            that.setState({favoriteList: success});
+            console.log('success!' + JSON.stringify(success));
+            
+          },
+          error: function (errorThrown)
+          {
+            console.log('error');
+            console.log(errorThrown);
+          }
         });
       })
       .fail(error => {
@@ -82,8 +101,9 @@ class App extends React.Component {
         //   }      
         // });
 
-      });
+      });  
   }
+
 
   render() {
     let mainScreen = this.props.main.type;
@@ -119,7 +139,7 @@ class App extends React.Component {
                   <LegislationSearch style={isShowing('LegislationSearch')} username={this.state.username} />
                 </span>
                 <span style={isShowing('Favorites')}>
-                  <Favorites style={isShowing('Favorites')} />
+                  <Favorites style={isShowing('Favorites')} username={this.state.username} list={this.state.favoriteList}/>
                 </span>
               </div>
               <div className="col-lg-4 col-lg-pull-8">
