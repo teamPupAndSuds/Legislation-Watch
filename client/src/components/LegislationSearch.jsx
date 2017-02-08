@@ -29,6 +29,7 @@ class LegislationSearch extends React.Component {
         billResults={this.state.searchResults} 
         onSearchSubmit={this.handleSearchSubmit}
         username={this.props.username}
+        updateList={this.props.updateList}
       />
     );
   }
@@ -72,6 +73,7 @@ class LegislationSearchPresentational extends React.Component {
             isFetching={this.props.isFetching} 
             billResults={this.props.billResults}
             username={this.props.username}
+            updateList={this.props.updateList}
             />
         }
       </div>
