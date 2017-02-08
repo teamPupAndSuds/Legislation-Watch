@@ -47,6 +47,7 @@ class App extends React.Component {
     };
     this.updateList = this.updateList.bind(this);
     this.updateFavoriteBillList = this.updateFavoriteBillList.bind(this);
+    this.handleSearchComplete = this.handleSearchComplete.bind(this);
   }
 
   // Checks the authentication status of the user
@@ -159,17 +160,46 @@ class App extends React.Component {
     //   success: this.handleSearchComplete.bind(this)
 
     // };
+    var that = this
+    favoriteIds.forEach(function(id) {
+      $.ajax({
+        method: "GET",
+        url: "https://congress.api.sunlightfoundation.com/bills/search?bill_id=" + id.legislationId,
+        dataType: 'jsonp',
+        success: function(success) {
+          console.log('success calling congress api');
+          that.handleSearchComplete(success);
+        },
+        error: function(err) {
+          console.log('error calling congress api');
+          console.log(err);
+        }
+      });
+    });
 
-    console.log('inside updateFavoriteBillList');
-    //$.ajax('https://congress.api.sunlightfoundation.com/bills/search', ajaxSettings);
+    // var that = this;
+    // favoriteIds.forEach(function(id) {
+    //   console.log('line 164 ' + id.legislationId);
+    //   let ajaxSettings = {
+    //     method: 'GET',
+    //     context: this,
+    //     data: {
+    //       query: id.legislationId,
+    //       fields: 'bill_id,bill_type,chamber,introduced_on,last_action_at,short_title,official_title,keywords,summary_short,urls,sponsor,sponsor_id,cosponsor_ids,cosponsors.legislator,related_bill_ids,upcoming'
+    //     },
+    //     dataType: 'jsonp',
+    //     success: that.handleSearchComplete.bind(that)
+    //   };
+    //   $.ajax('https://congress.api.sunlightfoundation.com/bills/search?bill_id=', ajaxSettings);
+    // });
   }
 
   handleSearchComplete(data) {
+    console.log('this is the data frmo the ajax ' + JSON.stringify(data));
     this.setState({
-      isFetchingSearchResults: false,
-      searchResults: data.results
+      favoriteBillList: data.results
     });
-
+    // console.log('this is now the state of favoriteBillList: ' + this.state.favoriteBillList);
   }
 
   render() {

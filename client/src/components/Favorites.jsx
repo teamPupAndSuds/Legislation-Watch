@@ -26,6 +26,8 @@ class Favorites extends React.Component {
   // }
 
   render() {
+    console.log('I HOPE THIS WORKS');
+    console.log(this.props.favoriteBillList);
     return (
       <div>
         <h1>Inside Favorites</h1>
