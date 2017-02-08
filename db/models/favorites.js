@@ -8,7 +8,7 @@ var favoritesSchema = new mongoose.Schema({
     required: true
   },
 
-  billId: {
+  legislationId: {
     type: String,
     required: true
   }
