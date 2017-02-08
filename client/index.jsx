@@ -42,9 +42,11 @@ class App extends React.Component {
         long: undefined
       },
       userMonitoredKeywords: [],
-      favoriteList: []
+      favoriteList: [],
+      favoriteBillList: []
     };
     this.updateList = this.updateList.bind(this);
+    this.updateFavoriteBillList = this.updateFavoriteBillList.bind(this);
   }
 
   // Checks the authentication status of the user
@@ -103,7 +105,6 @@ class App extends React.Component {
   }
 
   updateList(){
-    console.log('INSIDE UPDATE LIST YASSS QUEEEN');
     $.get('login')
       .done((data) => {
         // Debug
@@ -142,19 +143,6 @@ class App extends React.Component {
         });
 
         hashHistory.push('/about');
-
-        // Testing
-        // this.setState({
-        //   // Testing Only:
-        //   isVerifyingUserSession: false,          
-        //   isUserLoggedIn: true,
-        //   username: 'boba',
-        //   userLocation: {
-        //     lat: 37.795,
-        //     long: -122.40
-        //   }      
-        // });
-
       });
   }
 
@@ -192,7 +180,7 @@ class App extends React.Component {
                   <LegislationSearch style={isShowing('LegislationSearch')} username={this.state.username} updateList={this.updateList}/>
                 </span>
                 <span style={isShowing('Favorites')}>
-                  <Favorites style={isShowing('Favorites')} username={this.state.username} list={this.state.favoriteList} updateList={this.updateList} />
+                  <Favorites style={isShowing('Favorites')} username={this.state.username} list={this.state.favoriteList} updateList={this.updateList} favoriteBillList={this.state.favoriteBillList}/>
                 </span>
               </div>
               <div className="col-lg-4 col-lg-pull-8">
