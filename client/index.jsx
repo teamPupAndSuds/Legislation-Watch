@@ -27,6 +27,7 @@ const UserLogin = require(__dirname + '/src/components/UserLogin.jsx');
 const UserSignup = require(__dirname + '/src/components/UserSignup.jsx');
 const UserLogout = require(__dirname + '/src/components/UserLogout.jsx');
 const About = require(__dirname + '/src/components/About.jsx');
+const Favorites = require(__dirname + '/src/components/Favorites.jsx');
 
 class App extends React.Component {
   constructor(props) {
@@ -117,6 +118,9 @@ class App extends React.Component {
                 <span style={isShowing('LegislationSearch')}>
                   <LegislationSearch style={isShowing('LegislationSearch')} username={this.state.username} />
                 </span>
+                <span style={isShowing('Favorites')}>
+                  <Favorites style={isShowing('Favorites')} />
+                </span>
               </div>
               <div className="col-lg-4 col-lg-pull-8">
                 <UserLegislatorsInfo userLat={this.state.userLocation.lat} userLong={this.state.userLocation.long} />
@@ -151,6 +155,7 @@ class AppRoutes extends React.Component {
         <Route path="/" component={App}>
           <Route path="/search" components = {{main: 'LegislationSearch'}} />
           <Route path="/dashboard" components = {{main: 'UserDashBoard'}} />
+          <Route path="/favorites" components = {{main: 'Favorites'}} />
         </Route>
       </Router>
     );
