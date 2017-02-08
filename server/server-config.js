@@ -51,8 +51,10 @@ app.put('/user/:username/keywords', handler.insertWordMonitor);
 app.delete('/user/:username/keywords', handler.deleteWordMonitor);
 /////////////////////////////////////////////////////////////////
 
+//endpoints for adding favorites
 app.post('/user/:username/favorites', handler.insertFavoriteBills);
 
+app.get('/user/:username/favorites', handler.getFavoriteBills);
 //server up static files
 app.use(express.static(path.join(__dirname + '/../client')));
 

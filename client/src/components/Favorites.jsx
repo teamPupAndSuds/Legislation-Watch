@@ -3,7 +3,25 @@ class Favorites extends React.Component {
   constructor(props) {
     super(props);
   }
-  
+
+  componentWillMount(){
+    $.ajax({
+      method: "GET",
+      url : "/user/" + this.props.username + "/favorites",
+      contentType: "application/json",
+      success: function(data)
+      {
+        //data - response from server
+        console.log('success!' + JSON.stringify(data));
+      },
+      error: function (errorThrown)
+      {
+        console.log('error');
+        console.log(errorThrown);
+      }
+    });
+  }
+
   render() {
     return (
       <div>

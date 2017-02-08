@@ -7,6 +7,7 @@ var BillAssociate = require('./billAssociate.js');
 var Q = require('q');
 var Favorites = require('./../../db/models/favorites');
 var addFavorite = Q.nbind(Favorites.create, Favorites);
+var getFavorite = Q.nbind(Favorites.find, Favorites);
 //var getUser = Q.nbind(User.find, User);
 
 /////////////////////////////////////////////////////////////////
@@ -330,5 +331,17 @@ exports.insertFavoriteBills = function(req, res) {
     console.log('error saving favorite');
     console.log(err);
     return res.status(404).end();
+  });
+};
+
+//
+exports.getFavoriteBills = function(req, res) {
+  getFavorite({}).then(function(data){
+    console.log('got all favs ' + JSON.stringify(data));
+    return res.status(200).send(data);
+  }).fail(function(err) {
+    console.log('error getting favs');
+    console.log(err);
+    return res.stats(404).end();
   });
 };
