@@ -22,30 +22,35 @@ class BillResultSummary extends React.Component {
 }
 
 class BillResultSummaryPresentational extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.addFavorite = this.addFavorite.bind(this);
+    this.state = {
+      favorite: false
+    };
   }
 
-  addFavorite(){
+  addFavorite() {
     var obj = {
       legislationId: this.props.info.bill_id
     };
     $.ajax({
-      method: "POST",
-      url : "/user/" + this.props.username + "/favorites",
-      data : JSON.stringify(obj),
-      contentType: "application/json",
-      success: function(data)
-      {
+      method: 'POST',
+      url: '/user/' + this.props.username + '/favorites',
+      data: JSON.stringify(obj),
+      contentType: 'application/json',
+      success: function (data) {
         //data - response from server
         console.log('success!' + data);
       },
-      error: function (errorThrown)
-      {
+      error: function (errorThrown) {
         console.log('error');
         console.log(errorThrown);
       }
+    });
+    let currentSetting = this.state.favorite;
+    this.setState({
+      favorite: !currentSetting
     });
   }
 
@@ -136,7 +141,7 @@ class BillResultSummaryPresentational extends React.Component {
                     <h3 className="text-uppercase panel-title"><small>
                       {info.bill_id} |
                       INTRODUCED : {info.introduced_on}
-                      <button onClick={this.addFavorite}>Add Favorite</button>
+                      <span id="addToFavorites" className={this.state.favorite ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'} onClick={this.addFavorite}></span>
                     </small></h3>
                   </small>
                 </span>
