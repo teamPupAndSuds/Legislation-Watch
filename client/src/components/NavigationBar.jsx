@@ -34,6 +34,7 @@ class NavigationBar extends React.Component {
             <ul className="nav navbar-nav">
               <li><Link to="/dashboard" className="nav-link">Dashboard</Link></li>
               <li><Link to="/search" className="nav-link">Search</Link></li>
+              <li><Link to="/favorites" className="nav-link">Favorites</Link></li>
             </ul>
 
             <div className="navbar-right">

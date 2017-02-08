@@ -27,6 +27,7 @@ const UserLogin = require(__dirname + '/src/components/UserLogin.jsx');
 const UserSignup = require(__dirname + '/src/components/UserSignup.jsx');
 const UserLogout = require(__dirname + '/src/components/UserLogout.jsx');
 const About = require(__dirname + '/src/components/About.jsx');
+const Favorites = require(__dirname + '/src/components/Favorites.jsx');
 
 class App extends React.Component {
   constructor(props) {
@@ -40,7 +41,8 @@ class App extends React.Component {
         lat: undefined,
         long: undefined
       },
-      userMonitoredKeywords: []
+      userMonitoredKeywords: [],
+      favoriteList: []
     };
   }
 
@@ -55,7 +57,25 @@ class App extends React.Component {
           isUserLoggedIn: true,
           username: data.username,
           userLocation: data.geoLocation,
-          userMonitoredKeywords: data.keywords
+          userMonitoredKeywords: data.keywords,
+        });
+        var that = this;
+        $.ajax({
+          method: "GET",
+          url : "/user/" + data.username + "/favorites",
+          contentType: "application/json",
+          success: function(success)
+          {
+            //data - response from server
+            that.setState({favoriteList: success});
+            console.log('success!' + JSON.stringify(success));
+            
+          },
+          error: function (errorThrown)
+          {
+            console.log('error');
+            console.log(errorThrown);
+          }
         });
       })
       .fail(error => {
@@ -81,8 +101,9 @@ class App extends React.Component {
         //   }      
         // });
 
-      });
+      });  
   }
+
 
   render() {
     let mainScreen = this.props.main.type;
@@ -116,6 +137,9 @@ class App extends React.Component {
 
                 <span style={isShowing('LegislationSearch')}>
                   <LegislationSearch style={isShowing('LegislationSearch')} username={this.state.username} />
+                </span>
+                <span style={isShowing('Favorites')}>
+                  <Favorites style={isShowing('Favorites')} username={this.state.username} list={this.state.favoriteList}/>
                 </span>
               </div>
               <div className="col-lg-4 col-lg-pull-8">
@@ -151,6 +175,7 @@ class AppRoutes extends React.Component {
         <Route path="/" component={App}>
           <Route path="/search" components = {{main: 'LegislationSearch'}} />
           <Route path="/dashboard" components = {{main: 'UserDashBoard'}} />
+          <Route path="/favorites" components = {{main: 'Favorites'}} />
         </Route>
       </Router>
     );
