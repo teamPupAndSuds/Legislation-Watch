@@ -2,9 +2,6 @@ const React = require('react');
 class Favorites extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      list: []
-    };
   }
 
   // componentWillMount(){

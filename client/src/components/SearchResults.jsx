@@ -16,6 +16,7 @@ class SearchResults extends React.Component {
         searchResults={this.props.billResults} 
         legislatorCache={this.props.legislatorCache}
         username={this.props.username}
+        updateList={this.props.updateList}
         />
     );
   }
@@ -45,7 +46,7 @@ class SearchResultsPresentational extends React.Component {
     });
     let billResultComponents = this.props.searchResults.map(
       function(bill) {
-        return <BillResultSummary key={bill.bill_id} info={bill} legislatorCache={this.props.legislatorCache} username={this.props.username}/>;
+        return <BillResultSummary key={bill.bill_id} info={bill} legislatorCache={this.props.legislatorCache} username={this.props.username} updateList={this.props.updateList}/>;
       }.bind(this));
 
     return (
