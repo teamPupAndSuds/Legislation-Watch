@@ -305,5 +305,5 @@ exports.termSearch = function(req, res) {
           res.status(200).send('No associated keywords found');
         }
       }
-  });
+    });
 };
