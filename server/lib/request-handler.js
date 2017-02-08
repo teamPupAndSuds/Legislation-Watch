@@ -4,10 +4,10 @@ var unirest = require('unirest');
 var User = require('./../../db/models/user');
 var util = require('./utility.js');
 var BillAssociate = require('./billAssociate.js');
-var Favorites = ('./../../db/models/favorites');
 var Q = require('q');
+var Favorites = ('./../../db/models/favorites');
 var addFavorite = Q.nbind(Favorites.create, Favorites);
-var getUser = Q.nbind(User.find, User);
+//var getUser = Q.nbind(User.find, User);
 
 /////////////////////////////////////////////////////////////////
 //AUTHENTICATION
@@ -320,9 +320,12 @@ exports.insertFavoriteBills = function(req, res) {
     username: req.params.username
   };
 
+  console.log('this is the object ' + JSON.stringify(newFavorite));
+  console.log('this is req body ' + JSON.stringify(req.body));
+
   addFavorite(newFavorite).then(function(data) {
     console.log('Favorite saved');
-    return res.status(200).end();
+    return res.status(201).end();
   }).fail(function(err) {
     console.log('error saving favorite');
     console.log(err);

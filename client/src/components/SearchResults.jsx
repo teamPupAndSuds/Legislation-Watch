@@ -15,6 +15,7 @@ class SearchResults extends React.Component {
         isFetching={this.props.isFetching} 
         searchResults={this.props.billResults} 
         legislatorCache={this.props.legislatorCache}
+        username={this.props.username}
         />
     );
   }
@@ -44,7 +45,7 @@ class SearchResultsPresentational extends React.Component {
     });
     let billResultComponents = this.props.searchResults.map(
       function(bill) {
-        return <BillResultSummary key={bill.bill_id} info={bill} legislatorCache={this.props.legislatorCache}/>;
+        return <BillResultSummary key={bill.bill_id} info={bill} legislatorCache={this.props.legislatorCache} username={this.props.username}/>;
       }.bind(this));
 
     return (
