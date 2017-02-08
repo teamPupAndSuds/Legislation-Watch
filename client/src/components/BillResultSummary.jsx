@@ -5,7 +5,7 @@
 //
 // This is based on the "Projection" by TEMPLATED
 // Users are redirected to this page if they have not logged in
-// 
+//
 ////////////////////////////////////////////////////////////////////////////////
 
 const React = require('react');
@@ -30,11 +30,47 @@ class BillResultSummaryPresentational extends React.Component {
     // We match the supplied Bioguide IDs with the Legislator Cache to obtain the name and party information for display
     //
     // TODO: The Legislator Data CSV downloaded from Sunlight's website does not include *all* of legislators for some reason.
-    //       In that scenario, the component renders the Bioguide IDs as-is (rather than name + party). 
-    //         -  we need to implement a way to update the cache on server side, probably with the client code providing 
+    //       In that scenario, the component renders the Bioguide IDs as-is (rather than name + party).
+    //         -  we need to implement a way to update the cache on server side, probably with the client code providing
     //            a list of Bioguide ids that were not cached
-
     let cosponsorElements = [];
+
+    class Support {
+      constructor() {
+        this.republican = 0;
+        this.democrat = 0;
+        this.independent = 0;
+      }
+      count(party) {
+        if (party === 'R') {
+          this.republican++;
+        } else if (party === 'D') {
+          this.democrat++;
+        } else {
+          this.independent++;
+        }
+      }
+      total() {
+        var proportion = {};
+        var supportString = '';
+        var sum = Math.round(this.republican + this.democrat + this.independent);
+        if (this.republican !== 0) {
+          proportion.rep = Math.round(this.republican / sum * 100);
+          supportString += proportion.rep + '% Republican ';
+        }
+        if (this.democrat !== 0) {
+          proportion.dem = Math.round(this.democrat / sum * 100);
+          supportString += proportion.dem + '% Democrat ';
+        }
+        if (this.independent !== 0) {
+          proportion.ind = Math.round(this.independent / sum * 100);
+          supportString += proportion.ind + '% Independent ';
+        }
+        return supportString;
+      }
+    }
+    var support = new Support();
+    support.count(info.sponsor.party);
 
     if (info.cosponsor_ids && info.cosponsor_ids.length !== 0) {
       info.cosponsor_ids.forEach(function(id) {
@@ -48,9 +84,14 @@ class BillResultSummaryPresentational extends React.Component {
         } else {
           // Construct Legislator information for display
           cosponsorElements.push(' ' + cosponsor.firstname + ' ' + cosponsor.lastname + ' (' + cosponsor.party + ')');
+
+          // Count the cosponsor's party
+          support.count(cosponsor.party);
         }
       });
     }
+
+
 
     return (
       <div className="panel panel-info">
@@ -66,14 +107,14 @@ class BillResultSummaryPresentational extends React.Component {
                 <span className="pull-right panel-title">
                   <small>
                     <h3 className="text-uppercase panel-title"><small>
-                      {info.bill_id} | 
+                      {info.bill_id} |
                       INTRODUCED : {info.introduced_on}
                     </small></h3>
                   </small>
                 </span>
               </div>
             </div>
-          </div>        
+          </div>
         </div>
         <div className="panel-body">
           {/* Bill sponsor, co-sponsor and summary information */}
@@ -82,18 +123,24 @@ class BillResultSummaryPresentational extends React.Component {
               <tr>
                 <td>
                   <strong>Sponsor:</strong> {info.sponsor.first_name} {info.sponsor.last_name} ({info.sponsor.party})
-                  {info.cosponsor_ids && info.cosponsor_ids.length !== 0 && 
-                    <strong> Co-Sponsor(s): </strong> 
+                  {info.cosponsor_ids && info.cosponsor_ids.length !== 0 &&
+                    <strong> Co-Sponsor(s): </strong>
                   }
-                  {info.cosponsor_ids && info.cosponsor_ids.length !== 0 && 
+                  {info.cosponsor_ids && info.cosponsor_ids.length !== 0 &&
                     <span>{cosponsorElements.join(',')}</span>
                   }
                 </td>
               </tr>
               <tr>
                 <td>
+                  <strong>Support: </strong>
+                  {support.total()}
+                </td>
+              </tr>
+              <tr>
+                <td>
                   <br />
-                  {info.summary_short && 
+                  {info.summary_short &&
                     <div>{info.summary_short}</div>
                   }
                   {!info.summary_short &&
