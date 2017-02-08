@@ -8,6 +8,7 @@ var morgan = require('morgan');
 var cors = require('cors');
 var handler = require('./lib/request-handler');
 var util = require('./lib/utility.js');
+var cors = require('cors');
 
 var corsOptions = {
   origin: 'http://127.0.0.1:8080',
@@ -15,6 +16,7 @@ var corsOptions = {
 };
 
 var app = express();
+app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(cors(corsOptions));
@@ -48,6 +50,8 @@ app.put('/user/:username/keywords', handler.insertWordMonitor);
 
 app.delete('/user/:username/keywords', handler.deleteWordMonitor);
 /////////////////////////////////////////////////////////////////
+
+app.post('/user/:username/favorites', handler.insertFavoriteBills);
 
 //server up static files
 app.use(express.static(path.join(__dirname + '/../client')));

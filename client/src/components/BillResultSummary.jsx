@@ -16,12 +16,39 @@ const LegislatorData = require('../data/LegislatorData.js');
 class BillResultSummary extends React.Component {
   render() {
     return (
-      <BillResultSummaryPresentational info={this.props.info} legislatorCache={LegislatorData} />
+      <BillResultSummaryPresentational info={this.props.info} legislatorCache={LegislatorData} username={this.props.username} />
     );
   }
 }
 
 class BillResultSummaryPresentational extends React.Component {
+  constructor(props){
+    super(props);
+    this.addFavorite = this.addFavorite.bind(this);
+  }
+
+  addFavorite(){
+    var obj = {
+      legislationId: this.props.info.bill_id
+    };
+    $.ajax({
+      method: "POST",
+      url : "/user/" + this.props.username + "/favorites",
+      data : JSON.stringify(obj),
+      contentType: "application/json",
+      success: function(data)
+      {
+        //data - response from server
+        console.log('success!' + data);
+      },
+      error: function (errorThrown)
+      {
+        console.log('error');
+        console.log(errorThrown);
+      }
+    });
+  }
+
   render() {
     let info = this.props.info;
     let legislatorCache = this.props.legislatorCache;
@@ -68,6 +95,7 @@ class BillResultSummaryPresentational extends React.Component {
                     <h3 className="text-uppercase panel-title"><small>
                       {info.bill_id} | 
                       INTRODUCED : {info.introduced_on}
+                      <button onClick={this.addFavorite}>Add Favorite</button>
                     </small></h3>
                   </small>
                 </span>

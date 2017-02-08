@@ -28,6 +28,7 @@ class LegislationSearch extends React.Component {
         isFetching={this.state.isFetchingSearchResults}
         billResults={this.state.searchResults} 
         onSearchSubmit={this.handleSearchSubmit}
+        username={this.props.username}
       />
     );
   }
@@ -70,6 +71,7 @@ class LegislationSearchPresentational extends React.Component {
           <SearchResults 
             isFetching={this.props.isFetching} 
             billResults={this.props.billResults}
+            username={this.props.username}
             />
         }
       </div>

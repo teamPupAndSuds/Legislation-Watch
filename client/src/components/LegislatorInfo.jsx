@@ -23,6 +23,7 @@ class LegislatorInfoPresentational extends React.Component {
     super(props);
   }
   render() {
+    console.log(this.props.info);
     let info = this.props.info;
     return (
       <div className="panel panel-default" key={info.bioguide_id} >

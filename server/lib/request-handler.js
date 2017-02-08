@@ -4,6 +4,10 @@ var unirest = require('unirest');
 var User = require('./../../db/models/user');
 var util = require('./utility.js');
 var BillAssociate = require('./billAssociate.js');
+var Q = require('q');
+var Favorites = require('./../../db/models/favorites');
+var addFavorite = Q.nbind(Favorites.create, Favorites);
+//var getUser = Q.nbind(User.find, User);
 
 /////////////////////////////////////////////////////////////////
 //AUTHENTICATION
@@ -306,4 +310,25 @@ exports.termSearch = function(req, res) {
         }
       }
     });
+};
+
+/////////////////////////////////////////////////////////////////
+//FAVORITE LEGISLATION ADD
+exports.insertFavoriteBills = function(req, res) {
+  var newFavorite = {
+    legislationId: req.body.legislationId,
+    userName: req.params.username
+  };
+
+  console.log('this is the object ' + JSON.stringify(newFavorite));
+  console.log('this is req body ' + JSON.stringify(req.body));
+
+  addFavorite(newFavorite).then(function(data) {
+    console.log('Favorite saved');
+    return res.status(201).json(data);
+  }).fail(function(err) {
+    console.log('error saving favorite');
+    console.log(err);
+    return res.status(404).end();
+  });
 };

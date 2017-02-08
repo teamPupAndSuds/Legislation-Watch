@@ -22,7 +22,7 @@ var userSchema = new mongoose.Schema({
   latitude: Number,
   longitude: Number,
   keywords: Object,
-  email: String
+  email: String,
 });
 
 userSchema.methods.hashPassword = function (callback) {
