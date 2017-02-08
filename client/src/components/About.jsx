@@ -11,14 +11,48 @@
 const React = require('react');
 const ReactRouter = require('react-router');
 const Link = ReactRouter.Link;
-
+const LoginModal = require('./LoginModal.jsx');
+const SignupModal = require('./SignupModal.jsx');
+import { Button, Modal } from 'react-bootstrap';
 
 class About extends React.Component {
+  constructor() {
+    super()
+
+    this.state = {
+      showModalLogin: false,
+      showModalSignup: false
+    }
+
+    this.openLogin = this.openLogin.bind(this);
+    this.closeLogin = this.closeLogin.bind(this);
+    this.openSignup = this.openSignup.bind(this);
+    this.closeSignup = this.closeSignup.bind(this);
+  }
+
+  closeLogin() {
+    this.setState({ showModalLogin: false });
+  }
+
+  openLogin() {
+    this.setState({ showModalLogin: true });
+  }
+
+  closeSignup() {
+    this.setState({ showModalSignup: false });
+  }
+
+  openSignup() {
+    this.setState({ showModalSignup: true });
+  }
+
   render() {
     return (
         <div>
-          <link rel="stylesheet" href="../../css/about.css" />
+          <LoginModal close={this.closeLogin} showModal={this.state.showModalLogin} openSignup={this.openSignup}/>
+          <SignupModal close={this.closeSignup} showModal={this.state.showModalSignup} openLogin={this.openLogin}/>
 
+          <link rel="stylesheet" href="../../css/about.css" />
           {/* Front Scene */}
           <section id="banner">
             <div className="inner">
@@ -50,10 +84,10 @@ class About extends React.Component {
 
               <footer className="flex">
                 <div>
-                  <Link to="/signup" className="button">Sign Up</Link>
+                  <button onClick={this.openSignup} >Sign up</button>
                 </div>
                 <div>
-                  <Link to="/login" className="button">Log In</Link>
+                  <button onClick={this.openLogin}>Log In</button>
                 </div>
               </footer>
             </div>
@@ -74,7 +108,7 @@ class About extends React.Component {
                   The app fetches the latest bills drafted in congress and matches them to keywords you're interested in.
                   Then delivers them to your in-app dashboard, and email.</p>
                   <footer>
-                    <Link to="/signup" className="button">Signup</Link>
+                    <button onClick={this.openSignup}>Sign Up</button>
                   </footer>
                 </article>
               </div>
@@ -107,7 +141,9 @@ class About extends React.Component {
               </form>
 
             </div>
-          </footer>          
+            <LoginModal />
+          </footer>
+             
         </div>
     );
   }

@@ -9,19 +9,35 @@ const React = require('react');
 const ReactRouter = require('react-router');
 const hashHistory = ReactRouter.hashHistory;
 const Link = ReactRouter.Link;
+import { DropdownButton, MenuItem } from 'react-bootstrap';
+
+var usStates = [
+'AL', 'AK', 'AZ', 'AR', 'CA', 
+'CO', 'CT', 'DE', 'FL', 'GA', 
+'HI', 'ID', 'IL', 'IN', 'IA', 
+'KS', 'KY', 'LA', 'ME', 'MD', 
+'MA', 'MI', 'MN', 'MS', 'MO', 
+'MT', 'NE', 'NV', 'NH', 'NJ', 
+'NM', 'NY', 'NC', 'ND', 'OH', 
+'OK', 'OR', 'PA', 'RI', 'SC', 
+'SD', 'TN', 'TX', 'UT', 'VT', 
+'VA', 'WA', 'WV', 'WI', 'WY'];
 
 class UserSignup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isSignupError: false,
-      signupErrorMessage: ''
+      signupErrorMessage: '',
+      usState: 'AL'
     };
 
     this.formFields = {};
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputFieldChange = this.handleInputFieldChange.bind(this);
+    this.handleUsStateClick = this.handleUsStateClick.bind(this);
+    this.switchToLogin = this.switchToLogin.bind(this);
   }
 
   handleFormSubmit(event) {
@@ -46,9 +62,11 @@ class UserSignup extends React.Component {
     };
 
     // Send a AJAX POST request to the back-end server
+    var that = this;
     $.ajax('signup/' + this.formFields.username, ajaxOptions)
       .done(function(data) {
-        hashHistory.push('/login');
+        // hashHistory.push('/login');
+        that.switchToLogin();
       })
       .fail(error => {
         this.setState({
@@ -57,6 +75,12 @@ class UserSignup extends React.Component {
         });
       });
 
+  }
+
+  // handles click events on the usStates dropdown
+  handleUsStateClick(event) {
+    this.formFields['state'] = event.target.innerHTML;
+    this.setState({usState: event.target.innerHTML});
   }
 
   // Event handler to populate all values into the formFields object
@@ -75,56 +99,55 @@ class UserSignup extends React.Component {
     }
   }
 
+  switchToLogin() {
+    this.props.close();
+    this.props.openLogin();
+  }
+
   render() {
     return (
       <div className="container-fluid">
-        <h2>Legislation Watch</h2>
-        <div className="panel panel-info">
-          <div className="panel-heading">
-            <h4 className="panel-title">Signup</h4>
-          </div>
-          <div className="panel-body">
-            <form onSubmit={this.handleFormSubmit}>
-              <div className="form-group">
-                <label htmlFor="username">Username:</label>
-                <input type="text" className="form-control" id="username" placeholder="Enter Username" onChange={this.handleInputFieldChange}></input>
+        <h2>Sign Up</h2>
+        <div className="panel-body">
+          <form onSubmit={this.handleFormSubmit}>
+            <div className="form-group">
+              <label htmlFor="username">Username:</label>
+              <input autoFocus type="text" className="form-control" id="username" placeholder="Enter Username" onChange={this.handleInputFieldChange}></input>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="email">Email:</label>
+              <input type="text" className="form-control" id="email" placeholder="Enter Email" onChange={this.handleInputFieldChange}></input>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password">Password:</label>
+              <input type="password" className="form-control" id="password" placeholder="Enter Password" onChange={this.handleInputFieldChange}></input>
+            </div>
+            <hr />
+            <div className="form-inline">
+              <label htmlFor="address">Address:</label>
+              <input type="text" className="form-control signup-streetname" id="streetName" placeholder="Enter Street Address" onChange={this.handleInputFieldChange}></input>
+              <input type="text" className="form-control signup-city" id="city" placeholder="Enter City" onChange={this.handleInputFieldChange}></input>
+ 
+              <div className="btn-group signup-dropdown">
+                <button type="button" className="form-control signup-dropdown-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {this.state.usState}
+                </button>
+                <div className="dropdown-menu states-dropdown">
+                  {usStates.map((state, i) => <div className="dropdown-item" onClick={this.handleUsStateClick}>{state}</div>)}
+                </div>
               </div>
 
-              <div className="form-group">
-                <label htmlFor="email">Email:</label>
-                <input type="text" className="form-control" id="email" placeholder="Enter Email" onChange={this.handleInputFieldChange}></input>
-              </div>
+            </div>
+            <div className="form-group"></div>
 
-              <div className="form-group">
-                <label htmlFor="password">Password:</label>
-                <input type="password" className="form-control" id="password" placeholder="Enter Password" onChange={this.handleInputFieldChange}></input>
-              </div>
+            <div className="form-group">
+              <button type="submit">Signup</button>{(this.state.isSignupError) ? <h5 style={{'color': 'red'}}>Signup Failure: {this.state.signupErrorMessage}</h5> : '' }
+            </div>
 
-              <hr />
-              <h4> Address </h4>
-
-              <div className="form-group">
-                <label htmlFor="streetName">Street Address:</label>
-                <input type="text" className="form-control" id="streetName" placeholder="Enter Street Address" onChange={this.handleInputFieldChange}></input>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="city">City:</label>
-                <input type="text" className="form-control" id="city" placeholder="Enter City" onChange={this.handleInputFieldChange}></input>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="state">State:</label>
-                <input type="text" className="form-control" id="state" placeholder="Enter State" onChange={this.handleInputFieldChange}></input>
-              </div>
-
-              <div className="form-group">
-                <button type="submit" className="btn btn-primary">Signup</button>{(this.state.isSignupError) ? <h5 style={{'color': 'red'}}>Signup Failure: {this.state.signupErrorMessage}</h5> : <p></p> }
-              </div>
-
-              or <Link to="/login">Login</Link>
-            </form>
-          </div>
+            or <span className="login-link" onClick={this.switchToLogin}>Login</span>
+          </form>
         </div>
       </div>
     );
