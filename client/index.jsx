@@ -203,6 +203,16 @@ class App extends React.Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.favoriteList.length !== this.state.favoriteList.length) {
+      console.log('state has changed');
+      var value = this.state.favoriteList[this.state.favoriteList.length -1 ];
+      var arr = [];
+      arr.push(value);
+      this.updateFavoriteBillList(arr);
+    }
+  }
+
   render() {
     let mainScreen = this.props.main.type;
     function isShowing(mainPage) {

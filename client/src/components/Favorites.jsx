@@ -4,31 +4,8 @@ class Favorites extends React.Component {
   constructor(props) {
     super(props);
   }
-
-  // componentWillMount(){
-  //   var that = this;
-  //   $.ajax({
-  //     method: "GET",
-  //     url : "/user/" + this.props.username + "/favorites",
-  //     contentType: "application/json",
-  //     success: function(data)
-  //     {
-  //       //data - response from server
-  //       that.setState({list: data});
-  //       console.log('success!' + JSON.stringify(data));
-        
-  //     },
-  //     error: function (errorThrown)
-  //     {
-  //       console.log('error');
-  //       console.log(errorThrown);
-  //     }
-  //   });
-  // }
-
+  
   render() {
-    console.log('I HOPE THIS WORKS');
-    console.log(this.props.favoriteBillList);
     return (
       <div>
         <h1>Inside Favorites</h1>
