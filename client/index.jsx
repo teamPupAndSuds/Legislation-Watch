@@ -70,7 +70,14 @@ class App extends React.Component {
           success: function(success)
           {
             //data - response from server
-            that.setState({favoriteList: success});            
+            console.log('this is success ' + JSON.stringify(success));
+            var temp = that.state.favoriteList.slice();
+            temp.push(success);
+            console.log('this is temp ' + temp.length);
+
+            that.setState({favoriteList: success});
+            console.log('this is new state ' + that.state.favoriteList.length);   
+            that.updateFavoriteBillList(that.state.favoriteList);         
           },
           error: function (errorThrown)
           {
@@ -105,7 +112,7 @@ class App extends React.Component {
       });  
   }
 
-  updateList(){
+  updateList(id){
     $.get('login')
       .done((data) => {
         // Debug
@@ -119,14 +126,19 @@ class App extends React.Component {
         var that = this;
         $.ajax({
           method: "GET",
-          url : "/user/" + data.username + "/favorites",
+          url : "/user/" + data.username + "/favorites/"+id,
           contentType: "application/json",
           success: function(success)
           {
             //data - response from server
-            console.log('updating state...');
-            that.setState({favoriteList: success});
-            that.updateFavoriteBillList(that.state.favoriteList);         
+            console.log('this is the id ' + id);
+            console.log('updating state...' + JSON.stringify(success));
+            var temp = that.state.favoriteList.slice();
+            temp.push(success);
+            that.setState({favoriteList: temp});
+            var singleItem = [];
+            singleItem.push(success);
+            that.updateFavoriteBillList(singleItem);         
           },
           error: function (errorThrown)
           {
@@ -149,18 +161,11 @@ class App extends React.Component {
   }
 
   updateFavoriteBillList(favoriteIds) {
-    // let ajaxSettings = {
-    //   method: 'GET',
-    //   context: this,
-    //   data: {
-    //     query: searchTerms,
-    //     fields: 'bill_id,bill_type,chamber,introduced_on,last_action_at,short_title,official_title,keywords,summary_short,urls,sponsor,sponsor_id,cosponsor_ids,cosponsors.legislator,related_bill_ids,upcoming'
-    //   },
-    //   dataType: 'jsonp',
-    //   success: this.handleSearchComplete.bind(this)
-
-    // };
-    var that = this
+    var that = this;
+    console.log('inside favoriteBillList');
+    console.log(favoriteIds);
+    console.log('this is the state ');
+    console.log(this.state.favoriteBillList);
     favoriteIds.forEach(function(id) {
       $.ajax({
         method: "GET",
@@ -176,22 +181,6 @@ class App extends React.Component {
         }
       });
     });
-
-    // var that = this;
-    // favoriteIds.forEach(function(id) {
-    //   console.log('line 164 ' + id.legislationId);
-    //   let ajaxSettings = {
-    //     method: 'GET',
-    //     context: this,
-    //     data: {
-    //       query: id.legislationId,
-    //       fields: 'bill_id,bill_type,chamber,introduced_on,last_action_at,short_title,official_title,keywords,summary_short,urls,sponsor,sponsor_id,cosponsor_ids,cosponsors.legislator,related_bill_ids,upcoming'
-    //     },
-    //     dataType: 'jsonp',
-    //     success: that.handleSearchComplete.bind(that)
-    //   };
-    //   $.ajax('https://congress.api.sunlightfoundation.com/bills/search?bill_id=', ajaxSettings);
-    // });
   }
 
   handleSearchComplete(data) {
@@ -204,13 +193,15 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.favoriteList.length !== this.state.favoriteList.length) {
-      console.log('state has changed');
-      var value = this.state.favoriteList[this.state.favoriteList.length -1 ];
-      var arr = [];
-      arr.push(value);
-      this.updateFavoriteBillList(arr);
-    }
+    // if (prevState.favoriteList.length !== this.state.favoriteList.length) {
+    //   console.log('state has changed');
+    //   console.log(this.state.favoriteList);
+    //   var value = this.state.favoriteList[this.state.favoriteList.length -1 ];
+    //   var arr = [];
+    //   arr.push(value);
+    //   console.log('this is arr ' + arr);
+    //   this.updateFavoriteBillList(arr);
+    // }
   }
 
   render() {

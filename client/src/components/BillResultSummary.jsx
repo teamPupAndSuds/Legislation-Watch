@@ -46,7 +46,8 @@ class BillResultSummaryPresentational extends React.Component {
       contentType: 'application/json',
       success: function (data) {
         //data - response from server
-        that.props.updateList();
+        console.log('this is data ') + JSON.stringify(data);
+        that.props.updateList(that.props.info.bill_id);
       },
       error: function (errorThrown) {
         console.log('error');

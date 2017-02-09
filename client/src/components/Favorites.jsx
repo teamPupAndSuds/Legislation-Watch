@@ -4,8 +4,10 @@ class Favorites extends React.Component {
   constructor(props) {
     super(props);
   }
-  
+
   render() {
+    console.log('inside favorites');
+    console.log(this.props.favoriteBillList);
     return (
       <div>
         <h1>Inside Favorites</h1>
