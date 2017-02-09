@@ -12,6 +12,7 @@ var Comment = require('./../../db/models/comment');
 var addFavorite = Q.nbind(Favorites.create, Favorites);
 var getFavorite = Q.nbind(Favorites.find, Favorites);
 var getSingleFavorite = Q.nbind(Favorites.findOne, Favorites);
+var removeFavorite = Q.nbind(Favorites.remove, Favorites);
 //var getUser = Q.nbind(User.find, User);
 
 var createComment = Q.nbind(Comment.create, Comment);
@@ -345,11 +346,29 @@ exports.getFavoriteBills = function(req, res) {
 };
 
 exports.getSingleFavoriteBill = function(req, res) {
-  getSingleFavorite({legislationId: req.params.legislationId}).then(function(data){
+  getSingleFavorite({legislationId: req.params.legislationId}).then(function(data) {
     return res.status(200).send(data);
-  }).fail(function(err){
+  }).fail(function(err) {
     console.log('error getting single favorite');
     console.log(err);
+  });
+};
+
+exports.deleteFavoriteBill = function(req, res) {
+  var favoriteToRemove = {
+    legislationId: req.body.legislationId,
+    userName: req.params.username
+  };
+
+  removeFavorite(favoriteToRemove)
+  .then(function(removedItem) {
+    console.log('Favorite saved');
+    return res.status(202).json(removedItem);
+  })
+  .fail(function(err) {
+    console.log('error saving favorite');
+    console.log(err);
+    return res.status(404).end();
   });
 };
 
@@ -360,7 +379,6 @@ exports.addComment = function(req, res) {
     username: req.params.username,
     text: req.body.text
   };
-
 
   createComment(commentObj)
   .then((newComment) => {
@@ -386,3 +404,4 @@ exports.getComments = function(req, res) {
     return res.status(404).end();
   });
 };
+

@@ -52,6 +52,7 @@ class SearchResultsPresentational extends React.Component {
                                   legislatorCache={this.props.legislatorCache} 
                                   username={this.props.username} 
                                   updateList={this.props.updateList}
+                                  favoriteList={this.props.favoriteList}
                                   />;
       }.bind(this));
 
