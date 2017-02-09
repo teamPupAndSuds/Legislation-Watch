@@ -131,7 +131,7 @@ class BillResultSummaryPresentational extends React.Component {
             <tbody>
               <tr>
                 <td>
-                  <strong>Sponsor:</strong> {info.sponsor.first_name} {info.sponsor.last_name} ({support.checkParty()})
+                  <strong>Sponsor:</strong> {info.sponsor.first_name} {info.sponsor.last_name} ({info.sponsor.party})
                   {info.cosponsor_ids && info.cosponsor_ids.length !== 0 &&
                     <strong> Co-Sponsor(s): </strong>
                   }

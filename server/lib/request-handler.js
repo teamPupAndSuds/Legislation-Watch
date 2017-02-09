@@ -67,29 +67,21 @@ exports.userLogout = function(req, res) {
 
 exports.userSignup = function(req, res) {
   var username = req.params.username;
-
   console.log('request-handler.js: userSignup: entered');
 
-/////////////////////////////////////////////////////////////////
-//CHECKS USER DB 
-/////////////////////////////////////////////////////////////////
+// CHECKS USER DB 
 
   User.findOne({ username: username})
     .exec(function(err, user) {
       if (!user) {
-
         console.log('request-handler.js: userSignup: username free');
         console.log('request-handler.js: userSignup: signup data:', req.body);
-
       //If user profile is not taken, creates a new user profile
         var password = req.body['password'];
         var userEmail = req.body['email'];
         var userAddress = req.body['address'];
 
-
-        ///////////////////////////////////////////////
         //building location object to save to userdb
-        ///////////////////////////////////////////////
 
         var location = {};
         location['houseNum'] = userAddress['houseNum'].toString();
@@ -106,10 +98,7 @@ exports.userSignup = function(req, res) {
 
         console.log('request-handler.js: userSignup: userinfo:', userInfo);
 
-        ///////////////////////////////////////////////
         // building address string to feed to geoCode
-        ///////////////////////////////////////////////
-
         var streetAddress = userAddress['houseNum'].toString();        
         streetAddress = streetAddress.concat(
           ' ',
@@ -122,15 +111,15 @@ exports.userSignup = function(req, res) {
 
         console.log('request-handler.js: userSignup: streetAddress:', streetAddress);        
 
-        ////////////////////////////////////////////
-        util.geoCodeit(res, userInfo, streetAddress, function(err, response) {
+        util.geoCodeit(res, userInfo, streetAddress, function(err, geoResponse) {
           if (!err) {
-            var geoLocation = response.json.results[0].geometry.location;
+            if (geoResponse.json.results.length === 0) {
+              res.status(404).end();
+            }            
+            var geoLocation = geoResponse.json.results[0].geometry.location;
             userInfo['latitude'] = geoLocation.lat;
             userInfo['longitude'] = geoLocation.lng;
-            ////////////////////////////////////////////
             // creates new user and save to DB
-            ////////////////////////////////////////////
             var newUser = new User(userInfo);
             newUser.hashPassword(function() {
               newUser.save(function(err, newUser) {
@@ -138,9 +127,7 @@ exports.userSignup = function(req, res) {
                   console.log('request-handler.js: userSignup: fail to SaveUser to DB');
                   res.status(500).send(err);
                 } else {
-                /////////////////////////////////////////////////////////
                 // creates new client session for a successful sign-up
-                /////////////////////////////////////////////////////////
                   console.log('request-handler.js: userSignup: save user OK: newUser is:', newUser);
                   util.createSession(req, res, newUser);
                 }
@@ -153,18 +140,13 @@ exports.userSignup = function(req, res) {
         });
       } else {
         //USER PROFILE IN USE
-        res.status(401);
-
         console.log('request-handler.js: userSignup: user profile already in use');
-
-        res.send('Username already in use');
+        res.status(401).send('Username already in use');
       }
     });
 };
 
-/////////////////////////////////////////////////////////////////
 // HANDLES NEW USER MONITORED WORDS
-/////////////////////////////////////////////////////////////////
 
 exports.insertWordMonitor = function(req, res) {
   var username = req.params.username;
@@ -178,8 +160,7 @@ exports.insertWordMonitor = function(req, res) {
       if (!err) {
         if (!user) {
           console.log('request-handler.js: insertWordMonitor: user does not exist', username);
-          res.status(401);
-          res.end();
+          res.status(401).end();
         } else {
           console.log('request-handler.js: insertWordMonitor: user exist', user);
 
@@ -202,17 +183,15 @@ exports.insertWordMonitor = function(req, res) {
 
                 BillAssociate.billAssociate(user['keywords'][keywords], function(error, data) {
                   if (error) {
-                    res.stats(500).send(error);
-                    res.end();
+                    console.error(error);
+                    res.status(500).send(error);
                   } else {
                   // Save to DB
-                  
                     user.markModified('keywords');
                     user.save(function (err) {
                       if (err) {
-                        console.log('request-handler.js: insertWordMonitor: saving user object failed', err);
-                        res.stats(500).send(err);
-                        res.end();
+                        console.error('request-handler.js: insertWordMonitor: saving user object failed', err);
+                        res.status(500).send(err);
                       } else {
                         // Send the client the user object with the new results
                         console.log('request-handler.js: insertWordMonitor: keyword added, sending user object back to client:', user);
