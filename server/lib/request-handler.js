@@ -309,10 +309,19 @@ exports.insertFavoriteBills = function(req, res) {
   console.log('this is the object ' + JSON.stringify(newFavorite));
   console.log('this is req body ' + JSON.stringify(req.body));
 
-  addFavorite(newFavorite).then(function(data) {
+  getFavorite(newFavorite)
+  .then(function(result) {
+    if (!result) {
+      return addFavorite(newFavorite);
+    } else {
+      throw new Error('Favorite already exists');
+    }
+  })
+  .then(function(data) {
     console.log('Favorite saved');
     return res.status(201).json(data);
-  }).fail(function(err) {
+  })
+  .fail(function(err) {
     console.log('error saving favorite');
     console.log(err);
     return res.status(404).end();
@@ -338,6 +347,7 @@ exports.addComment = function(req, res) {
     username: req.params.username,
     text: req.body.text
   };
+
 
   createComment(commentObj)
   .then((newComment) => {

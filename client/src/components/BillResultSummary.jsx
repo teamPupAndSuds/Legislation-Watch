@@ -20,7 +20,10 @@ const Comments = require('./Comments.jsx');
 class BillResultSummary extends React.Component {
   render() {
     return (
-      <BillResultSummaryPresentational info={this.props.info} legislatorCache={LegislatorData} username={this.props.username} updateList={this.props.updateList}/>
+      <BillResultSummaryPresentational info={this.props.info} 
+                                       legislatorCache={LegislatorData} 
+                                       username={this.props.username} 
+                                       updateList={this.props.updateList}/>
     );
   }
 }
@@ -117,7 +120,9 @@ class BillResultSummaryPresentational extends React.Component {
                     <h3 className="text-uppercase panel-title"><small>
                       {info.bill_id} |
                       INTRODUCED : {info.introduced_on}
-                      <span id="addToFavorites" className={this.state.favorite ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'} onClick={this.addFavorite}></span>
+                      <span id="addToFavorites" 
+                            className={this.state.favorite ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'} 
+                            onClick={this.addFavorite}></span>
                     </small></h3>
                   </small>
                 </span>
@@ -142,7 +147,8 @@ class BillResultSummaryPresentational extends React.Component {
               </tr>
               <tr>
                 <td>
-                  <SupportBar support={support} tooltip={support.supportString} />
+                  <SupportBar support={support} 
+                                tooltip={support.supportString} />
                 </td>
               </tr>
               <tr>
