@@ -32,7 +32,7 @@ class UserSignup extends React.Component {
       usState: 'AL'
     };
 
-    this.formFields = {};
+    this.formFields = {'state': 'AL'};
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputFieldChange = this.handleInputFieldChange.bind(this);
@@ -69,7 +69,7 @@ class UserSignup extends React.Component {
         that.switchToLogin();
       })
       .fail(error => {
-        this.setState({
+        that.setState({
           isSignupError: true,
           signupErrorMessage: error.status + '-' + error.statusText
         });
@@ -79,13 +79,20 @@ class UserSignup extends React.Component {
 
   // handles click events on the usStates dropdown
   handleUsStateClick(event) {
+    if (this.state.isSignupError) {
+      this.setState({isSignupError: false, usState: event.target.innerHTML});
+    } else {
+      this.setState({usState: event.target.innerHTML});
+    }
     this.formFields['state'] = event.target.innerHTML;
-    this.setState({usState: event.target.innerHTML});
   }
 
   // Event handler to populate all values into the formFields object
   // for later use by handleFormSubmit()
   handleInputFieldChange(event) {
+    if (this.state.isSignupError) {
+      this.setState({isSignupError: false});
+    }
     if (event.target.id === 'streetName') {
       var address = event.target.value.split(' ');
       var houseNum = address.shift();
@@ -112,26 +119,26 @@ class UserSignup extends React.Component {
           <form onSubmit={this.handleFormSubmit}>
             <div className="form-group">
               <label htmlFor="username">Username:</label>
-              <input autoFocus type="text" className="form-control" id="username" placeholder="Enter Username" onChange={this.handleInputFieldChange}></input>
+              <input autoFocus type="text" className={this.state.isSignupError ? 'form-control form-error' : 'form-control'} id="username" placeholder="Enter Username" onChange={this.handleInputFieldChange}></input>
             </div>
 
             <div className="form-group">
               <label htmlFor="email">Email:</label>
-              <input type="text" className="form-control" id="email" placeholder="Enter Email" onChange={this.handleInputFieldChange}></input>
+              <input type="text" className={this.state.isSignupError ? 'form-control form-error' : 'form-control'} id="email" placeholder="Enter Email" onChange={this.handleInputFieldChange}></input>
             </div>
 
             <div className="form-group">
               <label htmlFor="password">Password:</label>
-              <input type="password" className="form-control" id="password" placeholder="Enter Password" onChange={this.handleInputFieldChange}></input>
+              <input type="password" className={this.state.isSignupError ? 'form-control form-error' : 'form-control'} id="password" placeholder="Enter Password" onChange={this.handleInputFieldChange}></input>
             </div>
             <hr />
             <div className="form-inline">
               <label htmlFor="address">Address:</label>
-              <input type="text" className="form-control signup-streetname" id="streetName" placeholder="Enter Street Address" onChange={this.handleInputFieldChange}></input>
-              <input type="text" className="form-control signup-city" id="city" placeholder="Enter City" onChange={this.handleInputFieldChange}></input>
+              <input type="text" className={this.state.isSignupError ? 'form-control signup-streetname form-error' : 'form-control signup-streetname'} id="streetName" placeholder="Enter Street Address" onChange={this.handleInputFieldChange}></input>
+              <input type="text" className={this.state.isSignupError ? 'form-control signup-city form-error' : 'form-control signup-city'} id="city" placeholder="Enter City" onChange={this.handleInputFieldChange}></input>
  
               <div className="btn-group signup-dropdown">
-                <button type="button" className="form-control signup-dropdown-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" className={this.state.isSignupError ? 'form-control signup-dropdown-button dropdown-error' : 'form-control signup-dropdown-button' } data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   {this.state.usState}
                 </button>
                 <div className="dropdown-menu states-dropdown">
@@ -143,7 +150,7 @@ class UserSignup extends React.Component {
             <div className="form-group"></div>
 
             <div className="form-group">
-              <button type="submit">Signup</button>{(this.state.isSignupError) ? <h5 style={{'color': 'red'}}>Signup Failure: {this.state.signupErrorMessage}</h5> : '' }
+              <button type="submit">Signup</button>{this.state.isSignupError ? <span style={{color: 'rgba(255, 0, 0, 0.73)', marginLeft: '1rem'}}>Sorry. There seems to be an issue please try again.</span> : '' }
             </div>
 
             or <span className="login-link" onClick={this.switchToLogin}>Login</span>
