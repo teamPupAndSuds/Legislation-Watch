@@ -30,6 +30,7 @@ class LegislationSearch extends React.Component {
         onSearchSubmit={this.handleSearchSubmit}
         username={this.props.username}
         updateList={this.props.updateList}
+        favoriteList={this.props.favoriteList}
       />
     );
   }
@@ -75,6 +76,7 @@ class LegislationSearchPresentational extends React.Component {
             billResults={this.props.billResults}
             username={this.props.username}
             updateList={this.props.updateList}
+            favoriteList={this.props.favoriteList}
             />
         }
       </div>

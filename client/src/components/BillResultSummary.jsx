@@ -23,7 +23,9 @@ class BillResultSummary extends React.Component {
       <BillResultSummaryPresentational info={this.props.info} 
                                        legislatorCache={LegislatorData} 
                                        username={this.props.username} 
-                                       updateList={this.props.updateList}/>
+                                       updateList={this.props.updateList}
+                                       favoriteList={this.props.favoriteList}
+                                       />
     );
   }
 }
@@ -31,11 +33,44 @@ class BillResultSummary extends React.Component {
 class BillResultSummaryPresentational extends React.Component {
   constructor(props) {
     super(props);
-    this.addFavorite = this.addFavorite.bind(this);
+    this.toggleFavorite = this.toggleFavorite.bind(this);
     this.state = {
       favorite: false
     };
   }
+
+  componentDidMount() {
+    let favoriteState = this.getFavoriteState();
+    this.setState({
+      favorite: favoriteState
+    });
+  }
+
+  getFavoriteState() {
+    let state = false;
+    if (this.props.favoriteList) {
+      this.props.favoriteList.forEach((favorite) => {
+        if (favorite.legislationId === this.props.info.bill_id) {
+          state = true;
+        }
+      });
+    }
+    return state;
+  }
+
+  toggleFavorite() {
+    
+    let currentSetting = this.state.favorite;
+    if (currentSetting) {
+      this.removeFavorite();
+    } else {
+      this.addFavorite();
+    }
+    this.setState({
+      favorite: !currentSetting
+    });
+  }
+
 
   addFavorite() {
     var obj = {
@@ -56,9 +91,27 @@ class BillResultSummaryPresentational extends React.Component {
         console.log(errorThrown);
       }
     });
-    let currentSetting = this.state.favorite;
-    this.setState({
-      favorite: !currentSetting
+  }
+
+  removeFavorite() {
+    var obj = {
+      legislationId: this.props.info.bill_id
+    };
+    var that = this;
+    $.ajax({
+      method: 'DELETE',
+      url: '/user/' + this.props.username + '/favorites',
+      data: JSON.stringify(obj),
+      contentType: 'application/json',
+      success: function (data) {
+        console.log('this is data ') + JSON.stringify(data);
+        // CHECK IF UPDATE LIST IS NECESSARY HERE!!!
+        that.props.updateList(that.props.info.bill_id);
+      },
+      error: function (errorThrown) {
+        console.log('error');
+        console.log(errorThrown);
+      }
     });
   }
 
@@ -118,7 +171,7 @@ class BillResultSummaryPresentational extends React.Component {
                       INTRODUCED : {info.introduced_on}
                       <span id="addToFavorites" 
                             className={this.state.favorite ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'} 
-                            onClick={this.addFavorite}></span>
+                            onClick={this.toggleFavorite}></span>
                     </small></h3>
                   </small>
                 </span>
