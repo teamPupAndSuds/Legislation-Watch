@@ -6,9 +6,15 @@ var util = require('./utility.js');
 var BillAssociate = require('./billAssociate.js');
 var Q = require('q');
 var Favorites = require('./../../db/models/favorites');
+var Comment = require('./../../db/models/comment');
+
+// Promisifying Database functions
 var addFavorite = Q.nbind(Favorites.create, Favorites);
 var getFavorite = Q.nbind(Favorites.find, Favorites);
 //var getUser = Q.nbind(User.find, User);
+
+var createComment = Q.nbind(Comment.create, Comment);
+var findComments = Q.nbind(Comment.find, Comment);
 
 /////////////////////////////////////////////////////////////////
 //AUTHENTICATION
@@ -336,12 +342,45 @@ exports.insertFavoriteBills = function(req, res) {
 
 //
 exports.getFavoriteBills = function(req, res) {
-  getFavorite({}).then(function(data){
+  getFavorite({}).then(function(data) {
     console.log('got all favs ' + JSON.stringify(data));
     return res.status(200).send(data);
   }).fail(function(err) {
     console.log('error getting favs');
     console.log(err);
     return res.stats(404).end();
+  });
+};
+
+exports.addComment = function(req, res) {
+  
+  let commentObj = {
+    billId: req.params.billId,
+    username: req.params.username,
+    text: req.body.text
+  };
+
+  createComment(commentObj)
+  .then((newComment) => {
+    console.log('Comment added!');
+    return res.status(201).json(newComment);
+  })
+  .fail((err) => {
+    console.error('Comment not added', err);
+    return res.status(404).end();
+  });
+};
+
+exports.getComments = function(req, res) {
+  let billId = req.params.billId;
+
+  findComments({billId: billId})
+  .then((comments) => {
+    console.log('Comments retrieved!');
+    return res.status(200).json(comments);
+  })
+  .fail((err) => {
+    console.error('Comments not found', err);
+    return res.status(404).end();
   });
 };

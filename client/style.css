@@ -2,6 +2,10 @@ body {
   padding-top: 65px;
 }
 
+.comment-box {
+  margin-top: 10px;
+}
+
 #addToFavorites {
   padding-left: 10px;
   font-size: 14px;

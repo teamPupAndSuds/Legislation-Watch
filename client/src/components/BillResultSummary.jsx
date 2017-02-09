@@ -62,7 +62,6 @@ class BillResultSummaryPresentational extends React.Component {
 
   render() {
     let info = this.props.info;
-    console.log('info: ', info);
     let legislatorCache = this.props.legislatorCache;
 
     // Bills may have 'co-sponsors' that are supplied as an array of <string> Bioguide IDs
