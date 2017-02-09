@@ -12,25 +12,37 @@ body {
 }
 
 .supportBar {
-  width: 200px;
-  height: 20px;
-  border-radius: 2px;
+  margin-top: 2%;
+  width: 180px;
+  height: 15px;
+  border-radius: 10px;
 }
 
 .republican {
   background: #E91D0E;
   display: inline-block;
   height: 100%;
+  border-top-right-radius: 2em;
+  border-bottom-right-radius: 2em;
 }
 
 .democrat {
   background: #232066;
   display: inline-block;
   height: 100%;
+  border-top-left-radius: 2em;
+  border-bottom-left-radius: 2em;
 }
 
 .independent {
   background: green;
   display: inline-block;
   height: 100%;
+}
+
+.fullSupport {
+  border-top-right-radius: 2em;
+  border-bottom-right-radius: 2em;
+  border-top-left-radius: 2em;
+  border-bottom-left-radius: 2em;
 }
