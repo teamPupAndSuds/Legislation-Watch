@@ -5,7 +5,7 @@
 //
 // Search related AJAX calls to the Sunlight server are made at this component
 // level
-// 
+//
 ////////////////////////////////////////////////////////////////////////////////
 
 const React = require('react');
@@ -24,9 +24,9 @@ class LegislationSearch extends React.Component {
   }
   render() {
     return (
-      <LegislationSearchPresentational 
+      <LegislationSearchPresentational
         isFetching={this.state.isFetchingSearchResults}
-        billResults={this.state.searchResults} 
+        billResults={this.state.searchResults}
         onSearchSubmit={this.handleSearchSubmit}
         username={this.props.username}
       />
@@ -61,6 +61,7 @@ class LegislationSearch extends React.Component {
   }
 }
 
+
 class LegislationSearchPresentational extends React.Component {
   render() {
     return (
@@ -68,8 +69,8 @@ class LegislationSearchPresentational extends React.Component {
         <h3>Bill Search</h3>
         <SearchBar onSubmit={this.props.onSearchSubmit}/>
         {!this.props.isFetching &&
-          <SearchResults 
-            isFetching={this.props.isFetching} 
+          <SearchResults
+            isFetching={this.props.isFetching}
             billResults={this.props.billResults}
             username={this.props.username}
             />
