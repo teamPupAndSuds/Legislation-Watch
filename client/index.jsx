@@ -196,8 +196,13 @@ class App extends React.Component {
 
   handleSearchComplete(data) {
     console.log('this is the data frmo the ajax ' + JSON.stringify(data));
+    var temp = this.state.favoriteBillList.slice();
+    temp.push(data.results);
     this.setState({
-      favoriteBillList: data.results
+      favoriteBillList: []
+    });
+    this.setState({
+      favoriteBillList: temp
     });
     // console.log('this is now the state of favoriteBillList: ' + this.state.favoriteBillList);
   }
