@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clientDevServer": "node_modules/.bin/webpack -d --watch --progress --color --content-base client/",
+    "webpack": "node_modules/.bin/webpack -d --watch --progress --color --content-base client/",
     "start": "nodemon server/server.js"
   },
   "repository": {
