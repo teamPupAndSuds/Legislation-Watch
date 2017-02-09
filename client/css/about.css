@@ -8,42 +8,52 @@
 */
 
 /* Custom Styles - Legislation Watch*/
-	.states-dropdown {
-		height: 10rem;
-		width: 45px;
-		padding-left: 5px;
-		overflow-y: scroll;
-		overflow-x: hidden;
-		min-width: 0;
-	}
+.states-dropdown {
+	height: 10rem;
+	width: 45px;
+	padding-left: 5px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	min-width: 0;
+}
 
-	.signup-link, .login-link {
-		color: #6cc091;
-		text-decoration: underline;
-	}
+.form-error {
+	border-color: rgba(255, 0, 0, 0.73) !important;
+  background-color: rgba(255, 0, 0, 0.66) !important;
+}
 
-	.signup-link:hover, .login-link:hover {
-		color: red;
-		text-decoration: none;
-		cursor: pointer;
-	}
+.signup-link, .login-link {
+	color: #6cc091;
+	text-decoration: underline;
+}
 
-	.signup-city {
-		margin-left: 1rem; 
-	}
+.signup-link:hover, .login-link:hover {
+	color: red;
+	text-decoration: none;
+	cursor: pointer;
+}
 
-	.signup-dropdown {
-		margin-left: 1rem; 
-	}
+.signup-city {
+	margin-left: 1rem; 
+}
 
-	.dropdown-item:hover {
-		color: #6cc091;
-		cursor: pointer;
-	}
+.signup-dropdown {
+	margin-left: 1rem; 
+}
 
-	.panel-body, .modal-body {
-		padding-bottom: 0;
-	}
+.signup-dropdown-button.dropdown-error {
+	color: rgba(255, 0, 0, 0.73);
+	border-color: rgba(255, 0, 0, 0.73);
+}
+
+.dropdown-item:hover {
+	color: #6cc091;
+	cursor: pointer;
+}
+
+.panel-body, .modal-body {
+	padding-bottom: 0;
+}
 
 /* Reset */
 
