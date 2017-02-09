@@ -95,7 +95,7 @@ class BillResultSummaryPresentational extends React.Component {
         }
       });
     }
-    // support.total();
+    support.total();
 
 
 
@@ -140,7 +140,7 @@ class BillResultSummaryPresentational extends React.Component {
               </tr>
               <tr>
                 <td>
-                  <SupportBar support={support} tooltip={support.total()} />
+                  <SupportBar support={support} tooltip={support.supportString} />
                 </td>
               </tr>
               <tr>
