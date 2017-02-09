@@ -3,7 +3,7 @@ var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
 
 var commentSchema = new mongoose.Schema({
-  legislationId: {
+  billId: {
     type: String,
     required: true
   },

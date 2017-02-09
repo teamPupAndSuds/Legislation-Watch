@@ -6,9 +6,10 @@ class Comments extends React.Component {
     this.state = {
       comments: []
     };
+    this.updateComments = this.updateComments.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // Pull comments from database, if any, before component mounts
     this.updateComments();
 
@@ -16,11 +17,13 @@ class Comments extends React.Component {
 
   updateComments() {
     // Utility function for pulling comments
+    var context = this;
+
     $.ajax({
       method: 'GET',
       url: `/comments/${this.props.billId}`,
       success: function(data) {
-        this.setState({
+        context.setState({
           comments: data
         });
       },
@@ -32,18 +35,26 @@ class Comments extends React.Component {
 
 
   render() {
+
+    let style;
+    if (this.state.comments.length === 0) {
+      style = {display: "none"};
+    }
+
     return (
-      <div>
-        <div className="panel panel-default">
+      <div className="comment-box">
+        <div style={style} className="panel panel-info">
           <div className="panel-heading">
             <h3 className="panel-title">Bill Discussion</h3>
           </div>
-          {this.state.comments.map((comment) => <CommentBox 
-                                                 comment={comment} 
-                                                 billId={this.props.billId}/>)}
+          {this.state.comments.map((comment, ind) => <CommentBox 
+                                                      comment={comment} 
+                                                      billId={this.props.billId}
+                                                      key={ind}/>)}
         </div>
         <CommentForm username={this.props.username}
-                     billId={this.props.billId}/>
+                     billId={this.props.billId}
+                     updateComments={this.updateComments}/>
       </div>
     );
   }
@@ -68,13 +79,20 @@ class CommentForm extends React.Component {
     super();
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
     // handle for submission for comments
+    var context = this;
+    console.log('Text Submitted: ' + this.text.value);
+    var textObj = JSON.stringify({text: this.text.value});
+    e.preventDefault();
     $.ajax({
       method: 'POST',
-      url: `/comments/${this.props.billId}/${this.props.username}`,
+      url: `/comments/${context.props.billId}/${context.props.username}`,
+      data: textObj,
+      contentType: 'application/json',
       success: function(newComment) {
         console.log('Comment added!');
+        context.props.updateComments();
         return;
       },
       error: function(err) {
@@ -83,15 +101,17 @@ class CommentForm extends React.Component {
         return;
       }
     });
+    this.commentForm.reset();
   }
 
   render() {
     return (
       <div>
-        <form>
+        <form onSubmit={this.handleSubmit.bind(this)}
+              ref={(input) => this.commentForm = input}>
           <div className="form-group">
             <label htmlFor="exampleInputEmail1">Comment:</label>
-            <input type="text" className="form-control" placeholder="Add comment" />
+            <input ref={(input) => this.text = input} type="text" className="form-control" placeholder="Add comment" />
           </div>
           <button type="submit" className="btn btn-default">Submit</button>
         </form>

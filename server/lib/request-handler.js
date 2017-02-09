@@ -342,7 +342,7 @@ exports.insertFavoriteBills = function(req, res) {
 
 //
 exports.getFavoriteBills = function(req, res) {
-  getFavorite({}).then(function(data){
+  getFavorite({}).then(function(data) {
     console.log('got all favs ' + JSON.stringify(data));
     return res.status(200).send(data);
   }).fail(function(err) {
@@ -353,6 +353,7 @@ exports.getFavoriteBills = function(req, res) {
 };
 
 exports.addComment = function(req, res) {
+  
   let commentObj = {
     billId: req.params.billId,
     username: req.params.username,
@@ -367,8 +368,8 @@ exports.addComment = function(req, res) {
   .fail((err) => {
     console.error('Comment not added', err);
     return res.status(404).end();
-  })
-}
+  });
+};
 
 exports.getComments = function(req, res) {
   let billId = req.params.billId;
@@ -381,5 +382,5 @@ exports.getComments = function(req, res) {
   .fail((err) => {
     console.error('Comments not found', err);
     return res.status(404).end();
-  })
-}
+  });
+};
