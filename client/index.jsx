@@ -99,7 +99,7 @@ class App extends React.Component {
   }
 
 
-  updateList(id){
+  updateList(id) {
     $.get('login')
       .done((data) => {
         // Debug
@@ -112,11 +112,10 @@ class App extends React.Component {
         });
         var that = this;
         $.ajax({
-          method: "GET",
-          url : "/user/" + data.username + "/favorites/"+id,
-          contentType: "application/json",
-          success: function(success)
-          {
+          method: 'GET',
+          url: '/user/' + data.username + '/favorites/' + id,
+          contentType: 'application/json',
+          success: function(success) {
             //data - response from server
             console.log('this is the id ' + id);
             console.log('updating state...' + JSON.stringify(success));
