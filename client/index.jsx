@@ -42,9 +42,12 @@ class App extends React.Component {
         long: undefined
       },
       userMonitoredKeywords: [],
-      favoriteList: []
+      favoriteList: [],
+      favoriteBillList: []
     };
     this.updateList = this.updateList.bind(this);
+    this.updateFavoriteBillList = this.updateFavoriteBillList.bind(this);
+    this.handleSearchComplete = this.handleSearchComplete.bind(this);
   }
 
   // Checks the authentication status of the user
@@ -103,7 +106,6 @@ class App extends React.Component {
   }
 
   updateList(){
-    console.log('INSIDE UPDATE LIST YASSS QUEEEN');
     $.get('login')
       .done((data) => {
         // Debug
@@ -123,7 +125,8 @@ class App extends React.Component {
           {
             //data - response from server
             console.log('updating state...');
-            that.setState({favoriteList: success});           
+            that.setState({favoriteList: success});
+            that.updateFavoriteBillList(that.state.favoriteList);         
           },
           error: function (errorThrown)
           {
@@ -142,20 +145,62 @@ class App extends React.Component {
         });
 
         hashHistory.push('/about');
-
-        // Testing
-        // this.setState({
-        //   // Testing Only:
-        //   isVerifyingUserSession: false,          
-        //   isUserLoggedIn: true,
-        //   username: 'boba',
-        //   userLocation: {
-        //     lat: 37.795,
-        //     long: -122.40
-        //   }      
-        // });
-
       });
+  }
+
+  updateFavoriteBillList(favoriteIds) {
+    // let ajaxSettings = {
+    //   method: 'GET',
+    //   context: this,
+    //   data: {
+    //     query: searchTerms,
+    //     fields: 'bill_id,bill_type,chamber,introduced_on,last_action_at,short_title,official_title,keywords,summary_short,urls,sponsor,sponsor_id,cosponsor_ids,cosponsors.legislator,related_bill_ids,upcoming'
+    //   },
+    //   dataType: 'jsonp',
+    //   success: this.handleSearchComplete.bind(this)
+
+    // };
+    var that = this
+    favoriteIds.forEach(function(id) {
+      $.ajax({
+        method: "GET",
+        url: "https://congress.api.sunlightfoundation.com/bills/search?bill_id=" + id.legislationId,
+        dataType: 'jsonp',
+        success: function(success) {
+          console.log('success calling congress api');
+          that.handleSearchComplete(success);
+        },
+        error: function(err) {
+          console.log('error calling congress api');
+          console.log(err);
+        }
+      });
+    });
+
+    // var that = this;
+    // favoriteIds.forEach(function(id) {
+    //   console.log('line 164 ' + id.legislationId);
+    //   let ajaxSettings = {
+    //     method: 'GET',
+    //     context: this,
+    //     data: {
+    //       query: id.legislationId,
+    //       fields: 'bill_id,bill_type,chamber,introduced_on,last_action_at,short_title,official_title,keywords,summary_short,urls,sponsor,sponsor_id,cosponsor_ids,cosponsors.legislator,related_bill_ids,upcoming'
+    //     },
+    //     dataType: 'jsonp',
+    //     success: that.handleSearchComplete.bind(that)
+    //   };
+    //   $.ajax('https://congress.api.sunlightfoundation.com/bills/search?bill_id=', ajaxSettings);
+    // });
+  }
+
+  handleSearchComplete(data) {
+    console.log('this is the data frmo the ajax ' + JSON.stringify(data));
+    var temp = this.state.favoriteBillList.slice();
+    temp.push(data.results);
+    this.setState({
+      favoriteBillList: temp
+    });
   }
 
   render() {
@@ -192,7 +237,7 @@ class App extends React.Component {
                   <LegislationSearch style={isShowing('LegislationSearch')} username={this.state.username} updateList={this.updateList}/>
                 </span>
                 <span style={isShowing('Favorites')}>
-                  <Favorites style={isShowing('Favorites')} username={this.state.username} list={this.state.favoriteList} updateList={this.updateList} />
+                  <Favorites style={isShowing('Favorites')} username={this.state.username} list={this.state.favoriteList} updateList={this.updateList} favoriteBillList={this.state.favoriteBillList}/>
                 </span>
               </div>
               <div className="col-lg-4 col-lg-pull-8">
