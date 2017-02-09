@@ -6,7 +6,6 @@ class Favorites extends React.Component {
   }
 
   render() {
-    console.log(this.props.favoriteBillList);
     return (
       <div>
         <h1>Favorites</h1>
