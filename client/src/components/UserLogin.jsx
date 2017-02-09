@@ -87,7 +87,7 @@ class UserLogin extends React.Component {
           </div>
           <div className="form-group">
             <button type="submit">Login</button>
-            {this.state.isLoginError ? <span style={{color: 'rgba(255, 0, 0, 0.73)', marginLeft: '1rem'}}>Invalid Username or Password</span> : '' }
+            {this.state.isLoginError ? <span style={{color: 'rgba(255, 0, 0, 0.73)', marginLeft: '1rem', fontSize: '13px'}}>Invalid Username or Password</span> : '' }
           </div>
           or <span className="signup-link" onClick={this.handleSignupClick}>Signup</span> 
         </form>

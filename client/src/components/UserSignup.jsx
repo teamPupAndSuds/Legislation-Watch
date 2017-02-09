@@ -150,7 +150,7 @@ class UserSignup extends React.Component {
             <div className="form-group"></div>
 
             <div className="form-group">
-              <button type="submit">Signup</button>{this.state.isSignupError ? <span style={{color: 'rgba(255, 0, 0, 0.73)', marginLeft: '1rem'}}>Sorry. There seems to be an issue please try again.</span> : '' }
+              <button type="submit">Signup</button>{this.state.isSignupError ? <span style={{color: 'rgba(255, 0, 0, 0.73)', marginLeft: '1rem', fontSize: '13px'}}>Sorry. There seems to be an issue please try again.</span> : '' }
             </div>
 
             or <span className="login-link" onClick={this.switchToLogin}>Login</span>
