@@ -76,7 +76,7 @@ exports.geoCodeit = function(res, userInfo, streetAddress, cb) {
     if (err) {
       return cb(err);
     } else {
-      cb(null, response);
+      return cb(null, response);
     }
   });
 };

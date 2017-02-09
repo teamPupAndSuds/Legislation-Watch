@@ -81,10 +81,9 @@ class CommentForm extends React.Component {
 
   handleSubmit(e) {
     // handle for submission for comments
-    var context = this;
-    console.log('Text Submitted: ' + this.text.value);
-    var textObj = JSON.stringify({text: this.text.value});
     e.preventDefault();
+    var context = this;
+    var textObj = JSON.stringify({text: this.text.value});
     $.ajax({
       method: 'POST',
       url: `/comments/${context.props.billId}/${context.props.username}`,
