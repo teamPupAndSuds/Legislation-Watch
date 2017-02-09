@@ -199,12 +199,8 @@ class App extends React.Component {
     var temp = this.state.favoriteBillList.slice();
     temp.push(data.results);
     this.setState({
-      favoriteBillList: []
-    });
-    this.setState({
       favoriteBillList: temp
     });
-    // console.log('this is now the state of favoriteBillList: ' + this.state.favoriteBillList);
   }
 
   render() {
