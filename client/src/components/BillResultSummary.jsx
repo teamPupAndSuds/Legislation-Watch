@@ -12,6 +12,8 @@ const React = require('react');
 
 // Load Legislator cache to minimise AJAX call to the Sunlight Server
 const LegislatorData = require('../data/LegislatorData.js');
+const Comments = require('./Comments.jsx');
+
 
 class BillResultSummary extends React.Component {
   render() {
@@ -183,6 +185,12 @@ class BillResultSummaryPresentational extends React.Component {
                   {!info.summary_short &&
                     <div>No Summary Available</div>
                   }
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <Comments billId={info.bill_id}
+                            username={this.props.username}/>
                 </td>
               </tr>
             </tbody>

@@ -55,6 +55,11 @@ app.delete('/user/:username/keywords', handler.deleteWordMonitor);
 app.post('/user/:username/favorites', handler.insertFavoriteBills);
 
 app.get('/user/:username/favorites', handler.getFavoriteBills);
+
+//endpoints for adding comments
+app.post('/comments/:billId/:username', handler.addComment);
+
+app.get('/comments/:billId', handler.getComments);
 //server up static files
 app.use(express.static(path.join(__dirname + '/../client')));
 
