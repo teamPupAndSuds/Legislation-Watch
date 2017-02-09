@@ -56,6 +56,8 @@ app.post('/user/:username/favorites', handler.insertFavoriteBills);
 
 app.get('/user/:username/favorites', handler.getFavoriteBills);
 
+app.get('/user/:username/favorites/:legislationId', handler.getSingleFavoriteBill);
+
 //endpoints for adding comments
 app.post('/comments/:billId/:username', handler.addComment);
 

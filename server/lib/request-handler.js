@@ -11,6 +11,7 @@ var Comment = require('./../../db/models/comment');
 // Promisifying Database functions
 var addFavorite = Q.nbind(Favorites.create, Favorites);
 var getFavorite = Q.nbind(Favorites.find, Favorites);
+var getSingleFavorite = Q.nbind(Favorites.findOne, Favorites);
 //var getUser = Q.nbind(User.find, User);
 
 var createComment = Q.nbind(Comment.create, Comment);
@@ -340,6 +341,15 @@ exports.getFavoriteBills = function(req, res) {
     console.log('error getting favs');
     console.log(err);
     return res.stats(404).end();
+  });
+};
+
+exports.getSingleFavoriteBill = function(req, res) {
+  getSingleFavorite({legislationId: req.params.legislationId}).then(function(data){
+    return res.status(200).send(data);
+  }).fail(function(err){
+    console.log('error getting single favorite');
+    console.log(err);
   });
 };
 
