@@ -18,7 +18,7 @@ const LegislatorData = require('../data/LegislatorData.js');
 class BillResultSummary extends React.Component {
   render() {
     return (
-      <BillResultSummaryPresentational info={this.props.info} legislatorCache={LegislatorData} username={this.props.username} />
+      <BillResultSummaryPresentational info={this.props.info} legislatorCache={LegislatorData} username={this.props.username} updateList={this.props.updateList}/>
     );
   }
 }
@@ -36,6 +36,8 @@ class BillResultSummaryPresentational extends React.Component {
     var obj = {
       legislationId: this.props.info.bill_id
     };
+    console.log('outside of post ' + this.props.updateList);
+    var that = this;
     $.ajax({
       method: 'POST',
       url: '/user/' + this.props.username + '/favorites',
@@ -43,6 +45,8 @@ class BillResultSummaryPresentational extends React.Component {
       contentType: 'application/json',
       success: function (data) {
         //data - response from server
+        console.log('this is update list ' + that.props.updateList);
+        that.props.updateList();
         console.log('success!' + data);
       },
       error: function (errorThrown) {

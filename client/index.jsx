@@ -44,6 +44,7 @@ class App extends React.Component {
       userMonitoredKeywords: [],
       favoriteList: []
     };
+    this.updateList = this.updateList.bind(this);
   }
 
   // Checks the authentication status of the user
@@ -51,7 +52,6 @@ class App extends React.Component {
     $.get('login')
       .done((data) => {
         // Debug
-        // console.log(data);
         this.setState({        
           isVerifyingUserSession: false,
           isUserLoggedIn: true,
@@ -67,9 +67,7 @@ class App extends React.Component {
           success: function(success)
           {
             //data - response from server
-            that.setState({favoriteList: success});
-            console.log('success!' + JSON.stringify(success));
-            
+            that.setState({favoriteList: success});            
           },
           error: function (errorThrown)
           {
@@ -104,6 +102,61 @@ class App extends React.Component {
       });  
   }
 
+  updateList(){
+    console.log('INSIDE UPDATE LIST YASSS QUEEEN');
+    $.get('login')
+      .done((data) => {
+        // Debug
+        this.setState({        
+          isVerifyingUserSession: false,
+          isUserLoggedIn: true,
+          username: data.username,
+          userLocation: data.geoLocation,
+          userMonitoredKeywords: data.keywords,
+        });
+        var that = this;
+        $.ajax({
+          method: "GET",
+          url : "/user/" + data.username + "/favorites",
+          contentType: "application/json",
+          success: function(success)
+          {
+            //data - response from server
+            console.log('updating state...');
+            that.setState({favoriteList: success});           
+          },
+          error: function (errorThrown)
+          {
+            console.log('error');
+            console.log(errorThrown);
+          }
+        });
+      })
+      .fail(error => {
+        // If user is not logged in:
+
+        // // Production
+        this.setState({
+          isVerifyingUserSession: false,
+          isUserLoggedIn: false
+        });
+
+        hashHistory.push('/about');
+
+        // Testing
+        // this.setState({
+        //   // Testing Only:
+        //   isVerifyingUserSession: false,          
+        //   isUserLoggedIn: true,
+        //   username: 'boba',
+        //   userLocation: {
+        //     lat: 37.795,
+        //     long: -122.40
+        //   }      
+        // });
+
+      });
+  }
 
   render() {
     let mainScreen = this.props.main.type;
@@ -136,10 +189,10 @@ class App extends React.Component {
                 </span>
 
                 <span style={isShowing('LegislationSearch')}>
-                  <LegislationSearch style={isShowing('LegislationSearch')} username={this.state.username} />
+                  <LegislationSearch style={isShowing('LegislationSearch')} username={this.state.username} updateList={this.updateList}/>
                 </span>
                 <span style={isShowing('Favorites')}>
-                  <Favorites style={isShowing('Favorites')} username={this.state.username} list={this.state.favoriteList}/>
+                  <Favorites style={isShowing('Favorites')} username={this.state.username} list={this.state.favoriteList} updateList={this.updateList} />
                 </span>
               </div>
               <div className="col-lg-4 col-lg-pull-8">

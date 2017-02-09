@@ -22,6 +22,7 @@ class UserLogin extends React.Component {
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputFieldChange = this.handleInputFieldChange.bind(this);
+    this.handleSignupClick = this.handleSignupClick.bind(this);
   }
 
   handleFormSubmit(event) {
@@ -59,37 +60,34 @@ class UserLogin extends React.Component {
     this.formFields[event.target.id] = event.target.value;
   }  
 
+  // Handle signup link
+  handleSignupClick() {
+    this.props.close()
+    this.props.openSignup()
+  }
+
   render() {
     return (
       <div className="container-fluid">
-        <h2>Legislation Watch</h2>      
-        <div className="panel panel-info">
-          <div className="panel-heading">
-            <h4 className="panel-title">Login</h4>
-          </div>
-          <div className="panel-body">
-            <form onSubmit={this.handleFormSubmit}>
-              <div className="form-group">
-                <label htmlFor="username">Username:</label>
-                <input type="text" className="form-control" id="username" placeholder="Enter Username" onChange={this.handleInputFieldChange}></input>
-
-              </div>
-              <div className="form-group">
-
-                <label htmlFor="password">Password:</label>
-                <input type="password" className="form-control" id="password" placeholder="Enter Password" onChange={this.handleInputFieldChange}></input>
-
-              </div>
-              <div className="form-group">
-                <button type="submit" className="btn btn-primary">Login</button>
-                {(this.state.isLoginError) ? <h5 style={{'color': 'red'}}>Login Failure: {this.state.loginErrorMessage}</h5> : <p></p> }
-              </div>
-
-              or <Link to="/signup">Signup</Link> 
-            </form>
+        <h2>Login</h2>      
+        <form onSubmit={this.handleFormSubmit}>
+          <div className="form-group">
+            <label htmlFor="username">Username:</label>
+            <input autoFocus type="text" className="form-control" id="username" placeholder="Enter Username" onChange={this.handleInputFieldChange}></input>
 
           </div>
-        </div>
+          <div className="form-group">
+
+            <label htmlFor="password">Password:</label>
+            <input type="password" className="form-control" id="password" placeholder="Enter Password" onChange={this.handleInputFieldChange}></input>
+
+          </div>
+          <div className="form-group">
+            <button type="submit">Login</button>
+            {(this.state.isLoginError) ? <h5 style={{'color': 'red'}}>Login Failure: {this.state.loginErrorMessage}</h5> : '' }
+          </div>
+          or <span className="signup-link" onClick={this.handleSignupClick}>Signup</span> 
+        </form>
       </div>
     );
   }
