@@ -64,16 +64,14 @@ class App extends React.Component {
         });
         var that = this;
         $.ajax({
-          method: "GET",
-          url : "/user/" + data.username + "/favorites",
-          contentType: "application/json",
-          success: function(success)
-          {
+          method: 'GET',
+          url: '/user/' + data.username + '/favorites',
+          contentType: 'application/json',
+          success: function (success) {
             //data - response from server
             that.setState({favoriteList: success});            
           },
-          error: function (errorThrown)
-          {
+          error: function (errorThrown) {
             console.log('error');
             console.log(errorThrown);
           }
@@ -105,7 +103,7 @@ class App extends React.Component {
       });  
   }
 
-  updateList(){
+  updateList() {
     $.get('login')
       .done((data) => {
         // Debug
@@ -118,18 +116,16 @@ class App extends React.Component {
         });
         var that = this;
         $.ajax({
-          method: "GET",
-          url : "/user/" + data.username + "/favorites",
-          contentType: "application/json",
-          success: function(success)
-          {
+          method: 'GET',
+          url: '/user/' + data.username + '/favorites',
+          contentType: 'application/json',
+          success: function (success) {
             //data - response from server
             console.log('updating state...');
             that.setState({favoriteList: success});
             that.updateFavoriteBillList(that.state.favoriteList);         
           },
-          error: function (errorThrown)
-          {
+          error: function (errorThrown) {
             console.log('error');
             console.log(errorThrown);
           }
@@ -160,11 +156,11 @@ class App extends React.Component {
     //   success: this.handleSearchComplete.bind(this)
 
     // };
-    var that = this
+    var that = this;
     favoriteIds.forEach(function(id) {
       $.ajax({
-        method: "GET",
-        url: "https://congress.api.sunlightfoundation.com/bills/search?bill_id=" + id.legislationId,
+        method: 'GET',
+        url: 'https://congress.api.sunlightfoundation.com/bills/search?bill_id=' + id.legislationId,
         dataType: 'jsonp',
         success: function(success) {
           console.log('success calling congress api');
@@ -230,14 +226,22 @@ class App extends React.Component {
             <div className="row">
               <div className="col-lg-8 col-lg-push-4">
                 <span style={isShowing('UserDashBoard')}>
-                  <UserDashBoard username={this.state.username} userMonitoredKeywords={this.state.userMonitoredKeywords} />
+                  <UserDashBoard username={this.state.username} 
+                                 userMonitoredKeywords={this.state.userMonitoredKeywords} />
                 </span>
 
                 <span style={isShowing('LegislationSearch')}>
-                  <LegislationSearch style={isShowing('LegislationSearch')} username={this.state.username} updateList={this.updateList}/>
+                  <LegislationSearch style={isShowing('LegislationSearch')} 
+                                     username={this.state.username} 
+                                     updateList={this.updateList}
+                                     favoriteList={this.state.favoriteList} />
                 </span>
                 <span style={isShowing('Favorites')}>
-                  <Favorites style={isShowing('Favorites')} username={this.state.username} list={this.state.favoriteList} updateList={this.updateList} favoriteBillList={this.state.favoriteBillList}/>
+                  <Favorites style={isShowing('Favorites')} 
+                             username={this.state.username} 
+                             list={this.state.favoriteList} 
+                             updateList={this.updateList} 
+                             favoriteBillList={this.state.favoriteBillList}/>
                 </span>
               </div>
               <div className="col-lg-4 col-lg-pull-8">
