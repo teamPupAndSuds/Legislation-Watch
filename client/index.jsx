@@ -69,13 +69,9 @@ class App extends React.Component {
           contentType: 'application/json',
           success: function (success) {
             //data - response from server
-            console.log('this is success ' + JSON.stringify(success));
             var temp = that.state.favoriteList.slice();
             temp.push(success);
-            console.log('this is temp ' + temp.length);
-
             that.setState({favoriteList: success});
-            console.log('this is new state ' + that.state.favoriteList.length);   
             that.updateFavoriteBillList(that.state.favoriteList);         
           },
           error: function (errorThrown) {
@@ -130,8 +126,6 @@ class App extends React.Component {
           success: function(success)
           {
             //data - response from server
-            console.log('this is the id ' + id);
-            console.log('updating state...' + JSON.stringify(success));
             var temp = that.state.favoriteList.slice();
             temp.push(success);
             that.setState({favoriteList: temp});
@@ -160,17 +154,12 @@ class App extends React.Component {
 
   updateFavoriteBillList(favoriteIds) {
     var that = this;
-    console.log('inside favoriteBillList');
-    console.log(favoriteIds);
-    console.log('this is the state ');
-    console.log(this.state.favoriteBillList);
     favoriteIds.forEach(function(id) {
       $.ajax({
         method: 'GET',
         url: 'https://congress.api.sunlightfoundation.com/bills/search?bill_id=' + id.legislationId,
         dataType: 'jsonp',
         success: function(success) {
-          console.log('success calling congress api');
           that.handleSearchComplete(success);
         },
         error: function(err) {
@@ -182,24 +171,11 @@ class App extends React.Component {
   }
 
   handleSearchComplete(data) {
-    console.log('this is the data frmo the ajax ' + JSON.stringify(data));
     var temp = this.state.favoriteBillList.slice();
     temp.push(data.results);
     this.setState({
       favoriteBillList: temp
     });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    // if (prevState.favoriteList.length !== this.state.favoriteList.length) {
-    //   console.log('state has changed');
-    //   console.log(this.state.favoriteList);
-    //   var value = this.state.favoriteList[this.state.favoriteList.length -1 ];
-    //   var arr = [];
-    //   arr.push(value);
-    //   console.log('this is arr ' + arr);
-    //   this.updateFavoriteBillList(arr);
-    // }
   }
 
   render() {
