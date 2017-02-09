@@ -23,7 +23,9 @@ class BillResultSummary extends React.Component {
       <BillResultSummaryPresentational info={this.props.info} 
                                        legislatorCache={LegislatorData} 
                                        username={this.props.username} 
-                                       updateList={this.props.updateList}/>
+                                       updateList={this.props.updateList}
+                                       favoriteList={this.props.favoriteList}
+                                       />
     );
   }
 }

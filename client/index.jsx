@@ -95,18 +95,6 @@ class App extends React.Component {
 
         hashHistory.push('/about');
 
-        // Testing
-        // this.setState({
-        //   // Testing Only:
-        //   isVerifyingUserSession: false,          
-        //   isUserLoggedIn: true,
-        //   username: 'boba',
-        //   userLocation: {
-        //     lat: 37.795,
-        //     long: -122.40
-        //   }      
-        // });
-
       });  
   }
 
@@ -159,6 +147,7 @@ class App extends React.Component {
   }
 
   updateFavoriteBillList(favoriteIds) {
+
     var that = this;
     console.log('inside favoriteBillList');
     console.log(favoriteIds);
@@ -248,7 +237,8 @@ class App extends React.Component {
                 </span>
               </div>
               <div className="col-lg-4 col-lg-pull-8">
-                <UserLegislatorsInfo userLat={this.state.userLocation.lat} userLong={this.state.userLocation.long} />
+                <UserLegislatorsInfo userLat={this.state.userLocation.lat} 
+                                     userLong={this.state.userLocation.long} />
               </div>
             </div>
           </div>

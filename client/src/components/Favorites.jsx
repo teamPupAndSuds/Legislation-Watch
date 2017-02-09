@@ -6,12 +6,11 @@ class Favorites extends React.Component {
   }
 
   render() {
-    console.log('inside favorites');
     console.log(this.props.favoriteBillList);
     return (
       <div>
-        <h1>Inside Favorites</h1>
-        <p>favorites</p>
+        <h1>Favorites</h1>
+        <p>Favorites</p>
           {this.props.favoriteBillList.map((value) => <SearchResults isFetching={false} billResults={value} username={this.props.username} updateList={this.props.updateList}/>)}
       </div>
     );
