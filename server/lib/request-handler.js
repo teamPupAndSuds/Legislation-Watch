@@ -11,6 +11,7 @@ var Comment = require('./../../db/models/comment');
 // Promisifying Database functions
 var addFavorite = Q.nbind(Favorites.create, Favorites);
 var getFavorite = Q.nbind(Favorites.find, Favorites);
+var getSingleFavorite = Q.nbind(Favorites.findOne, Favorites);
 //var getUser = Q.nbind(User.find, User);
 
 var createComment = Q.nbind(Comment.create, Comment);
@@ -81,63 +82,75 @@ exports.userSignup = function(req, res) {
         var userEmail = req.body['email'];
         var userAddress = req.body['address'];
 
+        var properUser = true;
         //building location object to save to userdb
-
+        if (!username || !password || !userEmail || userEmail.indexOf('@') === -1) {
+          // username, password, or email are blank and email doesn't contain a @
+          properUser = false;
+          res.status(401).send('request-handler.js: userSignup: Invalid User Info');
+        } else if (!userAddress.houseNum || !userAddress.streetName || !userAddress.city || !userAddress.state) {
+          //  location isn't filled out fully
+          properUser = false;
+          console.log('request-handler.js: userSignup: Empty Address'); 
+          res.status(401).send('request-handler.js: userSignup: Invalid User Location');
+        }
         var location = {};
-        location['houseNum'] = userAddress['houseNum'].toString();
-        location['street'] = userAddress['streetName'];
-        location['city'] = userAddress['city'];
-        location['state'] = userAddress['state'];
-        var userInfo = {
-          username: username,
-          password: password,
-          location: location,
-          email: userEmail,
-          keywords: {}
-        };
+        if (properUser) {
+          location['houseNum'] = userAddress['houseNum'].toString();
+          location['street'] = userAddress['streetName'];
+          location['city'] = userAddress['city'];
+          location['state'] = userAddress['state'];
+          var userInfo = {
+            username: username,
+            password: password,
+            location: location,
+            email: userEmail,
+            keywords: {}
+          };
 
-        console.log('request-handler.js: userSignup: userinfo:', userInfo);
+          console.log('request-handler.js: userSignup: userinfo:', userInfo);
 
-        // building address string to feed to geoCode
-        var streetAddress = userAddress['houseNum'].toString();        
-        streetAddress = streetAddress.concat(
-          ' ',
-          userAddress['streetName'],
-          ', ',
-          userAddress['city'],
-          ', ',
-          userAddress['state']
-          );
+          // building address string to feed to geoCode
+          var streetAddress = userAddress['houseNum'].toString();        
+          streetAddress = streetAddress.concat(
+            ' ',
+            userAddress['streetName'],
+            ', ',
+            userAddress['city'],
+            ', ',
+            userAddress['state']
+            );
 
-        console.log('request-handler.js: userSignup: streetAddress:', streetAddress);        
+          console.log('request-handler.js: userSignup: streetAddress:', streetAddress);        
 
-        util.geoCodeit(res, userInfo, streetAddress, function(err, geoResponse) {
-          if (!err) {
-            if (geoResponse.json.results.length === 0) {
-              res.status(404).end();
-            }            
-            var geoLocation = geoResponse.json.results[0].geometry.location;
-            userInfo['latitude'] = geoLocation.lat;
-            userInfo['longitude'] = geoLocation.lng;
-            // creates new user and save to DB
-            var newUser = new User(userInfo);
-            newUser.hashPassword(function() {
-              newUser.save(function(err, newUser) {
-                if (err) {
-                  console.log('request-handler.js: userSignup: fail to SaveUser to DB');
-                  res.status(500).send(err);
-                } else {
-                // creates new client session for a successful sign-up
-                  console.log('request-handler.js: userSignup: save user OK: newUser is:', newUser);
-                  util.createSession(req, res, newUser);
-                }
+          util.geoCodeit(res, userInfo, streetAddress, function(err, geoResponse) {
+            if (!err) {
+              if (geoResponse.json.results.length === 0) {
+                res.status(404).send('Unknown Location');
+              }            
+              var geoLocation = geoResponse.json.results[0].geometry.location;
+              userInfo['latitude'] = geoLocation.lat;
+              userInfo['longitude'] = geoLocation.lng;
+              // creates new user and save to DB
+              var newUser = new User(userInfo);
+              newUser.hashPassword(function() {
+                newUser.save(function(err, newUser) {
+                  if (err) {
+                    console.log('request-handler.js: userSignup: fail to SaveUser to DB');
+                    res.status(500).send(err);
+                  } else {
+                  // creates new client session for a successful sign-up
+                    console.log('request-handler.js: userSignup: save user OK: newUser is:', newUser);
+                    util.createSession(req, res, newUser);
+                  }
+                });
               });
-            });
-          } else {
-            console.log('request-handler.js: userSignup: geolocation failed');
-            res.status(401).send('Unable to get user geolocation');
-          }
-        });
+            } else {
+              console.log('request-handler.js: userSignup: geolocation failed');
+              res.status(401).send('Unable to get user geolocation');
+            }
+          });
+        }
       } else {
         //USER PROFILE IN USE
         console.log('request-handler.js: userSignup: user profile already in use');
@@ -328,6 +341,15 @@ exports.getFavoriteBills = function(req, res) {
     console.log('error getting favs');
     console.log(err);
     return res.stats(404).end();
+  });
+};
+
+exports.getSingleFavoriteBill = function(req, res) {
+  getSingleFavorite({legislationId: req.params.legislationId}).then(function(data){
+    return res.status(200).send(data);
+  }).fail(function(err){
+    console.log('error getting single favorite');
+    console.log(err);
   });
 };
 

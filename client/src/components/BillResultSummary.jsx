@@ -41,7 +41,6 @@ class BillResultSummaryPresentational extends React.Component {
     var obj = {
       legislationId: this.props.info.bill_id
     };
-    console.log('outside of post ' + this.props.updateList);
     var that = this;
     $.ajax({
       method: 'POST',
@@ -50,9 +49,8 @@ class BillResultSummaryPresentational extends React.Component {
       contentType: 'application/json',
       success: function (data) {
         //data - response from server
-        console.log('this is update list ' + that.props.updateList);
-        that.props.updateList();
-        console.log('success!' + data);
+        console.log('this is data ') + JSON.stringify(data);
+        that.props.updateList(that.props.info.bill_id);
       },
       error: function (errorThrown) {
         console.log('error');
@@ -67,7 +65,6 @@ class BillResultSummaryPresentational extends React.Component {
 
   render() {
     let info = this.props.info;
-    console.log('info: ', info);
     let legislatorCache = this.props.legislatorCache;
 
     // Bills may have 'co-sponsors' that are supplied as an array of <string> Bioguide IDs

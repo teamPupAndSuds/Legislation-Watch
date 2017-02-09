@@ -57,6 +57,9 @@ class UserLogin extends React.Component {
   // Event handler to populate all values into the formFields object
   // for later use by handleFormSubmit()
   handleInputFieldChange(event) {
+    if (this.state.isLoginError) {
+      this.setState({isLoginError: false})
+    }
     this.formFields[event.target.id] = event.target.value;
   }  
 
@@ -73,18 +76,18 @@ class UserLogin extends React.Component {
         <form onSubmit={this.handleFormSubmit}>
           <div className="form-group">
             <label htmlFor="username">Username:</label>
-            <input autoFocus type="text" className="form-control" id="username" placeholder="Enter Username" onChange={this.handleInputFieldChange}></input>
+            <input autoFocus type="text" className={this.state.isLoginError ? 'form-control form-error' : 'form-control'} id="username" placeholder="Enter Username" onChange={this.handleInputFieldChange}></input>
 
           </div>
           <div className="form-group">
 
             <label htmlFor="password">Password:</label>
-            <input type="password" className="form-control" id="password" placeholder="Enter Password" onChange={this.handleInputFieldChange}></input>
+            <input type="password" className={this.state.isLoginError ? 'form-control form-error' : 'form-control'} id="password" placeholder="Enter Password" onChange={this.handleInputFieldChange}></input>
 
           </div>
           <div className="form-group">
             <button type="submit">Login</button>
-            {(this.state.isLoginError) ? <h5 style={{'color': 'red'}}>Login Failure: {this.state.loginErrorMessage}</h5> : '' }
+            {this.state.isLoginError ? <span style={{color: 'rgba(255, 0, 0, 0.73)', marginLeft: '1rem', fontSize: '13px'}}>Invalid Username or Password</span> : '' }
           </div>
           or <span className="signup-link" onClick={this.handleSignupClick}>Signup</span> 
         </form>
