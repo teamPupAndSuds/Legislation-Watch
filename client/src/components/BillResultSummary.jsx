@@ -9,6 +9,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 const React = require('react');
+const SupportBar = require('./SupportBar.jsx').SupportBar;
+const Support = require('./SupportBar.jsx').Support;
 
 // Load Legislator cache to minimise AJAX call to the Sunlight Server
 const LegislatorData = require('../data/LegislatorData.js');
@@ -62,6 +64,7 @@ class BillResultSummaryPresentational extends React.Component {
 
   render() {
     let info = this.props.info;
+    console.log('info: ', info);
     let legislatorCache = this.props.legislatorCache;
 
     // Bills may have 'co-sponsors' that are supplied as an array of <string> Bioguide IDs
@@ -73,49 +76,6 @@ class BillResultSummaryPresentational extends React.Component {
     //            a list of Bioguide ids that were not cached
     let cosponsorElements = [];
 
-    class Support {
-      constructor() {
-        this.republican = 0;
-        this.democrat = 0;
-        this.independent = 0;
-      }
-      count(party) {
-        if (party === 'R') {
-          this.republican++;
-        } else if (party === 'D') {
-          this.democrat++;
-        } else {
-          this.independent++;
-        }
-      }
-      checkParty() {
-        if (!info.sponsor.party) {
-          return '';
-        } else {
-          return info.sponsor.party;
-        }
-      }
-
-
-      total() {
-        var proportion = {};
-        var supportString = '';
-        var sum = Math.round(this.republican + this.democrat + this.independent);
-        if (this.republican !== 0) {
-          proportion.rep = Math.round(this.republican / sum * 100);
-          supportString += proportion.rep + '% Republican ';
-        }
-        if (this.democrat !== 0) {
-          proportion.dem = Math.round(this.democrat / sum * 100);
-          supportString += proportion.dem + '% Democrat ';
-        }
-        if (this.independent !== 0) {
-          proportion.ind = Math.round(this.independent / sum * 100);
-          supportString += proportion.ind + '% Independent ';
-        }
-        return supportString;
-      }
-    }
     var support = new Support();
     support.count(info.sponsor.party);
 
@@ -137,6 +97,7 @@ class BillResultSummaryPresentational extends React.Component {
         }
       });
     }
+    // support.total();
 
 
 
@@ -181,8 +142,7 @@ class BillResultSummaryPresentational extends React.Component {
               </tr>
               <tr>
                 <td>
-                  <strong>Support: </strong>
-                  {support.total()}
+                  <SupportBar support={support} tooltip={support.total()} />
                 </td>
               </tr>
               <tr>
@@ -209,5 +169,8 @@ class BillResultSummaryPresentational extends React.Component {
     );
   }
 }
+
+// <strong>Support: </strong>
+// {support.total()}
 
 module.exports = BillResultSummary;
