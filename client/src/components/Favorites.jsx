@@ -10,7 +10,12 @@ class Favorites extends React.Component {
       <div>
         <h1>Favorites</h1>
         <p>Favorites</p>
-          {this.props.favoriteBillList.map((value) => <SearchResults isFetching={false} billResults={value} username={this.props.username} updateList={this.props.updateList}/>)}
+          {this.props.favoriteBillList.map((value) => <SearchResults isFetching={false} 
+                                                                     billResults={value} 
+                                                                     username={this.props.username} 
+                                                                     updateList={this.props.updateList}
+                                                                     favoriteList={this.props.favoriteList} 
+                                                                     />)}
       </div>
     );
   }
