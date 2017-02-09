@@ -10,8 +10,10 @@ var favoritesSchema = new mongoose.Schema({
 
   legislationId: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   }
+  
 });
 
 var FavoriteModel = mongoose.model('Favorites', favoritesSchema);

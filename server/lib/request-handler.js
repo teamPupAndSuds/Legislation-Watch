@@ -227,22 +227,17 @@ exports.insertWordMonitor = function(req, res) {
     });
 };
 
-/////////////////////////////////////////////////////////////////
 // HANDLES DELETION OF MONITORED WORDS
-/////////////////////////////////////////////////////////////////
 exports.deleteWordMonitor = function(req, res) {
   var username = req.params.username;
   var keywordsToBeDeleted = req.body.keywords;
   keywordsToBeDeleted = keywordsToBeDeleted.trim();
 
-  console.log('request-handler.js: deleteWordMonitor: entered: keyword to delete:', keywordsToBeDeleted);
-
   User.findOne( {username: username} )
     .exec(function(err, user) {
       if (!err) {
         if (!user) {
-          res.status(401);
-          res.end();
+          res.status(401).end();
         } else {
           // Locate and delete the keyword
           if (user['keywords'][keywordsToBeDeleted] !== undefined) {
@@ -259,27 +254,23 @@ exports.deleteWordMonitor = function(req, res) {
                 util.sendUserData(req, res);
               }
             });
-
             return;
           }
           // If we did not manage to find the keyword to be deleted
           console.log('request-handler.js: deleteWordMonitor: keyword to be deleted not found');
-          res.status(404);
-          res.end();
+          res.status(404).end();
         }
       } else {
         res.status(401).send(err);
-        res.end();
       }
     }); 
 };
 
 
 
-/////////////////////////////////////////////////////////////////
-//BILL SEARCH
-//termSearch function that utilizes a word-association API to get
-//list of word associated with user search word(s)
+// BILL SEARCH
+// termSearch function that utilizes a word-association API to get
+// list of word associated with user search word(s)
 exports.termSearch = function(req, res) {
   //searchTerm format: "entry=term"
   var searchTerm = 'entry=';
@@ -318,14 +309,21 @@ exports.insertFavoriteBills = function(req, res) {
     legislationId: req.body.legislationId,
     userName: req.params.username
   };
-
-  console.log('this is the object ' + JSON.stringify(newFavorite));
-  console.log('this is req body ' + JSON.stringify(req.body));
-
-  addFavorite(newFavorite).then(function(data) {
+  // Search for newly favorited item
+  // If it doesn't exist under the current username, add to favorites list
+  getFavorite(newFavorite)
+  .then(function(result) {
+    if (result.length === 0) {
+      return addFavorite(newFavorite);
+    } else {
+      throw new Error('Favorite already exists');
+    }
+  })
+  .then(function(data) {
     console.log('Favorite saved');
     return res.status(201).json(data);
-  }).fail(function(err) {
+  })
+  .fail(function(err) {
     console.log('error saving favorite');
     console.log(err);
     return res.status(404).end();
@@ -334,10 +332,12 @@ exports.insertFavoriteBills = function(req, res) {
 
 //
 exports.getFavoriteBills = function(req, res) {
-  getFavorite({}).then(function(data) {
-    console.log('got all favs ' + JSON.stringify(data));
+  
+  getFavorite({})
+  .then(function(data) {
     return res.status(200).send(data);
-  }).fail(function(err) {
+  })
+  .fail(function(err) {
     console.log('error getting favs');
     console.log(err);
     return res.stats(404).end();
@@ -360,6 +360,7 @@ exports.addComment = function(req, res) {
     username: req.params.username,
     text: req.body.text
   };
+
 
   createComment(commentObj)
   .then((newComment) => {
