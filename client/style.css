@@ -1,5 +1,5 @@
 body {
-  padding-top: 65px; 
+  padding-top: 65px;
 }
 
 .comment-box {
@@ -9,4 +9,40 @@ body {
 #addToFavorites {
   padding-left: 10px;
   font-size: 14px;
+}
+
+.supportBar {
+  margin-top: 2%;
+  width: 180px;
+  height: 15px;
+  border-radius: 10px;
+}
+
+.republican {
+  background: #E91D0E;
+  display: inline-block;
+  height: 100%;
+  border-top-right-radius: 2em;
+  border-bottom-right-radius: 2em;
+}
+
+.democrat {
+  background: #232066;
+  display: inline-block;
+  height: 100%;
+  border-top-left-radius: 2em;
+  border-bottom-left-radius: 2em;
+}
+
+.independent {
+  background: green;
+  display: inline-block;
+  height: 100%;
+}
+
+.fullSupport {
+  border-top-right-radius: 2em;
+  border-bottom-right-radius: 2em;
+  border-top-left-radius: 2em;
+  border-bottom-left-radius: 2em;
 }
