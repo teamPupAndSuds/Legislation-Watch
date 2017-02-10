@@ -201,14 +201,17 @@ class App extends React.Component {
                   <LegislationSearch style={isShowing('LegislationSearch')} 
                                      username={this.state.username} 
                                      updateList={this.updateList}
-                                     favoriteList={this.state.favoriteList} />
+                                     favoriteList={this.state.favoriteList} 
+                                     />
                 </span>
                 <span style={isShowing('Favorites')}>
                   <Favorites style={isShowing('Favorites')} 
                              username={this.state.username} 
                              list={this.state.favoriteList} 
                              updateList={this.updateList} 
-                             favoriteBillList={this.state.favoriteBillList}/>
+                             favoriteBillList={this.state.favoriteBillList}
+                             favoriteList={this.state.favoriteList} 
+                             />
                 </span>
               </div>
               <div className="col-lg-4 col-lg-pull-8">
