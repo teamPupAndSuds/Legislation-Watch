@@ -46,3 +46,15 @@ body {
   border-top-left-radius: 2em;
   border-bottom-left-radius: 2em;
 }
+
+.hideSupport {
+  display: none;
+}
+
+.trackerOn {
+  background: #6CC091;
+}
+
+.trackerOff {
+  background: #4C4C5B;
+}

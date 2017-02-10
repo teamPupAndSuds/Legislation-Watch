@@ -43,7 +43,7 @@ class LegislationSearch extends React.Component {
       context: this,
       data: {
         query: searchTerms,
-        fields: 'bill_id,bill_type,chamber,introduced_on,last_action_at,short_title,official_title,keywords,summary_short,urls,sponsor,sponsor_id,cosponsor_ids,cosponsors.legislator,related_bill_ids,upcoming'
+        fields: 'bill_id,bill_type,chamber,introduced_on,last_action_at,short_title,official_title,keywords,summary_short,urls,sponsor,sponsor_id,cosponsor_ids,cosponsors.legislator,related_bill_ids,upcoming,history'
       },
       dataType: 'jsonp',
       success: this.handleSearchComplete.bind(this)
