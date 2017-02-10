@@ -19,29 +19,29 @@ class NavigationBar extends React.Component {
 
   render() {
     return (
-      <nav className="navbar navbar-default navbar-fixed-top">
+      <nav className="navbar navbar-default navbar-fixed-top" id="page-navbar">
         <div className="container-fluid">
           <div className="navbar-header">
             <button type="button" className="navbar-toggle collapsed btn-sm" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
                 <span className="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
             </button>
-            <a className="navbar-brand" href="#">
+            <a className="navbar-brand" id="nav-text" href="#">
               Legislation Watch
             </a>
           </div>
           
           <div className="navbar-collapse collapse" id="navbar-collapse-1">
             <ul className="nav navbar-nav">
-              <li><Link to="/dashboard" className="nav-link">Dashboard</Link></li>
-              <li><Link to="/search" className="nav-link">Search</Link></li>
-              <li><Link to="/favorites" className="nav-link">Favorites</Link></li>
+              <li><Link to="/dashboard" className="nav-link" id="nav-text">Dashboard</Link></li>
+              <li><Link to="/search" className="nav-link" id="nav-text">Search</Link></li>
+              <li><Link to="/favorites" className="nav-link" id="nav-text">Favorites</Link></li>
             </ul>
 
             <div className="navbar-right">
-              <p className="navbar-text nav-link">[{this.props.username}]</p>
+              <p className="navbar-text nav-link" id="nav-text">[{this.props.username}]</p>
 
               <ul className="nav navbar-nav">
-                <li><Link to="/logout" className="nav-link">Logout</Link></li>      
+                <li><Link to="/logout" className="nav-link" id="nav-text">Logout</Link></li>      
               </ul> 
             </div>
           </div>

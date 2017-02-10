@@ -188,6 +188,7 @@ class App extends React.Component {
     if (this.state.isUserLoggedIn === true) {
       return (
         <div>
+          <link rel="stylesheet" href="../../css/about.css" />
           <NavigationBar username={this.state.username}/>
           <div className="container-fluid">
             <div className="row">

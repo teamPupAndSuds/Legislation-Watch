@@ -1,5 +1,69 @@
 body {
-  padding-top: 65px;
+  overflow: hidden;
+}
+
+#nav-text {
+  color: white;
+  text-decoration: none;
+}
+
+#nav-text:hover {
+  background-color: #656579
+}
+
+#nav-text.navbar-text.nav-link {
+  margin-top: 1rem;
+}
+
+#nav-text.navbar-text.nav-link:hover {
+  background-color: #4c4c5b;
+}
+
+#searchTerms {
+  margin-top: 2vh;
+  width: 60%;
+  float: left;
+  height: 4vh;
+}
+
+#searchButton {
+  margin-top: 2vh;
+  height: 4vh;
+  margin-left: 1vw;
+}
+
+#search-body {
+  padding-right: 1vw;
+  margin-top: 5.5vh;
+  height: 94.2vh;
+  overflow-y: scroll;
+}
+
+#legislator-title {
+  color: white;
+}
+
+#page-navbar {
+  background-color: #4c4c5b;
+}
+
+#legislator-heading {
+  background-color: #4c4c5b;
+  color: white;
+  height: 6rem;
+  overflow: hidden;
+}
+
+.legislator-info {
+  margin-top: 5.5vh;
+  margin-left: -1vw;
+  height: 94.2vh;
+}
+
+.legislator-body {
+  height: 85.3vh;
+  padding-bottom: 5vh;
+  overflow-y: scroll;
 }
 
 .comment-box {
