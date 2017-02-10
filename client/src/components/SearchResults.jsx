@@ -18,6 +18,7 @@ class SearchResults extends React.Component {
         username={this.props.username}
         updateList={this.props.updateList}
         favoriteList={this.props.favoriteList}
+        getAllFavorites={this.props.getAllFavorites}  
         />
     );
   }
@@ -53,6 +54,7 @@ class SearchResultsPresentational extends React.Component {
                                   username={this.props.username} 
                                   updateList={this.props.updateList}
                                   favoriteList={this.props.favoriteList}
+                                  getAllFavorites={this.props.getAllFavorites}  
                                   />;
       }.bind(this));
 

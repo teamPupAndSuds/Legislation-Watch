@@ -26,6 +26,7 @@ class BillResultSummary extends React.Component {
                                        username={this.props.username}
                                        updateList={this.props.updateList}
                                        favoriteList={this.props.favoriteList}
+                                       getAllFavorites={this.props.getAllFavorites}  
                                        />
     );
   }
@@ -85,7 +86,8 @@ class BillResultSummaryPresentational extends React.Component {
       contentType: 'application/json',
       success: function (data) {
         //data - response from server
-        that.props.updateList(that.props.info.bill_id);
+        // that.props.updateList(that.props.info.bill_id);
+        that.props.getAllFavorites();
       },
       error: function (errorThrown) {
         console.log('error');
@@ -107,7 +109,8 @@ class BillResultSummaryPresentational extends React.Component {
       success: function (data) {
         console.log('this is data ') + JSON.stringify(data);
         // CHECK IF UPDATE LIST IS NECESSARY HERE!!!
-        that.props.updateList(that.props.info.bill_id);
+        // that.props.updateList(that.props.info.bill_id);
+        that.props.getAllFavorites();      
       },
       error: function (errorThrown) {
         console.log('error');

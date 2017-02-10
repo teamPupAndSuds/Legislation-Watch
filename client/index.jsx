@@ -29,6 +29,8 @@ const UserLogout = require(__dirname + '/src/components/UserLogout.jsx');
 const About = require(__dirname + '/src/components/About.jsx');
 const Favorites = require(__dirname + '/src/components/Favorites.jsx');
 
+const Promise = require('bluebird');
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -48,6 +50,8 @@ class App extends React.Component {
     this.updateList = this.updateList.bind(this);
     this.updateFavoriteBillList = this.updateFavoriteBillList.bind(this);
     this.handleSearchComplete = this.handleSearchComplete.bind(this);
+    this.getAllFavorites = this.getAllFavorites.bind(this);
+    this.getSunlightAsync = Promise.promisify(this.getSunlight, {context: this});
   }
 
   // Checks the authentication status of the user
@@ -62,23 +66,8 @@ class App extends React.Component {
           userLocation: data.geoLocation,
           userMonitoredKeywords: data.keywords,
         });
-        var that = this;
-        $.ajax({
-          method: 'GET',
-          url: '/user/' + data.username + '/favorites',
-          contentType: 'application/json',
-          success: function (success) {
-            //data - response from server
-            var temp = that.state.favoriteList.slice();
-            temp.push(success);
-            that.setState({favoriteList: success});
-            that.updateFavoriteBillList(that.state.favoriteList);         
-          },
-          error: function (errorThrown) {
-            console.log('error');
-            console.log(errorThrown);
-          }
-        });
+        this.getAllFavorites();
+
       })
       .fail(error => {
         // If user is not logged in:
@@ -92,7 +81,28 @@ class App extends React.Component {
         hashHistory.push('/about');
 
       });  
+    // this.getAllFavorites();
   }
+
+  getAllFavorites() {
+
+    var that = this;
+    $.ajax({
+      method: 'GET',
+      url: '/user/' + that.state.username + '/favorites',
+      contentType: 'application/json',
+      success: function (success) {
+        //data - response from server
+        that.setState({favoriteList: success});
+        that.updateFavoriteBillList(success);         
+      },
+      error: function (errorThrown) {
+        console.log('error');
+        console.log(errorThrown);
+      }
+    });
+  }
+
 
 
   updateList(id) {
@@ -139,22 +149,39 @@ class App extends React.Component {
       });
   }
 
+  getSunlight(legislationId, callback) {
+    $.ajax({
+      method: 'GET',
+      url: 'https://congress.api.sunlightfoundation.com/bills/search?bill_id=' + legislationId,
+      dataType: 'jsonp',
+      success: function(success) {
+        callback(null, success.results);
+      },
+      error: function(err) {
+        console.log('error calling congress api');
+        callback(err);
+      }
+    });
+  }
+
   updateFavoriteBillList(favoriteIds) {
 
     var that = this;
+    var promises = [];
     favoriteIds.forEach(function(id) {
-      $.ajax({
-        method: 'GET',
-        url: 'https://congress.api.sunlightfoundation.com/bills/search?bill_id=' + id.legislationId,
-        dataType: 'jsonp',
-        success: function(success) {
-          that.handleSearchComplete(success);
-        },
-        error: function(err) {
-          console.log('error calling congress api');
-          console.log(err);
-        }
+      promises.push(that.getSunlightAsync(id.legislationId));
+    });
+
+    Promise.all(promises)
+    .then((results) => {
+      console.log('Promises finished');
+      console.log(results);
+      that.setState({
+        favoriteBillList: results
       });
+    })
+    .catch((err) => {
+      console.error('Promises error');
     });
   }
 
@@ -202,7 +229,8 @@ class App extends React.Component {
                   <LegislationSearch style={isShowing('LegislationSearch')} 
                                      username={this.state.username} 
                                      updateList={this.updateList}
-                                     favoriteList={this.state.favoriteList} 
+                                     favoriteList={this.state.favoriteList}
+                                     getAllFavorites={this.getAllFavorites}   
                                      />
                 </span>
                 <span style={isShowing('Favorites')}>
@@ -211,7 +239,8 @@ class App extends React.Component {
                              list={this.state.favoriteList} 
                              updateList={this.updateList} 
                              favoriteBillList={this.state.favoriteBillList}
-                             favoriteList={this.state.favoriteList} 
+                             favoriteList={this.state.favoriteList}
+                             getAllFavorites={this.getAllFavorites}  
                              />
                 </span>
               </div>

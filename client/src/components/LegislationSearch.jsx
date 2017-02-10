@@ -31,6 +31,7 @@ class LegislationSearch extends React.Component {
         username={this.props.username}
         updateList={this.props.updateList}
         favoriteList={this.props.favoriteList}
+        getAllFavorites={this.props.getAllFavorites}  
       />
     );
   }
@@ -76,6 +77,7 @@ class LegislationSearchPresentational extends React.Component {
             username={this.props.username}
             updateList={this.props.updateList}
             favoriteList={this.props.favoriteList}
+            getAllFavorites={this.props.getAllFavorites}  
             />
         }
       </div>
