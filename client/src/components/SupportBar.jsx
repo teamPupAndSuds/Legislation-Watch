@@ -22,11 +22,9 @@ class Support {
   total() {
     var sum = this.republican + this.democrat + this.independent;
     if (this.democrat !== 0) {
-      // console.log('democrat ===> ', this.democrat);
       this.democrat = (this.democrat / sum * 100);
       var demString = (this.democrat) + '';
       this.democrat = Math.floor(this.democrat);
-      console.log('dem % = ', this.democrat);
       let demIndex = demString.indexOf('.');
       if (demIndex !== - 1) {
         demString = demString.slice(0, demIndex + 2);
@@ -34,11 +32,9 @@ class Support {
       this.supportString += demString + '% Democrat ';
     }
     if (this.independent !== 0) {
-      // console.log('independent ===> ', this.independent);
       this.independent = (this.independent / sum * 100);
       var indString = (this.independent) + '';
       this.independent = Math.floor(this.independent);
-      console.log('ind % = ', this.independent);
       let indIndex = indString.indexOf('.');
       if (indIndex !== - 1) {
         indString = indString.slice(0, indIndex + 2);
@@ -46,11 +42,9 @@ class Support {
       this.supportString += indString + '% Independent ';
     }
     if (this.republican !== 0) {
-      // console.log('republican ===> ', this.republican);
       this.republican = (this.republican / sum * 100);
       var repString = (this.republican) + '';
       this.republican = Math.floor(this.republican);
-      console.log('rep % = ', this.republican);
       let repIndex = repString.indexOf('.');
       if (repIndex !== - 1) {
         repString = repString.slice(0, repIndex + 2);
