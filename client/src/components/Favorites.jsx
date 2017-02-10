@@ -15,7 +15,8 @@ class Favorites extends React.Component {
                                                                      billResults={value} 
                                                                      username={this.props.username} 
                                                                      updateList={this.props.updateList}
-                                                                     favoriteList={this.props.favoriteList} 
+                                                                     favoriteList={this.props.favoriteList}
+                                                                     getAllFavorites={this.props.getAllFavorites}   
                                                                      />)}
       </div>
     );
