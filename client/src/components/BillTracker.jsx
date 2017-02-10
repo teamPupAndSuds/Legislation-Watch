@@ -7,9 +7,7 @@ class BillTracker extends React.Component {
   }
 
   render() {
-    // console.log('history: ', this.props.history);
     var introduced, house, senate, president, enacted;
-    // var current = {backgroundColor: '#6CC091 !important'};
     var off = 'trackerOff';
     var on = 'trackerOn';
     var failed = {backgroundColor: '#6CC091 !important'};
@@ -24,7 +22,6 @@ class BillTracker extends React.Component {
         introduced = on;
         house = failed;
       }
-      console.log('history: ', history);
     } else if (history.awaiting_signature === true) {
       if (history.senate_passage_result === 'pass') {
         introduced = house = senate = on;
@@ -33,7 +30,6 @@ class BillTracker extends React.Component {
         senate = failed;
       }
       president = pending;
-      console.log('history: ', history);
     } else if (history.awaiting_signature === false) {
       introduced = house = senate = president = on;
       if (history.enacted === true) {
@@ -41,7 +37,6 @@ class BillTracker extends React.Component {
       } else {
         enacted = failed;
       }
-      console.log('history: ', history);
     }
 
     return (
