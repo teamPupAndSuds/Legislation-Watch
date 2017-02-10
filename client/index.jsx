@@ -91,23 +91,11 @@ class App extends React.Component {
 
         hashHistory.push('/about');
 
-        // Testing
-        // this.setState({
-        //   // Testing Only:
-        //   isVerifyingUserSession: false,          
-        //   isUserLoggedIn: true,
-        //   username: 'boba',
-        //   userLocation: {
-        //     lat: 37.795,
-        //     long: -122.40
-        //   }      
-        // });
-
       });  
   }
 
 
-  updateList(id){
+  updateList(id) {
     $.get('login')
       .done((data) => {
         // Debug
@@ -120,11 +108,10 @@ class App extends React.Component {
         });
         var that = this;
         $.ajax({
-          method: "GET",
-          url : "/user/" + data.username + "/favorites/"+id,
-          contentType: "application/json",
-          success: function(success)
-          {
+          method: 'GET',
+          url: '/user/' + data.username + '/favorites/' + id,
+          contentType: 'application/json',
+          success: function(success) {
             //data - response from server
             var temp = that.state.favoriteList.slice();
             temp.push(success);
@@ -153,6 +140,7 @@ class App extends React.Component {
   }
 
   updateFavoriteBillList(favoriteIds) {
+
     var that = this;
     favoriteIds.forEach(function(id) {
       $.ajax({
@@ -200,6 +188,7 @@ class App extends React.Component {
     if (this.state.isUserLoggedIn === true) {
       return (
         <div>
+          <link rel="stylesheet" href="../../css/about.css" />
           <NavigationBar username={this.state.username}/>
           <div className="container-fluid">
             <div className="row">
@@ -213,18 +202,22 @@ class App extends React.Component {
                   <LegislationSearch style={isShowing('LegislationSearch')} 
                                      username={this.state.username} 
                                      updateList={this.updateList}
-                                     favoriteList={this.state.favoriteList} />
+                                     favoriteList={this.state.favoriteList} 
+                                     />
                 </span>
                 <span style={isShowing('Favorites')}>
                   <Favorites style={isShowing('Favorites')} 
                              username={this.state.username} 
                              list={this.state.favoriteList} 
                              updateList={this.updateList} 
-                             favoriteBillList={this.state.favoriteBillList}/>
+                             favoriteBillList={this.state.favoriteBillList}
+                             favoriteList={this.state.favoriteList} 
+                             />
                 </span>
               </div>
               <div className="col-lg-4 col-lg-pull-8">
-                <UserLegislatorsInfo userLat={this.state.userLocation.lat} userLong={this.state.userLocation.long} />
+                <UserLegislatorsInfo userLat={this.state.userLocation.lat} 
+                                     userLong={this.state.userLocation.long} />
               </div>
             </div>
           </div>

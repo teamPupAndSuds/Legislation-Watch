@@ -30,6 +30,7 @@ class LegislationSearch extends React.Component {
         onSearchSubmit={this.handleSearchSubmit}
         username={this.props.username}
         updateList={this.props.updateList}
+        favoriteList={this.props.favoriteList}
       />
     );
   }
@@ -66,8 +67,7 @@ class LegislationSearch extends React.Component {
 class LegislationSearchPresentational extends React.Component {
   render() {
     return (
-      <div>
-        <h3>Bill Search</h3>
+      <div id="search-body">
         <SearchBar onSubmit={this.props.onSearchSubmit}/>
         {!this.props.isFetching &&
           <SearchResults
@@ -75,6 +75,7 @@ class LegislationSearchPresentational extends React.Component {
             billResults={this.props.billResults}
             username={this.props.username}
             updateList={this.props.updateList}
+            favoriteList={this.props.favoriteList}
             />
         }
       </div>
