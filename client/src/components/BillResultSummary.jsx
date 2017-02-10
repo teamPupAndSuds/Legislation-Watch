@@ -11,6 +11,7 @@
 const React = require('react');
 const SupportBar = require('./SupportBar.jsx').SupportBar;
 const Support = require('./SupportBar.jsx').Support;
+const BillTracker = require('./BillTracker.jsx').BillTracker;
 
 // Load Legislator cache to minimise AJAX call to the Sunlight Server
 const LegislatorData = require('../data/LegislatorData.js');
@@ -20,9 +21,9 @@ const Comments = require('./Comments.jsx');
 class BillResultSummary extends React.Component {
   render() {
     return (
-      <BillResultSummaryPresentational info={this.props.info} 
-                                       legislatorCache={LegislatorData} 
-                                       username={this.props.username} 
+      <BillResultSummaryPresentational info={this.props.info}
+                                       legislatorCache={LegislatorData}
+                                       username={this.props.username}
                                        updateList={this.props.updateList}
                                        favoriteList={this.props.favoriteList}
                                        />
@@ -59,7 +60,7 @@ class BillResultSummaryPresentational extends React.Component {
   }
 
   toggleFavorite() {
-    
+
     let currentSetting = this.state.favorite;
     if (currentSetting) {
       this.removeFavorite();
@@ -169,8 +170,8 @@ class BillResultSummaryPresentational extends React.Component {
                     <h3 className="text-uppercase panel-title"><small>
                       {info.bill_id} |
                       INTRODUCED : {info.introduced_on}
-                      <span id="addToFavorites" 
-                            className={this.state.favorite ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'} 
+                      <span id="addToFavorites"
+                            className={this.state.favorite ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'}
                             onClick={this.toggleFavorite}></span>
                     </small></h3>
                   </small>
@@ -185,6 +186,11 @@ class BillResultSummaryPresentational extends React.Component {
             <tbody>
               <tr>
                 <td>
+                  <BillTracker history={info.history} />
+                </td>
+              </tr>
+              <tr>
+                <td>
                   <strong>Sponsor:</strong> {info.sponsor.first_name} {info.sponsor.last_name} ({info.sponsor.party})
                   {info.cosponsor_ids && info.cosponsor_ids.length !== 0 &&
                     <strong> Co-Sponsor(s): </strong>
@@ -196,7 +202,7 @@ class BillResultSummaryPresentational extends React.Component {
               </tr>
               <tr>
                 <td>
-                  <SupportBar support={support} 
+                  <SupportBar support={support}
                                 tooltip={support.supportString} />
                 </td>
               </tr>
