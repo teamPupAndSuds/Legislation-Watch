@@ -8,8 +8,7 @@ class Favorites extends React.Component {
   render() {
     return (
       <div>
-        <h1>Favorites</h1>
-        <p>Favorites</p>
+        <h3>Favorites</h3>
           {this.props.favoriteBillList.map((value, ind) => <SearchResults isFetching={false} 
                                                                      key={ind}
                                                                      billResults={value} 

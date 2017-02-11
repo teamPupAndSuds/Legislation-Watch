@@ -69,6 +69,7 @@ class LegislationSearchPresentational extends React.Component {
   render() {
     return (
       <div id="search-body">
+        <h3>Search</h3>
         <SearchBar onSubmit={this.props.onSearchSubmit}/>
         {!this.props.isFetching &&
           <SearchResults

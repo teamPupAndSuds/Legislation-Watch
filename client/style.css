@@ -33,8 +33,21 @@ body {
   height: 45px;
 }
 
+#keySearchTerms {
+  margin-top: 8px;
+  width: 55%;
+  float: left;
+  height: 45px;
+}
+
 #searchButton {
   margin-top: 8px;
+  height: 45px;
+  margin-left: 1vw;
+}
+
+#searchKeyButton {
+  margin-top: 14px;
   height: 45px;
   margin-left: 1vw;
 }
