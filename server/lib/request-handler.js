@@ -35,8 +35,7 @@ exports.userLogin = function(req, res) {
       if (!err) {
         if (!user) {
           console.log('request-handler.js: userLogin: username not found');
-          res.status(401);
-          res.end();
+          res.status(401).end();
         } else {
           console.log('request-handler.js: userLogin: username found, comparing passwords');          
           util.comparePassword(password, user.password, function(err, match) {
@@ -47,8 +46,7 @@ exports.userLogin = function(req, res) {
               util.createSession(req, res, user);
             } else {
               console.log('request-handler.js: userLogin: username found, password DO NOT match');                    
-              res.status(401);
-              res.end();
+              res.status(401).end();
             }
           });
         }
@@ -61,8 +59,7 @@ exports.userLogin = function(req, res) {
 
 exports.userLogout = function(req, res) {
   req.session.destroy(function() {
-    res.status(200);
-    res.end();
+    res.status(200).end();
   });
 };
 

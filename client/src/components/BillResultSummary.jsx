@@ -105,7 +105,6 @@ class BillResultSummaryPresentational extends React.Component {
       data: JSON.stringify(obj),
       contentType: 'application/json',
       success: function (data) {
-        console.log('this is data ') + JSON.stringify(data);
         that.props.getAllFavorites();      
       },
       error: function (errorThrown) {
