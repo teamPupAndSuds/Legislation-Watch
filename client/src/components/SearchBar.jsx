@@ -40,7 +40,7 @@ class SearchBarPresentational extends React.Component {
       <div>
         <form className="form-group" onSubmit={this.props.onSubmit}>
           <span>
-            <input className="form-control" type="text" id="searchTerms" placeholder="Search" onChange={this.props.onSearchInputChange}></input>
+            <input autoFocus className="form-control" type="text" id="searchTerms" placeholder="Search" onChange={this.props.onSearchInputChange}></input>
           </span>
           <span>
             <button type="submit" id="searchButton"><span className="glyphicon glyphicon-search" aria-hidden="true"></span></button>

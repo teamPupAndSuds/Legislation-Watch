@@ -153,24 +153,32 @@ class BillResultSummaryPresentational extends React.Component {
 
     return (
       <div className="panel panel-info">
-        <div className="panel-heading">
+        <div className="panel-heading" id="bill-panel-head">
           <div className="container-fluid">
             <div className="row">
               {/* Bill title with link to full text */}
               <div className="col-sm-9" style={{padding: 0}}>
-                <h3 className="panel-title"><a href={info.urls.congress + '/text'} target="_blank">{info.short_title}{!info.short_title && info.official_title}</a>
-                <small className="text-uppercase panel-title"><small>&nbsp;({info.chamber}) </small></small></h3>
+                <div id="bill-title">
+                  <h3 className="panel-title"><a href={info.urls.congress + '/text'} target="_blank"><span>{info.short_title}{!info.short_title && info.official_title}</span></a>
+                  <small className="text-uppercase panel-title"><small>&nbsp;({info.chamber}) </small></small></h3>
+                </div>
               </div>
               <div className="col-sm-3" style={{padding: 0}}>
                 <span className="pull-right panel-title">
                   <small>
-                    <h3 className="text-uppercase panel-title"><small>
-                      {info.bill_id} |
-                      INTRODUCED : {info.introduced_on}
-                      <span id="addToFavorites"
-                            className={this.state.favorite ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'}
-                            onClick={this.toggleFavorite}></span>
-                    </small></h3>
+                    <h3 className="text-uppercase panel-title">
+                      <small>
+                        {info.bill_id} |
+                        INTRODUCED : {info.introduced_on}
+                        <span id="addToFavorites"
+                              className={this.state.favorite ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'}
+                              onClick={this.toggleFavorite}>
+                        </span>
+                      </small>
+                      <div className="supportbar-box">
+                        <SupportBar support={support} tooltip={support.supportString} />
+                      </div>
+                    </h3>
                   </small>
                 </span>
               </div>
@@ -181,10 +189,9 @@ class BillResultSummaryPresentational extends React.Component {
           {/* Bill sponsor, co-sponsor and summary information */}
           <table>
             <tbody>
+              <BillTracker history={info.history} />
               <tr>
-                <td>
-                  <BillTracker history={info.history} />
-                </td>
+                <td></td>
               </tr>
               <tr>
                 <td>
@@ -197,15 +204,9 @@ class BillResultSummaryPresentational extends React.Component {
                   }
                 </td>
               </tr>
+ 
               <tr>
                 <td>
-                  <SupportBar support={support}
-                                tooltip={support.supportString} />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <br />
                   {info.summary_short &&
                     <div>{info.summary_short}</div>
                   }

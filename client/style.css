@@ -27,14 +27,14 @@ body {
 }
 
 #searchTerms {
-  margin-top: 2vh;
+  margin-top: 8px;
   width: 60%;
   float: left;
   height: 45px;
 }
 
 #searchButton {
-  margin-top: 2vh;
+  margin-top: 8px;
   height: 45px;
   margin-left: 1vw;
 }
@@ -69,8 +69,56 @@ body {
   overflow-y: scroll;
 }
 
+
+#bill-panel-head {
+  background-color: #4c4c5b;
+}
+
+#bill-title {
+  margin-left: 20px;
+}
+
+.supportbar-box {
+  padding-bottom: 4px;
+}
+
 .comment-box {
   margin-top: 10px;
+}
+
+#comment-form {
+  margin: 0;
+}
+
+#comments-panel {
+  height: 200px;
+  overflow-y: scroll;
+}
+
+#comment-input {
+  width: 80%;
+  height: 45px;
+}
+
+@media(max-width: 1460px) {
+  #comment-input {
+    width: 70%
+  }
+}
+
+@media(max-width: 1200px) {
+  #comment-input {
+    width: 60%
+  }
+}
+
+#comment-button {
+  height: 50px;
+  margin-left: 1vw;
+}
+
+#comment-panel-head {
+  background-color: #4c4c5b;
 }
 
 #addToFavorites {
@@ -80,7 +128,7 @@ body {
 
 .supportBar {
   margin-top: 2%;
-  width: 180px;
+  width: 100%;
   height: 15px;
   border-radius: 10px;
 }
