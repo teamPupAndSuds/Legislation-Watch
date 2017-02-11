@@ -244,8 +244,7 @@ exports.deleteWordMonitor = function(req, res) {
             user.markModified('keywords');
             user.save(function(err) {
               if (err) {
-                res.statu(500);
-                res.end(err);
+                res.status(500).end(err);
               } else {
                 // Ensure the session is pointed to this newly updated user model instance
                 req.session.user = user;
