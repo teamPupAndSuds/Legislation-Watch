@@ -43,6 +43,7 @@ class App extends React.Component {
         lat: undefined,
         long: undefined
       },
+      legislation: true,
       userMonitoredKeywords: [],
       favoriteList: [],
       favoriteBillList: []
@@ -52,6 +53,7 @@ class App extends React.Component {
     this.handleSearchComplete = this.handleSearchComplete.bind(this);
     this.getAllFavorites = this.getAllFavorites.bind(this);
     this.getSunlightAsync = Promise.promisify(this.getSunlight, {context: this});
+    this.toggleLeg = this.toggleLeg.bind(this);
   }
 
   // Checks the authentication status of the user
@@ -193,6 +195,10 @@ class App extends React.Component {
     });
   }
 
+  toggleLeg() {
+    this.setState({legislation: !this.state.legislation});
+  }
+
   render() {
     let mainScreen = this.props.main.type;
     function isShowing(mainPage) {
@@ -215,7 +221,7 @@ class App extends React.Component {
     if (this.state.isUserLoggedIn === true) {
       return (
         <div>
-          <div id="wrapper">
+          <div className={ this.state.legislation ? '' : 'toggled'} id="wrapper">
             <link rel="stylesheet" href="./css/about.css" />
             <link rel="stylesheet" href="./css/simple-sidebar.css" />
 
@@ -226,7 +232,7 @@ class App extends React.Component {
               </div>
             </div>
             <div id="page-content-wrapper">
-              <NavigationBar username={this.state.username}/>
+              <NavigationBar toggleLeg={this.toggleLeg} username={this.state.username}/>
               <div className="container-fluid">
                 <div className="row">
                   <div className="col-lg-12">

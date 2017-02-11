@@ -32,6 +32,7 @@ class NavigationBar extends React.Component {
           
           <div className="navbar-collapse collapse" id="navbar-collapse-1">
             <ul className="nav navbar-nav">
+              <li><Link style={{cursor: 'pointer'}} to="" onClick={this.props.toggleLeg} className="nav-link" id="nav-text">Legislation</Link></li>
               <li><Link to="/dashboard" className="nav-link" id="nav-text">Dashboard</Link></li>
               <li><Link to="/search" className="nav-link" id="nav-text">Search</Link></li>
               <li><Link to="/favorites" className="nav-link" id="nav-text">Favorites</Link></li>
