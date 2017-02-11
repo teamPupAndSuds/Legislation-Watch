@@ -342,9 +342,11 @@ exports.getFavoriteBills = function(req, res) {
 };
 
 exports.getSingleFavoriteBill = function(req, res) {
-  getSingleFavorite({legislationId: req.params.legislationId}).then(function(data) {
+  getSingleFavorite({legislationId: req.params.legislationId})
+  .then(function(data) {
     return res.status(200).send(data);
-  }).fail(function(err) {
+  })
+  .fail(function(err) {
     console.log('error getting single favorite');
     console.log(err);
   });
