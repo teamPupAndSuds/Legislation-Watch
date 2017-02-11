@@ -60,7 +60,6 @@ class App extends React.Component {
   componentDidMount() {
     $.get('login')
       .done((data) => {
-        // Debug
         this.setState({
           isVerifyingUserSession: false,
           isUserLoggedIn: true,
@@ -69,12 +68,9 @@ class App extends React.Component {
           userMonitoredKeywords: data.keywords,
         });
         this.getAllFavorites();
-
       })
       .fail(error => {
         // If user is not logged in:
-
-        // // Production
         this.setState({
           isVerifyingUserSession: false,
           isUserLoggedIn: false
@@ -83,7 +79,6 @@ class App extends React.Component {
         hashHistory.push('/about');
 
       });
-    // this.getAllFavorites();
   }
 
   getAllFavorites() {
@@ -140,8 +135,6 @@ class App extends React.Component {
       })
       .fail(error => {
         // If user is not logged in:
-
-        // // Production
         this.setState({
           isVerifyingUserSession: false,
           isUserLoggedIn: false
@@ -179,8 +172,6 @@ class App extends React.Component {
 
     Promise.all(promises)
     .then((results) => {
-      console.log('Promises finished');
-      console.log(results);
       that.setState({
         favoriteBillList: results
       });
