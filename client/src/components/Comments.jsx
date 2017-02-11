@@ -1,4 +1,5 @@
 const React = require('react');
+const ReactDOM = require('react-dom');
 
 class Comments extends React.Component {
   constructor() {
@@ -12,7 +13,17 @@ class Comments extends React.Component {
   componentDidMount() {
     // Pull comments from database, if any, before component mounts
     this.updateComments();
+    this.scrollToBottom();
+  }
 
+
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom() {
+    const node = ReactDOM.findDOMNode(this.messagesEnd);
+    node.scrollIntoView(false, {behavior: "smooth"});
   }
 
   updateComments() {
@@ -43,14 +54,14 @@ class Comments extends React.Component {
 
     return (
       <div className="comment-box">
-        <div style={style} className="panel panel-info">
-          <div className="panel-heading">
-            <h3 className="panel-title">Bill Discussion</h3>
-          </div>
+        <div style={style} className="panel panel-info" id="comments-panel">
           {this.state.comments.map((comment, ind) => <CommentBox 
                                                       comment={comment} 
                                                       billId={this.props.billId}
                                                       key={ind}/>)}
+          <div style={ {float:"left", clear: "both"} }
+                ref={(el) => { this.messagesEnd = el; }}>
+          </div>
         </div>
         <CommentForm username={this.props.username}
                      billId={this.props.billId}
@@ -106,13 +117,15 @@ class CommentForm extends React.Component {
   render() {
     return (
       <div>
-        <form onSubmit={this.handleSubmit.bind(this)}
+        <form id="comment-form" onSubmit={this.handleSubmit.bind(this)}
               ref={(input) => this.commentForm = input}>
           <div className="form-group">
             <label htmlFor="exampleInputEmail1">Comment:</label>
-            <input ref={(input) => this.text = input} type="text" className="form-control" placeholder="Add comment" />
           </div>
-          <button type="submit" className="btn btn-default">Submit</button>
+          <div className="form-inline">
+            <input ref={(input) => this.text = input} type="text" className="form-control" id="comment-input" placeholder="Add comment" />
+            <button id="comment-button" type="submit">Submit</button>
+          </div>
         </form>
       </div>
     );
