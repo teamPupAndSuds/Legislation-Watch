@@ -43,6 +43,7 @@ class App extends React.Component {
         lat: undefined,
         long: undefined
       },
+      legislation: true,
       userMonitoredKeywords: [],
       favoriteList: [],
       favoriteBillList: []
@@ -52,6 +53,7 @@ class App extends React.Component {
     this.handleSearchComplete = this.handleSearchComplete.bind(this);
     this.getAllFavorites = this.getAllFavorites.bind(this);
     this.getSunlightAsync = Promise.promisify(this.getSunlight, {context: this});
+    this.toggleLeg = this.toggleLeg.bind(this);
   }
 
   // Checks the authentication status of the user
@@ -193,6 +195,10 @@ class App extends React.Component {
     });
   }
 
+  toggleLeg() {
+    this.setState({legislation: !this.state.legislation});
+  }
+
   render() {
     let mainScreen = this.props.main.type;
     function isShowing(mainPage) {
@@ -215,26 +221,36 @@ class App extends React.Component {
     if (this.state.isUserLoggedIn === true) {
       return (
         <div>
-          <link rel="stylesheet" href="../../css/about.css" />
-          <NavigationBar username={this.state.username}/>
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-lg-8 col-lg-push-4">
-                <span style={isShowing('UserDashBoard')}>
-                  <UserDashBoard username={this.state.username} 
-                                 userMonitoredKeywords={this.state.userMonitoredKeywords} />
-                </span>
+          <div className={ this.state.legislation ? '' : 'toggled'} id="wrapper">
+            <link rel="stylesheet" href="./css/about.css" />
+            <link rel="stylesheet" href="./css/simple-sidebar.css" />
 
-                <span style={isShowing('LegislationSearch')}>
-                  <LegislationSearch style={isShowing('LegislationSearch')} 
-                                     username={this.state.username} 
-                                     updateList={this.updateList}
-                                     favoriteList={this.state.favoriteList}
-                                     getAllFavorites={this.getAllFavorites}   
-                                     />
-                </span>
-                <span style={isShowing('Favorites')}>
-                  <Favorites style={isShowing('Favorites')} 
+            <div id="sidebar-wrapper">
+              <div class="sidebar-nav">
+                <UserLegislatorsInfo userLat={this.state.userLocation.lat} 
+                                       userLong={this.state.userLocation.long} />
+              </div>
+            </div>
+            <div id="page-content-wrapper">
+              <NavigationBar toggleLeg={this.toggleLeg} username={this.state.username}/>
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col-lg-12">
+                    <span style={isShowing('UserDashBoard')}>
+                      <UserDashBoard username={this.state.username} 
+                                     userMonitoredKeywords={this.state.userMonitoredKeywords} />
+                    </span>
+
+                    <span style={isShowing('LegislationSearch')}>
+                      <LegislationSearch style={isShowing('LegislationSearch')} 
+                                         username={this.state.username} 
+                                         updateList={this.updateList}
+                                         favoriteList={this.state.favoriteList}
+                                         getAllFavorites={this.getAllFavorites}   
+                                         />
+                    </span>
+                    <span style={isShowing('Favorites')}>
+                      <Favorites style={isShowing('Favorites')} 
                              username={this.state.username} 
                              list={this.state.favoriteList} 
                              updateList={this.updateList} 
@@ -242,11 +258,9 @@ class App extends React.Component {
                              favoriteList={this.state.favoriteList}
                              getAllFavorites={this.getAllFavorites}  
                              />
-                </span>
-              </div>
-              <div className="col-lg-4 col-lg-pull-8">
-                <UserLegislatorsInfo userLat={this.state.userLocation.lat} 
-                                     userLong={this.state.userLocation.long} />
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
