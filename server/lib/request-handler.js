@@ -35,8 +35,7 @@ exports.userLogin = function(req, res) {
       if (!err) {
         if (!user) {
           console.log('request-handler.js: userLogin: username not found');
-          res.status(401);
-          res.end();
+          res.status(401).end();
         } else {
           console.log('request-handler.js: userLogin: username found, comparing passwords');          
           util.comparePassword(password, user.password, function(err, match) {
@@ -47,8 +46,7 @@ exports.userLogin = function(req, res) {
               util.createSession(req, res, user);
             } else {
               console.log('request-handler.js: userLogin: username found, password DO NOT match');                    
-              res.status(401);
-              res.end();
+              res.status(401).end();
             }
           });
         }
@@ -61,8 +59,7 @@ exports.userLogin = function(req, res) {
 
 exports.userLogout = function(req, res) {
   req.session.destroy(function() {
-    res.status(200);
-    res.end();
+    res.status(200).end();
   });
 };
 
@@ -247,8 +244,7 @@ exports.deleteWordMonitor = function(req, res) {
             user.markModified('keywords');
             user.save(function(err) {
               if (err) {
-                res.statu(500);
-                res.end(err);
+                res.status(500).end(err);
               } else {
                 // Ensure the session is pointed to this newly updated user model instance
                 req.session.user = user;
@@ -346,9 +342,11 @@ exports.getFavoriteBills = function(req, res) {
 };
 
 exports.getSingleFavoriteBill = function(req, res) {
-  getSingleFavorite({legislationId: req.params.legislationId}).then(function(data) {
+  getSingleFavorite({legislationId: req.params.legislationId})
+  .then(function(data) {
     return res.status(200).send(data);
-  }).fail(function(err) {
+  })
+  .fail(function(err) {
     console.log('error getting single favorite');
     console.log(err);
   });
