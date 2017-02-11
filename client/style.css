@@ -125,3 +125,8 @@ body {
 .trackerOff {
   background: #4C4C5B;
 }
+
+#tooltip {
+  white-space:pre-wrap;
+}
+}

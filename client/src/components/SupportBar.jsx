@@ -21,6 +21,8 @@ class Support {
   }
   total() {
     var sum = this.republican + this.democrat + this.independent;
+    var addedDem = false;
+    var addedInd = false;
     if (this.democrat !== 0) {
       this.democrat = (this.democrat / sum * 100);
       var demString = (this.democrat) + '';
@@ -30,6 +32,7 @@ class Support {
         demString = demString.slice(0, demIndex + 2);
       }
       this.supportString += demString + '% Democrat ';
+      addedDem = true;
     }
     if (this.independent !== 0) {
       this.independent = (this.independent / sum * 100);
@@ -39,7 +42,11 @@ class Support {
       if (indIndex !== - 1) {
         indString = indString.slice(0, indIndex + 2);
       }
+      if (addedDem) {
+        this.supportString += '\n';
+      }
       this.supportString += indString + '% Independent ';
+      addedInd = true;
     }
     if (this.republican !== 0) {
       this.republican = (this.republican / sum * 100);
@@ -48,6 +55,9 @@ class Support {
       let repIndex = repString.indexOf('.');
       if (repIndex !== - 1) {
         repString = repString.slice(0, repIndex + 2);
+      }
+      if (addedDem || addedInd) {
+        this.supportString += '\n';
       }
       this.supportString += repString + '% Republican ';
     }
