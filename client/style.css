@@ -1,5 +1,12 @@
+html {
+    overflow: hidden;
+    height: 100%;
+}
+
 body {
-  overflow: hidden;
+    height: 100%;
+    padding-top: 65px;
+    overflow: auto;
 }
 
 #nav-text {
@@ -23,20 +30,18 @@ body {
   margin-top: 2vh;
   width: 60%;
   float: left;
-  height: 4vh;
+  height: 45px;
 }
 
 #searchButton {
   margin-top: 2vh;
-  height: 4vh;
+  height: 45px;
   margin-left: 1vw;
 }
 
 #search-body {
   padding-right: 1vw;
-  margin-top: 5.5vh;
-  height: 94.2vh;
-  overflow-y: scroll;
+  height: 94vh;
 }
 
 #legislator-title {
@@ -55,9 +60,7 @@ body {
 }
 
 .legislator-info {
-  margin-top: 5.5vh;
-  margin-left: -1vw;
-  height: 94.2vh;
+  height: 100%;
 }
 
 .legislator-body {
