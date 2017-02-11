@@ -40,14 +40,12 @@ class UserDashBoardKeywordsEntryBarPresentational extends React.Component {
     return (
       <div>
         <form className="form-group" onSubmit={this.props.onSubmit}>
-          <label htmlFor="searchTerms">Add Keywords to Monitor:</label><br />
-          <div className="input-group">
-            <span className="input-group-addon"><span className="glyphicon glyphicon-plus" aria-hidden="true"></span></span>
-            <input className="form-control" type="text" id="searchTerms" placeholder="Enter Keywords" onChange={this.props.onKeywordChange}></input>
-             <span className="input-group-btn">
-                <button type="submit" className="btn btn-default">Add</button>
-             </span>   
-          </div>           
+          <span>
+            <input autoFocus className="form-control" type="text" id="keySearchTerms" placeholder="Keywords" onChange={this.props.onKeywordChange}></input>
+          </span>
+          <span>
+            <button type="submit" id="searchButton"><span className="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+          </span>
         </form> 
       </div>
     );
@@ -55,3 +53,5 @@ class UserDashBoardKeywordsEntryBarPresentational extends React.Component {
 }
 
 module.exports = UserDashBoardKeywordsEntryBar;
+
+

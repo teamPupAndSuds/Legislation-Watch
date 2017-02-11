@@ -226,7 +226,7 @@ class App extends React.Component {
               </div>
             </div>
             <div id="page-content-wrapper">
-              <NavigationBar toggleLeg={this.toggleLeg} username={this.state.username}/>
+              <NavigationBar legislationShown={this.state.legislation} toggleLeg={this.toggleLeg} username={this.state.username}/>
               <div className="container-fluid">
                 <div className="row">
                   <div className="col-lg-12">
