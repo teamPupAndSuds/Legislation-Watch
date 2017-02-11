@@ -6,7 +6,7 @@
 // The AppRoutes class defines the client side routes
 // The App class is the main view after a user has logged-in
 // Other view with non-nested component: login, signup, logout and about
-// 
+//
 ////////////////////////////////////////////////////////////////////////////////
 const React = require('react');
 const ReactDOM = require('react-dom');
@@ -61,7 +61,7 @@ class App extends React.Component {
     $.get('login')
       .done((data) => {
         // Debug
-        this.setState({        
+        this.setState({
           isVerifyingUserSession: false,
           isUserLoggedIn: true,
           username: data.username,
@@ -82,7 +82,7 @@ class App extends React.Component {
 
         hashHistory.push('/about');
 
-      });  
+      });
     // this.getAllFavorites();
   }
 
@@ -96,7 +96,7 @@ class App extends React.Component {
       success: function (success) {
         //data - response from server
         that.setState({favoriteList: success});
-        that.updateFavoriteBillList(success);         
+        that.updateFavoriteBillList(success);
       },
       error: function (errorThrown) {
         console.log('error');
@@ -111,7 +111,7 @@ class App extends React.Component {
     $.get('login')
       .done((data) => {
         // Debug
-        this.setState({        
+        this.setState({
           isVerifyingUserSession: false,
           isUserLoggedIn: true,
           username: data.username,
@@ -130,7 +130,7 @@ class App extends React.Component {
             that.setState({favoriteList: temp});
             var singleItem = [];
             singleItem.push(success);
-            that.updateFavoriteBillList(singleItem);         
+            that.updateFavoriteBillList(singleItem);
           },
           error: function (errorThrown) {
             console.log('error');
@@ -155,6 +155,9 @@ class App extends React.Component {
     $.ajax({
       method: 'GET',
       url: 'https://congress.api.sunlightfoundation.com/bills/search?bill_id=' + legislationId,
+      data: {
+        fields: 'bill_id,bill_type,chamber,introduced_on,last_action_at,short_title,official_title,keywords,summary_short,urls,sponsor,sponsor_id,cosponsor_ids,cosponsors.legislator,related_bill_ids,upcoming,history'
+      },
       dataType: 'jsonp',
       success: function(success) {
         callback(null, success.results);
@@ -256,8 +259,9 @@ class App extends React.Component {
                              updateList={this.updateList} 
                              favoriteBillList={this.state.favoriteBillList}
                              favoriteList={this.state.favoriteList}
-                             getAllFavorites={this.getAllFavorites}  
+                             getAllFavorites={this.getAllFavorites}
                              />
+
                     </span>
                   </div>
                 </div>
@@ -288,7 +292,7 @@ class AppRoutes extends React.Component {
         <Route path="/about" component={About} />
         <Route path="/login" component={UserLogin} />
         <Route path="/signup" component={UserSignup} />
-        <Route path="/logout" component={UserLogout} /> 
+        <Route path="/logout" component={UserLogout} />
         <Route path="/" component={App}>
           <Route path="/search" components = {{main: 'LegislationSearch'}} />
           <Route path="/dashboard" components = {{main: 'UserDashBoard'}} />
@@ -297,6 +301,6 @@ class AppRoutes extends React.Component {
       </Router>
     );
   }
-} 
+}
 
 ReactDOM.render(<AppRoutes />, document.getElementById('app'));
