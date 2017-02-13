@@ -22,8 +22,8 @@ class Comments extends React.Component {
   }
 
   scrollToBottom() {
-    const node = ReactDOM.findDOMNode(this.messagesEnd);
-    node.scrollIntoView(false, {behavior: "smooth"});
+    var node = ReactDOM.findDOMNode(this.messagesEnd);
+    node.parentNode.scrollTop = node.offsetTop;
   }
 
   updateComments() {
