@@ -7,9 +7,9 @@ An app for people who want to know what happens in congress about issues they ca
 
 ## Team
 
-  - __Product Owner__: Cynthia Bathgate
-  - __Scrum Master__: Benze Gong
-  - __Development Team Members__: Stephen Chan, James Falkoff
+  - __Product Owner__: Joey Laguna
+  - __Scrum Master__: Michael Tutt
+  - __Development Team Members__: Derrick Chan, Jeremy Sande
 
 ## Table of Contents
 
